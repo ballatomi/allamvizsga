@@ -5,9 +5,9 @@ Building a complete RESTful API in Java using JAX-RS and Jersey.
 Consuming these services using AngularJS
 
 Used tehnologies:
-  DB: MySQL
-  JAVA EE: JAX-RS, Jersey, ORM-Hibernate
-  HTML, AngularJS
+  DB: MySQL;
+  Server: JAVA EE: JAX-RS, Jersey, ORM-Hibernate;
+  Client: HTML, AngularJS
 
 Set Up: 
 
