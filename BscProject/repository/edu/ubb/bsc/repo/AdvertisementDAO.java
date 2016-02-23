@@ -2,6 +2,7 @@ package edu.ubb.bsc.repo;
 
 import java.util.List;
 
+import edu.ubb.bsc.repo.RepositoryException;
 import edu.ubb.bsc.repo.model.Advertisement;
 
 public interface AdvertisementDAO {

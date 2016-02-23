@@ -70,11 +70,11 @@ public class JdbcUserDAO implements UserDAO {
 	public String insertUser(User user) throws RepositoryException {
 		Session session = factoryUser.openSession();
 		Transaction tx = null;
-		Integer UserId = 0;
+		Integer id = 0;
 
 		try {
 			tx = session.beginTransaction();
-			UserId = (Integer) session.save(user); // save to DB
+			id = (Integer) session.save(user); // save to DB
 			tx.commit();
 
 		} catch (HibernateException e) {
@@ -86,7 +86,7 @@ public class JdbcUserDAO implements UserDAO {
 		}
 
 		log.info("New User Inserted!");
-		return UserId.toString();
+		return id.toString();
 	}
 
 	public void updateUser(User user) throws RepositoryException {

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html ng-app="controllApp">
+<head>
+<meta charset="ISO-8859-1">
+<title>Upload Sheet music</title>
+
+<link rel="stylesheet"
+	href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+
+<script
+	src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
+
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+
+<script
+	src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+<script src="../js/util.js"></script>
+<script src="../js/controller.js"></script>
+
+</head>
+
+<body>
+	<nav class="navbar navbar-inverse">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse"
+					data-target="#myNavbar">
+					<span class="icon-bar"></span> <span class="icon-bar"></span> <span
+						class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="#">Upload sheet music</a>
+			</div>
+		</div>
+	</nav>
+	<div class="container" ng-controller="uploadSheetCtrl">
+		<div class="row">
+			<form class="form-horizontal">
+				<fieldset>
+
+					<!-- Form Name -->
+					<legend>About sheet music</legend>
+
+					<div class="form-group">
+						<label class="col-md-3 control-label" for="Title">Title</label>
+						<div class="col-md-5">
+							<input id="title" ng-model="adv.name" name="title" type="text"
+								class="form-control input-md">
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label class="col-md-3 control-label" for="Page numbers">Page
+							numbers</label>
+						<div class="col-md-5">
+							<input id="pagenumber" ng-model="adv.length" name="pagenumber"
+								type="text" class="form-control input-md">
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label class="col-md-3 control-label" for="Page numbers">Upload
+							pdf file</label>
+
+						<div class="col-md-5">
+							<span id="fileselector"> <label class="btn btn-default"
+								for="upload-file-selector"> <input 
+									id="upload-file-selector" type="file">
+									<i class="fa_icon icon-upload-alt margin-correction"></i>upload
+									file
+							</label>
+							</span>
+						</div>
+					</div>
+
+
+
+					<!-- Button -->
+					<div class="form-group">
+						<label class="col-md-3 control-label" for="singlebutton">Submit</label>
+						<div class="col-md-4">
+							<button id="singlebutton" name="singlebutton"
+								class="btn btn-primary" ng-click="uploadSheet(adv)">Submit</button>
+						</div>
+					</div>
+
+				</fieldset>
+			</form>
+
+		</div>
+
+
+
+	</div>
+
+</body>
+</html>

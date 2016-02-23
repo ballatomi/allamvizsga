@@ -12,4 +12,9 @@ public class JdbcDAOFactory extends DAOFactory {
 		return new JdbcAdverisementDAO();
 	}
 
+	@Override
+	public SheetMusicDAO getSheetMusicDAO() {
+		return new JdbcSheetMusicDAO();
+	}
+
 }

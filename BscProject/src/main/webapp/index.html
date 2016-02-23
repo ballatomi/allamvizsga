@@ -15,11 +15,16 @@
 
 <script
 	src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-</head>
 
+<script src="js/util.js"></script>
 <script src="js/controller.js"></script>
 
+</head>
+
+
 <body>
+
+
 	<div class="container">
 		<div id="loginbox" style="margin-top: 50px;"
 			class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2"
@@ -105,7 +110,10 @@
 						
 
 						<div class="form-group">
-							<label for="username" class="col-md-3 control-label">Username</label>
+							<label for="username" class="col-md-3 control-label">Username<div class="required-icon" >
+					             <div class="label" style="color:red">*</div>
+					        </div></label>
+						    
 							<div class="col-md-9">
 								<input ng-model="userreg.userName" type="text"
 									class="form-control" name="username" placeholder="User Name">
@@ -113,15 +121,54 @@
 						</div>
 
 						<div class="form-group">
-							<label for="password" class="col-md-3 control-label">Password</label>
+							<label for="password" class="col-md-3 control-label">Password
+							<div class="required-icon" >
+				                <div class="label" style="color:red">*</div>
+				            </div>
+				            </label>
+							
 							<div class="col-md-9">
 								<input ng-model="userreg.userPassword" type="password"
 									class="form-control" name="passwd" placeholder="Password">
 							</div>
 						</div>
+						
+						<div class="form-group">
+							<label for="re_password" class="col-md-3 control-label">Re-enter
+							<div class="required-icon" >
+				                <div class="label" style="color:red">*</div>
+				            </div>
+				            </label>
+						
+							<div class="col-md-9">
+								<input ng-model="userreg.re_password" type="password"
+									class="form-control" name="re_password" placeholder="Re-enter Password">
+							</div>
+						</div>
 
 						<div class="form-group">
-							<label for="email" class="col-md-3 control-label">Email</label>
+							<label for="FirstName" class="col-md-3 control-label">First Name</label>
+							<div class="col-md-9">
+								<input ng-model="userreg.userFirstName" type="text"
+									class="form-control" name="FirstName" placeholder="First Name">
+							</div>
+						</div>		
+
+						<div class="form-group">
+							<label for="SureName" class="col-md-3 control-label">Last Name</label>
+							<div class="col-md-9">
+								<input ng-model="userreg.userLastName" type="text"
+									class="form-control" name="SureName" placeholder="Surename">
+							</div>
+						</div>		
+
+						<div class="form-group">
+							<label for="email" class="col-md-3 control-label">Email
+							<div class="required-icon" >
+				                <div class="label" style="color:red">*</div>
+				            </div>
+				            </label>
+							
 							<div class="col-md-9">
 								<input ng-model="userreg.userMail" type="text"
 									class="form-control" name="email" placeholder="Email Address">
@@ -144,7 +191,7 @@
 									type="button" class="btn btn-info">
 									<i class="icon-hand-right"></i> &nbsp Sign Up
 								</button>
-							</div>
+							</div>							
 						</div>
 
 					</form>
