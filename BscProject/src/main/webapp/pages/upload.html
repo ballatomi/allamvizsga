@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html ng-app="controllApp">
+<html ng-app="controllSheetMusic">
 <head>
 <meta charset="ISO-8859-1">
 <title>Upload Sheet music</title>
@@ -18,6 +18,8 @@
 
 <script src="../js/util.js"></script>
 <script src="../js/controller.js"></script>
+<script src="../js/sheetMusic.js"></script>
+
 
 </head>
 
@@ -34,7 +36,8 @@
 			</div>
 		</div>
 	</nav>
-	<div class="container" ng-controller="uploadSheetCtrl">
+	
+	<div class="container" ng-controller="uploadSheetCtrl" data-ng-init="init()">
 		<div class="row">
 			<form class="form-horizontal">
 				<fieldset>
@@ -55,7 +58,15 @@
 							numbers</label>
 						<div class="col-md-5">
 							<input id="pagenumber" ng-model="adv.length" name="pagenumber"
-								type="text" class="form-control input-md">
+								type="number" min="0" class="form-control input-md">
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label class="col-md-3 control-label" for="Page numbers">License ©</label>
+						<div class="col-md-5">
+							<input id="license" ng-model="adv.license" name="license"
+								type="text" placeholder="With a Creative Commons license, you keep your copyright" class="form-control input-md">
 						</div>
 					</div>
 
@@ -66,22 +77,54 @@
 						<div class="col-md-5">
 							<span id="fileselector"> <label class="btn btn-default"
 								for="upload-file-selector"> <input 
-									id="upload-file-selector" type="file">
+									id="upload-file-selector-pdf" accept="application/pdf" type="file">
+									<i class="fa_icon icon-upload-alt margin-correction"></i>upload
+									file
+							</label>
+							</span>
+						</div>
+						
+						<div style="display: {{display_type}} none" id="alert"
+							class="{{alert_type}} col-sm-3">
+							<p>{{message}}</p>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label class="col-md-3 control-label" for="Page numbers">Upload
+							sound file</label>
+
+						<div class="col-md-5">
+							<span id="fileselector"> <label class="btn btn-default"
+								for="upload-file-selector"> <input 
+									id="upload-file-selector-sound" accept="audio/*" type="file">
 									<i class="fa_icon icon-upload-alt margin-correction"></i>upload
 									file
 							</label>
 							</span>
 						</div>
 					</div>
-
-
+					
+					
+					<div class="form-group">
+						<label class="col-md-3 control-label" for="Song genre">Song genre</label>
+						<div class="col-md-5">
+							<select name="adv.selectedGenre" ng-model="adv.selectedGenre">
+						        <option selected="selected" ng:repeat="genre in songGenreList" value="{{genre.songGenreId}}">{{genre.songGenreName}}</option>
+						    </select> 
+						</div>
+					</div>
 
 					<!-- Button -->
 					<div class="form-group">
 						<label class="col-md-3 control-label" for="singlebutton">Submit</label>
 						<div class="col-md-4">
 							<button id="singlebutton" name="singlebutton"
-								class="btn btn-primary" ng-click="uploadSheet(adv)">Submit</button>
+								class="btn btn-primary" ng-click="uploadSheet(adv)">
+								<span ng-show="uploadButtonText == 'Uploading'">
+									<i class="glyphicon glyphicon-refresh spinning"></i></span>
+            						{{ uploadButtonText }}
+							</button>
 						</div>
 					</div>
 
@@ -89,8 +132,6 @@
 			</form>
 
 		</div>
-
-
 
 	</div>
 

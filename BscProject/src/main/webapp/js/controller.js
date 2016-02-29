@@ -1,5 +1,4 @@
 var urlLogin = "http://localhost:8080/BscProject/rest/login/";
-var urlSheetMusic = "http://localhost:8080/BscProject/rest/sheet/";
 
 var user = null;
 
@@ -45,17 +44,4 @@ App.controller('CtrlReg', function($scope, $http) {
 		}
 	};
 
-});
-
-App.controller('uploadSheetCtrl', function($scope, $http) {
-	$scope.uploadSheet = function(sheet) {
-		var file = document.getElementById("upload-file-selector").files;
-		sheet.filePdf = file[0];
-		console.log(sheet.filePdf);
-		//sheet.filePDF
-		
-		$http.post(urlSheetMusic + "upload", sheet).success(function(response) {
-			console.log(response);
-		});
-	}
 });

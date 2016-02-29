@@ -1,7 +1,9 @@
 package edu.ubb.bsc.repo;
 
+import java.util.Iterator;
 import java.util.List;
 
+import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -10,7 +12,7 @@ import org.hibernate.cfg.AnnotationConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import edu.ubb.bsc.repo.model.Sheetmusic;
+import edu.ubb.bsc.repo.model.SheetMusic;
 import edu.ubb.bsc.service.repo.ServiceException;
 
 public class JdbcSheetMusicDAO implements SheetMusicDAO {
@@ -20,7 +22,7 @@ public class JdbcSheetMusicDAO implements SheetMusicDAO {
 
 	public JdbcSheetMusicDAO() {
 		try {
-			factory = new AnnotationConfiguration().addAnnotatedClass(Sheetmusic.class).configure()
+			factory = new AnnotationConfiguration().addAnnotatedClass(SheetMusic.class).configure()
 					.buildSessionFactory();
 			log.info("UserDao Factory was created!");
 		} catch (Throwable ex) {
@@ -29,18 +31,33 @@ public class JdbcSheetMusicDAO implements SheetMusicDAO {
 		}
 	}
 
-	public List<Sheetmusic> getAllSheetmusic() throws RepositoryException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public Sheetmusic getSheetmusicById(int id) throws RepositoryException {
+	@SuppressWarnings("unchecked")
+	public List<SheetMusic> getAllSheetmusic() throws RepositoryException {
 		Session session = factory.openSession();
 		Transaction tx = null;
-		Sheetmusic object = null;
+		List<SheetMusic> object = null;
 		try {
 			tx = session.beginTransaction();
-			object = (Sheetmusic) session.get(Sheetmusic.class, id);
+			object = session.createCriteria(SheetMusic.class).list();
+			tx.commit();
+		} catch (HibernateException e) {
+			if (tx != null)
+				tx.rollback();
+			log.error("Error get all!", e);
+			throw new RepositoryException("Error get all", e);
+		} finally {
+			session.close();
+		}
+		return object;
+	}
+
+	public SheetMusic getSheetmusicById(int id) throws RepositoryException {
+		Session session = factory.openSession();
+		Transaction tx = null;
+		SheetMusic object = null;
+		try {
+			tx = session.beginTransaction();
+			object = (SheetMusic) session.get(SheetMusic.class, id);
 
 			if (object != null) {
 				System.out.print("\t" + object.getSheetMusicId());
@@ -48,28 +65,29 @@ public class JdbcSheetMusicDAO implements SheetMusicDAO {
 				System.out.print("\t" + object.getUploadDate());
 			}
 
-			//increment the views number
+			// increment the views number
 			int viewsNum = object.getViewsNum();
 			object.setViewsNum(viewsNum + 1);
 			this.updateSheetmusic(object);
-			
+
 			tx.commit();
 		} catch (HibernateException e) {
 			if (tx != null)
 				tx.rollback();
-			e.printStackTrace();
+			log.error("Error get Sheetmusic by ID!", e);
+			throw new RepositoryException("Error get Sheetmusic by ID", e);
 		} finally {
 			session.close();
 		}
 		return object;
 	}
 
-	public List<Sheetmusic> getSheetmusicByFilter(String pattern) throws RepositoryException {
+	public List<SheetMusic> getSheetmusicByFilter(String pattern) throws RepositoryException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public String insertSheetmusic(Sheetmusic sheetmusic) throws RepositoryException {
+	public String insertSheetmusic(SheetMusic sheetmusic) throws RepositoryException {
 		Session session = factory.openSession();
 		Transaction tx = null;
 		Integer UserId = 0;
@@ -82,7 +100,8 @@ public class JdbcSheetMusicDAO implements SheetMusicDAO {
 		} catch (HibernateException e) {
 			if (tx != null)
 				tx.rollback();
-			e.printStackTrace();
+			log.error("Error insert!", e);
+			throw new RepositoryException("Error insert", e);
 		} finally {
 			session.close();
 		}
@@ -91,7 +110,7 @@ public class JdbcSheetMusicDAO implements SheetMusicDAO {
 		return UserId.toString();
 	}
 
-	public void updateSheetmusic(Sheetmusic sheetmusic) throws RepositoryException {
+	public void updateSheetmusic(SheetMusic sheetmusic) throws RepositoryException {
 		Session session = factory.openSession();
 		Transaction tx = null;
 		try {
@@ -103,13 +122,14 @@ public class JdbcSheetMusicDAO implements SheetMusicDAO {
 		} catch (HibernateException e) {
 			if (tx != null)
 				tx.rollback();
-			e.printStackTrace();
+			log.error("Error update!", e);
+			throw new RepositoryException("Error update", e);
 		} finally {
 			session.close();
 		}
 	}
 
-	public void deleteSheetmusic(Sheetmusic sheetmusic) throws RepositoryException {
+	public void deleteSheetmusic(SheetMusic sheetmusic) throws RepositoryException {
 		Session session = factory.openSession();
 		Transaction tx = null;
 		try {
@@ -124,15 +144,27 @@ public class JdbcSheetMusicDAO implements SheetMusicDAO {
 		} catch (HibernateException e) {
 			if (tx != null)
 				tx.rollback();
-			e.printStackTrace();
+			log.error("Error delete!", e);
+			throw new RepositoryException("Error delete", e);
 		} finally {
 			session.close();
 		}
 	}
 
-	public Sheetmusic getSheetmusicByName(String username) throws RepositoryException {
-		// TODO Auto-generated method stub
+	public SheetMusic getSheetmusicByName(String username) throws RepositoryException {
 		return null;
+	}
+
+	public static void main(String[] args) {
+		JdbcSheetMusicDAO cd = new JdbcSheetMusicDAO();
+		// cd.getCategoryById(2);
+		List<SheetMusic> sm = cd.getAllSheetmusic();
+		for (Iterator<?> iterator = sm.iterator(); iterator.hasNext();) {
+			SheetMusic a = (SheetMusic) iterator.next();
+			System.out.println(a.getName());
+			System.out.println(a.getFilePdf());
+
+		}
 	}
 
 }

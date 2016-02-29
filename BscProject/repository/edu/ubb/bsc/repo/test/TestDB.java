@@ -13,7 +13,7 @@ public class TestDB {
 	private DAOFactory df;
 	private UserDAO ud;
 	private final static Logger log = LoggerFactory.getLogger(TestDB.class);
-	
+
 	public TestDB(){
 		df = DAOFactory.getInstance();
 		ud = df.getUserDAO();

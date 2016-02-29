@@ -2,22 +2,22 @@ package edu.ubb.bsc.service.repo;
 
 import java.util.List;
 
-import edu.ubb.bsc.repo.model.Sheetmusic;
+import edu.ubb.bsc.repo.model.SheetMusic;
 
 public interface SheetMusicService {
 	
-	List<Sheetmusic> getAllSheetmusic() throws ServiceException;
+	List<SheetMusic> getAllSheetmusic() throws ServiceException;
 
-	Sheetmusic getSheetmusicById(int id) throws ServiceException;
+	SheetMusic getSheetmusicById(int id) throws ServiceException;
 
-	List<Sheetmusic> getSheetmusicByFilter(String pattern) throws ServiceException;
+	List<SheetMusic> getSheetmusicByFilter(String pattern) throws ServiceException;
 
-	String insertSheetmusic(Sheetmusic user) throws ServiceException;
+	String insertSheetmusic(SheetMusic user) throws ServiceException;
 
-	void updateSheetmusic(Sheetmusic user) throws ServiceException;
+	void updateSheetmusic(SheetMusic user) throws ServiceException;
 
-	void deleteSheetmusic(Sheetmusic user) throws ServiceException;
+	void deleteSheetmusic(SheetMusic user) throws ServiceException;
 	
-	Sheetmusic getSheetmusicByName(String username) throws ServiceException;
+	SheetMusic getSheetmusicByName(String username) throws ServiceException;
 
 }

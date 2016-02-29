@@ -3,13 +3,19 @@
 "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
 "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
 <hibernate-configuration>
-    <session-factory>
-        <property name="hibernate.bytecode.use_reflection_optimizer">false</property>
-        <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
-        <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/bscproject</property>
-        <property name="hibernate.connection.username">root</property>
-        <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
-        <property name="hibernate.search.autoregister_listeners">false</property>
-        <property name="hibernate.validator.apply_to_ddl">false</property>
-    </session-factory>
+	<session-factory>
+		<property name="hibernate.bytecode.use_reflection_optimizer">false</property>
+		<property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
+		<property name="hibernate.connection.url">jdbc:mysql://localhost:3306/bscproject</property>
+		<property name="hibernate.connection.username">root</property>
+		<property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
+		<property name="hibernate.search.autoregister_listeners">false</property>
+		<property name="hibernate.validator.apply_to_ddl">false</property>
+		
+		<mapping class="edu.ubb.bsc.repo.model.Advertisement" />
+		<mapping class="edu.ubb.bsc.repo.model.Instrument" />
+		<mapping class="edu.ubb.bsc.repo.model.SheetMusic" />
+		<mapping class="edu.ubb.bsc.repo.model.SongGenre" />
+		<mapping class="edu.ubb.bsc.repo.model.User" />
+	</session-factory>
 </hibernate-configuration>
