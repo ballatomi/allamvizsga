@@ -9,6 +9,8 @@ public abstract class DAOFactory {
 	public abstract AdvertisementDAO getAdvertisementDAO();
 	public abstract SheetMusicDAO getSheetMusicDAO();
 	public abstract SongGenreDAO getSongGenreDAO();
+	public abstract InstrumentSheetMusicDAO getInstrumentSheetMusicDAO();
+	public abstract InstrumentDAO getInstrumentDAO();
 	
 
 }

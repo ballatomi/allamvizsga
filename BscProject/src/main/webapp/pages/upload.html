@@ -16,16 +16,17 @@
 <script
 	src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 
-<script src="../js/util.js"></script>
-<script src="../js/controller.js"></script>
-<script src="../js/sheetMusic.js"></script>
 
+<link rel="stylesheet" href="../css/util.css">
+<script src="../js/authentication.js"></script>
+<script src="../js/sheetMusic.js"></script>
 
 </head>
 
 <body>
-	<nav class="navbar navbar-inverse">
-		<div class="container-fluid">
+	<!-- <nav class="navbar navbar-default navbar-fixed-top"> -->
+	<nav class="navbar navbar-default">
+		<div class="container-fluid" ng-controller="logoutController">
 			<div class="navbar-header">
 				<button type="button" class="navbar-toggle" data-toggle="collapse"
 					data-target="#myNavbar">
@@ -34,10 +35,22 @@
 				</button>
 				<a class="navbar-brand" href="#">Upload sheet music</a>
 			</div>
+			<div id="navbar" class="navbar-collapse collapse">
+				<ul class="nav navbar-nav">
+					<li class="active"><a href="#">Home</a></li>
+					<li><a href="#about">About</a></li>
+					<li><a href="#contact">Contact</a></li>
+				</ul>
+
+				<ul class="nav navbar-nav navbar-right">
+					<li><a href="#" ng-click="logout()">Log out </a></li>
+				</ul>
+			</div>
 		</div>
 	</nav>
-	
-	<div class="container" ng-controller="uploadSheetCtrl" data-ng-init="init()">
+
+	<div class="container" ng-controller="uploadSheetCtrl"
+		data-ng-init="init()">
 		<div class="row">
 			<form class="form-horizontal">
 				<fieldset>
@@ -63,10 +76,13 @@
 					</div>
 
 					<div class="form-group">
-						<label class="col-md-3 control-label" for="Page numbers">License ©</label>
+						<label class="col-md-3 control-label" for="Page numbers">License
+							©</label>
 						<div class="col-md-5">
 							<input id="license" ng-model="adv.license" name="license"
-								type="text" placeholder="With a Creative Commons license, you keep your copyright" class="form-control input-md">
+								type="text"
+								placeholder="With a Creative Commons license, you keep your copyright"
+								class="form-control input-md">
 						</div>
 					</div>
 
@@ -76,15 +92,16 @@
 
 						<div class="col-md-5">
 							<span id="fileselector"> <label class="btn btn-default"
-								for="upload-file-selector"> <input 
-									id="upload-file-selector-pdf" accept="application/pdf" type="file">
-									<i class="fa_icon icon-upload-alt margin-correction"></i>upload
+								for="upload-file-selector"> <input
+									id="upload-file-selector-pdf" accept="application/pdf"
+									type="file"> <i
+									class="fa_icon icon-upload-alt margin-correction"></i>upload
 									file
 							</label>
 							</span>
 						</div>
-						
-						<div style="display: {{display_type}} none" id="alert"
+
+						<div style="display: {{display_type" id="alert"
 							class="{{alert_type}} col-sm-3">
 							<p>{{message}}</p>
 						</div>
@@ -96,7 +113,7 @@
 
 						<div class="col-md-5">
 							<span id="fileselector"> <label class="btn btn-default"
-								for="upload-file-selector"> <input 
+								for="upload-file-selector"> <input
 									id="upload-file-selector-sound" accept="audio/*" type="file">
 									<i class="fa_icon icon-upload-alt margin-correction"></i>upload
 									file
@@ -104,14 +121,50 @@
 							</span>
 						</div>
 					</div>
-					
-					
+
 					<div class="form-group">
-						<label class="col-md-3 control-label" for="Song genre">Song genre</label>
+						<label class="col-md-3 control-label" for="Song genre">Instruments</label>
+						<div class="col-md-5">
+
+							<!-- 	<select id="example-getting-started" multiple="multiple"> -->
+							<!-- 							<select id="multi-selectbox" multiple="multiple" size="6" ng-model="adv.selectedInstrument">
+								<option selected="selected"
+									ng:repeat="instrument in instrumentsList"
+									value="{{instrument.instrumentID}}">{{instrument.name}}
+								</option>
+							</select> -->
+
+							<section class="container">
+								<div>
+									<select id="leftValues" size="5" multiple></select>
+								</div>
+								<div>
+									<input type="button" id="btnLeft" value="&lt;&lt;" /> <input
+										type="button" id="btnRight" value="&gt;&gt;" />
+								</div>
+								<div>
+
+									<select id="rightValues" size="5" multiple
+										name="adv.selectedInstrument" ng-model="instrument">
+										<option ng:repeat="instrument in instrumentsList"
+											value="{{instrument.instrumentId}}">
+											{{instrument.name}}</option>
+									</select>
+								</div>
+							</section>
+						</div>
+					</div>
+
+
+					<div class="form-group">
+						<label class="col-md-3 control-label" for="Song genre">Song
+							genre</label>
 						<div class="col-md-5">
 							<select name="adv.selectedGenre" ng-model="adv.selectedGenre">
-						        <option selected="selected" ng:repeat="genre in songGenreList" value="{{genre.songGenreId}}">{{genre.songGenreName}}</option>
-						    </select> 
+								<option selected="selected" ng:repeat="genre in songGenreList"
+									value="{{genre.songGenreId}}">{{genre.songGenreName}}
+								</option>
+							</select>
 						</div>
 					</div>
 
@@ -121,13 +174,13 @@
 						<div class="col-md-4">
 							<button id="singlebutton" name="singlebutton"
 								class="btn btn-primary" ng-click="uploadSheet(adv)">
-								<span ng-show="uploadButtonText == 'Uploading'">
-									<i class="glyphicon glyphicon-refresh spinning"></i></span>
-            						{{ uploadButtonText }}
+								<span ng-show="uploadButtonText == 'Uploading'"> <i
+									class="glyphicon glyphicon-refresh spinning"></i></span> {{
+								uploadButtonText }}
 							</button>
+							<br /> <br />
 						</div>
 					</div>
-
 				</fieldset>
 			</form>
 

@@ -16,29 +16,94 @@
 <script
 	src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 
-<script
-	src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-1.1.2.js"></script>
+
+<script src="../js/pdf_js/pdf.js"></script>
+<script src="../js/pdf_js/pdf.worker.js"></script>
+
 
 <script src="../js/sheetMusic.js"></script>
+<script src="../js/authentication.js"></script>
 
 </head>
 <body>
 
-	<div class="container" ng-controller="ctrlSheetViewer"
-		data-ng-init="init()">
-		Sheet
-		<table class="table">
-			<tr ng-repeat="sheet in Sheetmusic">
-				<td>ID:{{sheet.sheetMusicId}}</td>
-				<td>Name:{{sheet.name}}</td>
-				<td>Upload Date:{{sheet.uploadDate}}</td>
-				<td>Music style:{{sheet.songGenre.songGenreName}}</td>
-				
-			</tr>
+	<nav class="navbar navbar-default navbar-fixed-top">
+		<div class="container" ng-controller="logoutController">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle collapsed"
+					data-toggle="collapse" data-target="#navbar" aria-expanded="false"
+					aria-controls="navbar">
+					<span class="sr-only">Sheet Music viewer</span> <span
+						class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="#">Sheet Music viewer</a>
+			</div>
+			<div id="navbar" class="navbar-collapse collapse">
+				<ul class="nav navbar-nav">
+					<li class="active"><a href="#">Home</a></li>
+					<li><a href="upload.html">Upload Sheet music</a></li>
+					<li><a href="#about">About</a></li>
+					<li><a href="#contact">Contact</a></li>
+				</ul>
 
-		</table>
+				<ul class="nav navbar-nav navbar-right">
+					<li><a href="#" ng-click="logout()">Log out </a></li>
+				</ul>
+			</div>
+			<!-- nav-collapse /end -->
+		</div>
+	</nav>
 
+	<div class="view-content">
+		<div class="container" ng-controller="ctrlSheetViewer"
+			data-ng-init="init()">
+			<h3>Sheet</h3>
+
+			<table align="center" class="table">
+				<tbody>
+					<tr ng-repeat="sheet in Sheetmusic" colspan="2" valign="bottom"
+						height="10" width="70%">
+						<td><a href="#">
+								<div class="wrapper" style="border: 1px solid #d3d3d3;">
+									<canvas id="{{ sheet.sheetMusicId }}"></canvas>
+								</div>
+						</a></td>
+						<td valign="bottom" height="10" width="80%">
+							<div class="views-field-title">
+								<h3>
+									<a href="#" style="color: #80aaff;">Title: <b>
+											{{sheet.name}} </b>
+									</a>
+								</h3>
+							</div>
+							<table>
+								<tr>
+									<td>By: <em>{{sheet.user.userName}}</em> | <em>{{sheet.length}}</em>
+										pages | <em>{{sheet.viewsNum}}</em> views | Upload Date:
+										{{sheet.uploadDate}}</br>
+									</td>
+								</tr>
+
+								<tr>
+									<td><p>Music style: {{sheet.songGenre.songGenreName}}</p></td>
+								</tr>
+
+								<tr>
+									<td><p>Instruments:</p> <!-- <em ng-repeat="instrument in sheet.instrument">
+											{{instrument.name}}
+										</em> --></td>
+								</tr>
+							</table>
+						</td>
+
+					</tr>
+				</tbody>
+			</table>
+
+		</div>
+		<!-- controller - Container /end -->
 	</div>
+	<!--/ view-content -->
 
 </body>
 </html>

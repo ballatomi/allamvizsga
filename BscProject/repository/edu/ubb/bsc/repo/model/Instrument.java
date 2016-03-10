@@ -59,4 +59,9 @@ public class Instrument implements java.io.Serializable {
 		this.type = type;
 	}
 
+	public String toString(){
+		return "ID: " + instrumentId + 
+				"\tname: "  + name;
+	}
+	
 }

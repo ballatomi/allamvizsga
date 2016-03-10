@@ -3,7 +3,6 @@ package edu.ubb.bsc.repo;
 import java.util.Iterator;
 import java.util.List;
 
-import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -13,7 +12,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import edu.ubb.bsc.repo.model.SheetMusic;
-import edu.ubb.bsc.service.repo.ServiceException;
 
 public class JdbcSheetMusicDAO implements SheetMusicDAO {
 
@@ -129,6 +127,7 @@ public class JdbcSheetMusicDAO implements SheetMusicDAO {
 		}
 	}
 
+	@SuppressWarnings("null")
 	public void deleteSheetmusic(SheetMusic sheetmusic) throws RepositoryException {
 		Session session = factory.openSession();
 		Transaction tx = null;

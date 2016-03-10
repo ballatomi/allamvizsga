@@ -151,7 +151,8 @@ public class SheetMusic implements java.io.Serializable {
 	public String toString(){
 		return "\tsmId: " + sheetMusicId+
 		"\tname: " + name +
-		"\tuploadDate: " + uploadDate;
+		"\tuploadDate: " + uploadDate +
+		"\tuser: " + user.getUserName();
 	}
 
 }

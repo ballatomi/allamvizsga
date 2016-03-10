@@ -1,0 +1,21 @@
+@CHARSET "ISO-8859-1";
+
+SELECT {
+	width: 200px;
+	box-sizing: border-box;
+}
+
+SECTION {
+	padding: 8px;
+	overflow: hidden;
+}
+
+SECTION>DIV {
+	float: left;
+	padding: 4px;
+}
+
+SECTION>DIV+DIV {
+	width: 40px;
+	text-align: center;
+}

@@ -6,6 +6,7 @@ import javax.security.auth.login.LoginException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -39,12 +40,14 @@ public class Authenticate {
 		} catch (ServiceException e) {
 			jo.put("Message", "Login error!");
 			jo.put("display_type", "initial");
+			jo.put("login","false");
 			return jo.toString();
 		}
 
 		if (user == null) {
 			jo.put("Message", "Incorrect username or password!");
 			jo.put("display_type", "initial");
+			jo.put("login","false");
 		} else {
 			HttpSession session = request.getSession();
 			session.setAttribute("logged-user", user);
@@ -52,6 +55,7 @@ public class Authenticate {
 			System.out.println(user);
 			jo.put("Message", "Log in success!");
 			jo.put("display_type", "initial");
+			jo.put("login","true");
 			log.info("User login was successfull!");
 		}
 		return jo.toString();
@@ -83,7 +87,7 @@ public class Authenticate {
 		return jo.toString();
 	}
 
-	@POST
+	@GET
 	@Path("/logout")
 	@Produces({ MediaType.APPLICATION_JSON })
 	public String logout(@Context HttpServletRequest request) throws LoginException, JSONException, ServiceException {

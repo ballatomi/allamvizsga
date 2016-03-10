@@ -22,4 +22,14 @@ public class JdbcDAOFactory extends DAOFactory {
 		return new JdbcSongGenreDAO();
 	}
 
+	@Override
+	public InstrumentSheetMusicDAO getInstrumentSheetMusicDAO() {
+		return new JdbcInstrumentSheetMusicDAO();
+	}
+	
+	@Override
+	public InstrumentDAO getInstrumentDAO() {
+		return new JdbcInstrumentDAO();
+	}
+
 }
