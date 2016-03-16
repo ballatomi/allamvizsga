@@ -1,53 +1,75 @@
 var urlSheetMusic = "http://localhost:8080/BscProject/rest/sheet/";
 var pdfAsArray;
 var instrumentListId = [];
+var instrumentSheetMusicListlength = 0;
+
+/**
+ * Controlling load sheet music to listing
+ */
 var App = angular.module('controllSheetMusic', []);
 App.controller('ctrlSheetViewer', function($scope, $http, $location, $window) {
 
+	$scope.showLoader = true;
 	$scope.init = function() {
-		$http.post(urlSheetMusic + "getAll").success(function(response) {
-			console.log(response.sheetMusic);
-
-			$scope.Sheetmusic = response.sheetMusic;
-			//console.log(response.sheetMusic[2].filePdf); - pdf json-ban
-			// byte-onkent
-//			var instrumentSheetMusicList;
-//			var instrumentSheetMusicListlength;
-			
-//			$http.post(urlSheetMusic + "getAllInstrumentSheetmusic").success(function(response) {
-//				instrumentSheetMusicList = response.instrumentSheetmusic;
-//				instrumentSheetMusicListlength = response.instrumentSheetmusic.length
-//			});
-			
-			// Json-bol file-ra alakitas
-			var respLength = response.sheetMusic.length;
-			
-			for (var respInd = 0; respInd < respLength; respInd++) {
-
-				console.log(response.sheetMusic[respInd].name);
-				var data = atob(response.sheetMusic[respInd].filePdf);
-				var pdfAsArray = new Array(data.length);
-				for (var i = 0; i < data.length; i++) {
-					pdfAsArray[i] = data.charCodeAt(i);
-				}
-				var pdfUint = new Uint8Array(pdfAsArray);
-				var id = response.sheetMusic[respInd].sheetMusicId;
-				console.log("ID: " + id);
-				loadCanvas(1, pdfUint, id);
+		
+		$http.post(urlSheetMusic + "getAllInstrumentSheetmusic").success(function(response) {
+			instrumentSheetMusicList = response.instrumentSheetmusic;
+			instrumentSheetMusicListlength = response.instrumentSheetmusic.length;
+		
+			$http.post(urlSheetMusic + "getAll").success(function(response) {
+				console.log(response.sheetMusic);
+	
+				$scope.Sheetmusic = response.sheetMusic;
 				
-//				for (var int = 0; int < instrumentSheetMusicListlength; int++) {
-//					if (response.sheetMusic[respInd].sheetMusicId == instrumentSheetMusicList[int].sheetMusic.sheetMusicId){
-//						$scope.Sheetmusic[respInd].instrument = instrumentSheetMusicList[int].instrument;
-//						console.log(instrumentSheetMusicList[int].instrument.name);
-//					}
-//				}
-
-			}
+				//console.log(response.sheetMusic[2].filePdf); - pdf json-ban
+				// byte-onkent
+				// Json-bol file-ra alakitas
+				var respLength = response.sheetMusic.length;
+				
+				for (var respInd = 0; respInd < respLength; respInd++) {
+					//console.log(response.sheetMusic[respInd].uploadDate);
+					var d = new Date(response.sheetMusic[respInd].uploadDate);
+					dformat = [ (d.getMonth()+1).padLeft(), d.getDate().padLeft(),d.getFullYear()].join('-')+
+			                    ' ' +
+			                  [ d.getHours().padLeft(), d.getMinutes().padLeft(), d.getSeconds().padLeft()].join(':');
+					//console.log(dformat);
+					$scope.Sheetmusic[respInd].uploadDate = dformat;
+					
+					console.log(response.sheetMusic[respInd].name);
+					var data = atob(response.sheetMusic[respInd].filePdf);
+					var pdfAsArray = new Array(data.length);
+					for (var i = 0; i < data.length; i++) {
+						pdfAsArray[i] = data.charCodeAt(i);
+					}
+					var pdfUint = new Uint8Array(pdfAsArray);
+					var id = response.sheetMusic[respInd].sheetMusicId;
+					console.log("ID: " + id);
+					loadCanvas(1, pdfUint, id);
+					
+					//load instruments
+					var ins = "";
+					for (var int = 0; int < instrumentSheetMusicListlength; int++) {
+						if (response.sheetMusic[respInd].sheetMusicId == instrumentSheetMusicList[int].sheetMusic.sheetMusicId){
+							ins += instrumentSheetMusicList[int].instrument.name + ", ";
+						}
+					}
+					$scope.Sheetmusic[respInd].instrument = ins;
+				}
+				$scope.showLoader = false;
+			});
 		});
+	}	
+	
+	$scope.redirectSheetMusicViewer = function(id) {
+		console.log("ID:" + id);
+		//console.log($location.absUrl());
 	}
-
+	
 });
 
+/**
+ * Controlling logout user
+ */
 App.controller('logoutController', function($scope, $http, $location, $window) {
 	$scope.logout = function(user) {
 		$http.get(urlLogin + "logout").success(function(response) {
@@ -57,109 +79,21 @@ App.controller('logoutController', function($scope, $http, $location, $window) {
 	};
 });
 
-App.controller('uploadSheetCtrl',
-		function($scope, $http, $timeout) {
-			$scope.songGenreList = [];
-			
-			$("#btnLeft").click(function () {
-			    var selectedItem = $("#rightValues option:selected");
-			    $("#leftValues").append(selectedItem);
-			    instrumentListId = ($( "#leftValues" ).val());
-			});
 
-			$("#btnRight").click(function () {
-			    var selectedItem = $("#leftValues option:selected");
-			    $("#rightValues").append(selectedItem);
-			    instrumentListId.splice($( "#leftValues" ).val(), 1);
-			});
+/**
+ * convert datetime
+ */
+Number.prototype.padLeft = function(base,chr){
+   var  len = (String(base || 10).length - String(this).length)+1;
+   return len > 0? new Array(len).join(chr || '0')+this : this;
+}
 
-			$("#rightValues").change(function (val) {
-			    var selectedItem = $("#rightValues option:selected");
-			    $("#txtRight").val(selectedItem.text());
-			});
-			
-			$scope.init = function() {
-
-				$http.post(urlSheetMusic + "getAllGenre").success(
-						function(response) {
-							console.log(response);
-							$scope.songGenreList = response.songGenre;
-						});
-
-				$http.post(urlSheetMusic + "getAllInstrument").success(
-						function(response) {
-							console.log(response);
-							$scope.instrumentsList = response.instrument;
-							var dataSource = response.instrument;
-
-						});
-			}
-			$scope.uploadButtonText = "Upload";
-
-			$scope.uploadSheet = function(sheet) {
-				var filepdf = document
-						.getElementById("upload-file-selector-pdf").files;
-				var fileSound = document
-						.getElementById("upload-file-selector-sound").files;
-
-				// sheet.filePdf = file[0];
-				console.log("File pdf: " + filepdf[0]);
-				console.log(instrumentListId);
-
-				try {
-					if (sheet.name != undefined) {
-
-						var fd = new FormData();
-						fd.append("filepdf", filepdf[0]);
-						fd.append("filesound", fileSound[0]);
-						fd.append("name", sheet.name);
-
-						if (isNaN(sheet.selectedGenre)) {
-							sheet.selectedGenre = '20';
-						}
-						fd.append("genre_id", parseInt(sheet.selectedGenre));
-
-						if (sheet.length == undefined) {
-							sheet.length = 1;
-						}
-						fd.append("length", parseInt(sheet.length));
-						fd.append("license", sheet.license);
-						fd.append("instrumentList", instrumentListId);
-						
-						// uploading spinner
-						$scope.uploadButtonText = "Uploading";
-
-						$http.post(urlSheetMusic + "upload", fd, {
-							
-							transformRequest : angular.identity,
-							headers : {
-								'Content-Type' : undefined
-							}
-						}).success(function(response) {
-							console.log(response);
-							$scope.message = response.message;
-							$scope.display_type = response.display_type;
-							$scope.alert_type = response.alert_type;
-
-							$timeout(function() {
-								$scope.uploadButtonText = "Upload";
-							});
-						});
-
-					} else {
-						$scope.message = "Not filled correctly!";
-						$scope.display_type = "initial";
-						$scope.alert_type = "alert alert-danger";
-					}
-				} catch (e) {
-					$scope.message = "Error! " + e;
-					$scope.display_type = "initial";
-					$scope.alert_type = "alert alert-danger";
-				}
-			}
-		});
-
-
+/**
+ *  load canvas a Picture
+ * @param page
+ * @param pdfAsArray
+ * @param musicId
+ */
 function loadCanvas(page, pdfAsArray, musicId) {
 	var pdf = PDFJS.getDocument(pdfAsArray).then(function(pdf) {
 		maxPageNumber = pdf.numPages;

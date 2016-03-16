@@ -10,8 +10,10 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
@@ -23,6 +25,8 @@ import org.codehaus.jettison.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.sun.jersey.multipart.FormDataBodyPart;
 import com.sun.jersey.multipart.FormDataParam;
 
@@ -126,20 +130,17 @@ public class SheetMusicRest {
 
 		} catch (ServiceException e) {
 			jo.put("message", "Error in saving sheet music! " + e);
-			jo.put("display_type", "initial");
 			jo.put("alert_type", "alert alert-danger");
 			log.error("Error in saving sheet music!", e);
 			return jo.toString();
 		} catch (IOException e) {
 			jo.put("message", "Error, file failed!");
-			jo.put("display_type", "initial");
 			jo.put("alert_type", "alert alert-danger");
 			log.error("Error, file failed!", e);
 			return jo.toString();
 		}
 
 		jo.put("message", "Upload was successfull!");
-		jo.put("display_type", "initial");
 		jo.put("alert_type", "alert alert-success");
 		return jo.toString();
 	}
@@ -155,7 +156,6 @@ public class SheetMusicRest {
 	public List<SheetMusic> getSheetMusic() {
 		SheetMusicServiceImpl service;
 		List<SheetMusic> smList = new ArrayList<SheetMusic>();
-		SheetMusic s = new SheetMusic();
 		
 		try {
 			service = new SheetMusicServiceImpl();
@@ -174,6 +174,7 @@ public class SheetMusicRest {
 		}
 		return smList;
 	}
+	
 	
 	/**
 	 * get Instrument Sheetmusic
@@ -196,6 +197,52 @@ public class SheetMusicRest {
 			log.error("Error in getting sheetMusic", e);
 		}
 		return is;
+	}
+	
+	/**
+	 * get Instrument Sheetmusic by sheetmusic ID
+	 * @return
+	 */
+	@GET
+	@Path("/getInstrumentSheetmusicBySheetID/{id}")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public List<InstrumentSheetmusic> getInstrumentSheetmusicBySheetID(@PathParam("id") Integer id) {
+		InstrumentSheetMusicImpl ismService;
+		List<InstrumentSheetmusic> is = new ArrayList<InstrumentSheetmusic>();
+		try {
+			ismService = new InstrumentSheetMusicImpl();
+			System.out.println("Meghiv");
+			is = ismService.getInstrumentSheetmusicBySheetmusicId(id);
+
+			log.info("Get InstrumentSheetmusic by sheet music ID");
+
+		} catch (ServiceException e) {
+			log.error("Error in getting sheetMusic", e);
+		}
+		return is;
+	}
+	
+	/**
+	 * get Sheetmusic by sheetmusic ID
+	 * @return
+	 */
+	@GET
+	@Path("/getSheetmusicBySheetID/{id}")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public SheetMusic getSheetmusicBySheetID(@PathParam("id") Integer id) {
+		SheetMusicServiceImpl smService;
+		SheetMusic sm = new SheetMusic();
+		try {
+			smService = new SheetMusicServiceImpl();
+			System.out.println("Meghiv");
+			sm = smService.getSheetmusicById(id);
+			
+			log.info("Get Sheetmusic by sheet music ID");
+
+		} catch (ServiceException e) {
+			log.error("Error in getting sheetMusic", e);
+		}
+		return sm;
 	}
 
 

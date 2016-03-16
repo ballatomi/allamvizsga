@@ -39,14 +39,12 @@ public class Authenticate {
 			user = service.loginAuthenticateUser(user.getUserName(), user.getUserPassword());
 		} catch (ServiceException e) {
 			jo.put("Message", "Login error!");
-			jo.put("display_type", "initial");
 			jo.put("login","false");
 			return jo.toString();
 		}
 
 		if (user == null) {
 			jo.put("Message", "Incorrect username or password!");
-			jo.put("display_type", "initial");
 			jo.put("login","false");
 		} else {
 			HttpSession session = request.getSession();
@@ -54,7 +52,6 @@ public class Authenticate {
 
 			System.out.println(user);
 			jo.put("Message", "Log in success!");
-			jo.put("display_type", "initial");
 			jo.put("login","true");
 			log.info("User login was successfull!");
 		}
@@ -77,12 +74,10 @@ public class Authenticate {
 
 			System.out.println(user);
 			jo.put("regMessage", "Registration was successfull!");
-			jo.put("display_type", "initial");
 			log.info("User Registration was successfull!");
 
 		} catch (ServiceException e) {
 			jo.put("regMessage", "Registration not was successfull!");
-			jo.put("display_type", "initial");
 		}
 		return jo.toString();
 	}
@@ -97,7 +92,6 @@ public class Authenticate {
 		session.invalidate();
 
 		jo.put("Message", "Logged out in success!");
-		jo.put("display_type", "initial");
 
 		return jo.toString();
 	}

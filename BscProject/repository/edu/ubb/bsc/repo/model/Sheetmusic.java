@@ -152,7 +152,7 @@ public class SheetMusic implements java.io.Serializable {
 		return "\tsmId: " + sheetMusicId+
 		"\tname: " + name +
 		"\tuploadDate: " + uploadDate +
-		"\tuser: " + user.getUserName();
+		"\tuser: " + user;
 	}
 
 }

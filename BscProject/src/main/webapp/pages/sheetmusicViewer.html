@@ -2,7 +2,7 @@
 <html ng-app="controllSheetMusic">
 <head>
 <meta charset="ISO-8859-1">
-<title>Sheet Music view</title>
+<title>Sheet Music viewer</title>
 
 <link rel="stylesheet"
 	href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
@@ -22,9 +22,11 @@
 <script src="../js/pdf_js/pdf.js"></script>
 <script src="../js/pdf_js/pdf.worker.js"></script>
 
-
 <script src="../js/sheetMusic.js"></script>
 <script src="../js/authentication.js"></script>
+<script src="../js/sheetMusicViewer.js"></script>
+
+<script type='text/javascript' src='http://www.midijs.net/lib/midi.js'></script>
 
 </head>
 <body>
@@ -35,17 +37,15 @@
 				<button type="button" class="navbar-toggle collapsed"
 					data-toggle="collapse" data-target="#navbar" aria-expanded="false"
 					aria-controls="navbar">
-					<span class="sr-only">Sheet Music</span> <span
+					<span class="sr-only">Sheet Music viewer</span> <span
 						class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" href="#">Sheet Music</a>
+				<a class="navbar-brand" href="#">Sheet Music viewer</a>
 			</div>
 			<div id="navbar" class="navbar-collapse collapse">
 				<ul class="nav navbar-nav">
 					<li class="active"><a href="#">Home</a></li>
 					<li><a href="upload.html">Upload Sheet music</a></li>
-					<li><a href="#about">About</a></li>
-					<li><a href="#contact">Contact</a></li>
 				</ul>
 
 				<ul class="nav navbar-nav navbar-right">
@@ -56,11 +56,12 @@
 		</div>
 	</nav>
 
+
 	<div class="view-content">
 		<div class="container" ng-controller="ctrlSheetViewer"
 			data-ng-init="init()">
 			<h3>Sheet</h3>
-
+			
 			<div class="spinner" ng-show="showLoader">
 			  <h4> Loading...</h4>
 			  <div class="rect1"></div>
@@ -68,52 +69,30 @@
 			  <div class="rect3"></div>
 			  <div class="rect4"></div>
 			  <div class="rect5"></div>
-			</div>    
+			</div>
+			
+			<h2>{{sheetmusicName}}</h2>
 
-			<table align="center" class="table">
-				<tbody>
-					<tr ng-repeat="sheet in Sheetmusic" colspan="2" valign="bottom"
-						height="10" width="70%">
-						<td><a href="sheetmusicViewer.html?page={{sheet.sheetMusicId}}" ><!-- ng-click="redirectSheetMusicViewer(sheet.sheetMusicId)" -->
-								<div class="wrapper" style="border: 1px solid #d3d3d3;">
-									<canvas id="{{ sheet.sheetMusicId }}"></canvas>
-								</div>
-						</a></td>
-						<td valign="bottom" height="10" width="80%">
-							<div class="views-field-title">
-								<h3>
-									<a href="sheetmusicViewer.html?page={{sheet.sheetMusicId}}" style="color: #80aaff;">Title: <b>
-											{{sheet.name}} </b>
-									</a>
-								</h3>
-							</div>
-							<table>
-								<tr>
-									<td>By: <em>{{sheet.user.userName}}</em> | <em>{{sheet.length}}</em>
-										pages | <em>{{sheet.viewsNum}}</em> views | Upload Date:
-										{{sheet.uploadDate}}</br>
-									</td>
-								</tr>
-
-								<tr>
-									<td><p>Music style: {{sheet.songGenre.songGenreName}}</p></td>
-								</tr>
-
-								<tr>
-									<td><p>Instruments: <em>{{sheet.instrument}}</em></p> 
-									</td>
-								</tr>
-							</table>
-						</td>
-
-					</tr>
-				</tbody>
-			</table>
+			<!-- <audio src="../LaLaLaHappiness.mp3" controls>	
+			<p>Fallback content goes here.</p>
+			</audio> -->
+			
+			
+			<audio id="audio" src ="" controls>	
+			<p>Fallback content goes here.</p>
+			</audio>
+			
+			 <a href="#" ng-click="palyMidiMusic()">Play midi</a>
+			 
+			<div class="wrapper" >
+				<canvas id="pdfCanvas" style="border: 1px solid #d3d3d3;" width="480" height="480"></canvas>
+			</div>
 
 		</div>
-		<!-- controller - Container /end -->
 	</div>
-	<!--/ view-content -->
+
+
+
 
 </body>
 </html>

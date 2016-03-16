@@ -193,13 +193,13 @@ public class JdbcInstrumentSheetMusicDAO implements InstrumentSheetMusicDAO {
 //
 //		System.out.println(is.getName());
 
-		//List<InstrumentSheetmusic> sm = (List<InstrumentSheetmusic>) cd.getInstrumentSheetmusicBySheetmusicId(29);
-		List<InstrumentSheetmusic> sm = (List<InstrumentSheetmusic>) cd.getInstrumentSheetmusicByInstrumentId(1);
+		List<InstrumentSheetmusic> sm = (List<InstrumentSheetmusic>) cd.getInstrumentSheetmusicBySheetmusicId(29);
+		//List<InstrumentSheetmusic> sm = (List<InstrumentSheetmusic>) cd.getInstrumentSheetmusicByInstrumentId(1);
 
 		for (Iterator<?> iterator = sm.iterator(); iterator.hasNext();) {
 			InstrumentSheetmusic a = (InstrumentSheetmusic) iterator.next();
-			System.out.println(a.getInstrument().getName());
-			System.out.println(a.getSheetMusic().getName());
+			System.out.println(a.getInstrument());
+			System.out.println(a.getSheetMusic());
 		}
 
 		// for (Iterator<?> iterator = sm.iterator(); iterator.hasNext();) {
