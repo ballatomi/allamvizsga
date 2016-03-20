@@ -2,7 +2,6 @@ var urlSheetMusic = "http://localhost:8080/BscProject/rest/sheet/";
 var pdfAsArray;
 var instrumentListId = [];
 var instrumentSheetMusicListlength = 0;
-
 /**
  * Controlling load sheet music to listing
  */
@@ -36,6 +35,7 @@ App.controller('ctrlSheetViewer', function($scope, $http, $location, $window) {
 					$scope.Sheetmusic[respInd].uploadDate = dformat;
 					
 					console.log(response.sheetMusic[respInd].name);
+					
 					var data = atob(response.sheetMusic[respInd].filePdf);
 					var pdfAsArray = new Array(data.length);
 					for (var i = 0; i < data.length; i++) {
@@ -44,7 +44,9 @@ App.controller('ctrlSheetViewer', function($scope, $http, $location, $window) {
 					var pdfUint = new Uint8Array(pdfAsArray);
 					var id = response.sheetMusic[respInd].sheetMusicId;
 					console.log("ID: " + id);
+					
 					loadCanvas(1, pdfUint, id);
+					$scope.Sheetmusic[respInd].length = response.sheetMusic[respInd].length;
 					
 					//load instruments
 					var ins = "";
@@ -95,9 +97,9 @@ Number.prototype.padLeft = function(base,chr){
  * @param musicId
  */
 function loadCanvas(page, pdfAsArray, musicId) {
-	var pdf = PDFJS.getDocument(pdfAsArray).then(function(pdf) {
-		maxPageNumber = pdf.numPages;
+	PDFJS.getDocument(pdfAsArray).then(function(pdf) {
 		pdf.getPage(page).then(function(page) {
+			maxPageNumber = pdf.numPages;
 			var scale = 0.35;
 			var viewport = page.getViewport(scale);
 			var canvas = document.getElementById(musicId);
@@ -113,4 +115,6 @@ function loadCanvas(page, pdfAsArray, musicId) {
 			page.render(renderContext);
 		});
 	});
+
+	
 }

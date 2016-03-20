@@ -211,7 +211,6 @@ public class SheetMusicRest {
 		List<InstrumentSheetmusic> is = new ArrayList<InstrumentSheetmusic>();
 		try {
 			ismService = new InstrumentSheetMusicImpl();
-			System.out.println("Meghiv");
 			is = ismService.getInstrumentSheetmusicBySheetmusicId(id);
 
 			log.info("Get InstrumentSheetmusic by sheet music ID");
@@ -234,7 +233,6 @@ public class SheetMusicRest {
 		SheetMusic sm = new SheetMusic();
 		try {
 			smService = new SheetMusicServiceImpl();
-			System.out.println("Meghiv");
 			sm = smService.getSheetmusicById(id);
 			
 			log.info("Get Sheetmusic by sheet music ID");

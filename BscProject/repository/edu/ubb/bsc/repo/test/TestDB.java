@@ -1,22 +1,21 @@
 package edu.ubb.bsc.repo.test;
 
-import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import edu.ubb.bsc.repo.DAOFactory;
+import edu.ubb.bsc.repo.SheetMusicDAO;
 import edu.ubb.bsc.repo.UserDAO;
+import edu.ubb.bsc.repo.model.SheetMusic;
 import edu.ubb.bsc.repo.model.User;
 
 public class TestDB {
 
-	private DAOFactory df;
-	private UserDAO ud;
-	private final static Logger log = LoggerFactory.getLogger(TestDB.class);
-
+	
+	//private final static Logger log = LoggerFactory.getLogger(TestDB.class);
+	private DAOFactory df = DAOFactory.getInstance(); 
 	public TestDB(){
-		df = DAOFactory.getInstance();
-		ud = df.getUserDAO();
+	}
+
+	public void testUser(){
+		UserDAO ud = df.getUserDAO();
 
 		User user = new User();
 		user.setUserName("Tamas");
@@ -25,12 +24,20 @@ public class TestDB {
 		user.setUserRight(1);
 		user.setUserTel("0123");
 
-		ud.insertUser(user);
-		 
+		//ud.insertUser(user);
+		ud.getUserByName("Tamas");
+	}
+	
+	public void testSheetMusic(){
+		SheetMusicDAO sd = df.getSheetMusicDAO();
+		SheetMusic sm = sd.getSheetmusicById(35);
+		System.out.println(sm);
 	}
 	
 	public static void main(String[] args) {
-		new TestDB();
+		TestDB test = new TestDB();
+		test.testSheetMusic();
+		
 	}
 
 }

@@ -7,6 +7,9 @@
 <link rel="stylesheet"
 	href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
 
+<link rel="stylesheet"
+	href="http://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.5.4/bootstrap-select.min.css">
+
 <script
 	src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
 
@@ -44,7 +47,7 @@
 			</div>
 			<div id="navbar" class="navbar-collapse collapse">
 				<ul class="nav navbar-nav">
-					<li class="active"><a href="#">Home</a></li>
+					<li class="active"><a href="sheetmusic.html">Home</a></li>
 					<li><a href="upload.html">Upload Sheet music</a></li>
 				</ul>
 
@@ -61,33 +64,113 @@
 		<div class="container" ng-controller="ctrlSheetViewer"
 			data-ng-init="init()">
 			<h3>Sheet</h3>
-			
+
 			<div class="spinner" ng-show="showLoader">
-			  <h4> Loading...</h4>
-			  <div class="rect1"></div>
-			  <div class="rect2"></div>
-			  <div class="rect3"></div>
-			  <div class="rect4"></div>
-			  <div class="rect5"></div>
-			</div>
-			
-			<h2>{{sheetmusicName}}</h2>
-
-			<!-- <audio src="../LaLaLaHappiness.mp3" controls>	
-			<p>Fallback content goes here.</p>
-			</audio> -->
-			
-			
-			<audio id="audio" src ="" controls>	
-			<p>Fallback content goes here.</p>
-			</audio>
-			
-			 <a href="#" ng-click="palyMidiMusic()">Play midi</a>
-			 
-			<div class="wrapper" >
-				<canvas id="pdfCanvas" style="border: 1px solid #d3d3d3;" width="480" height="480"></canvas>
+				<h4>Loading...</h4>
+				<div class="rect1"></div>
+				<div class="rect2"></div>
+				<div class="rect3"></div>
+				<div class="rect4"></div>
+				<div class="rect5"></div>
 			</div>
 
+			<div class="container-fluid text-center" ng-show="!showLoader">
+				<div class="row content">
+					<div class="col-xs-7 text-left">
+						<h2>{{Sheetmusic.name}}</h2>
+
+						<div class="containerView">
+							<audio id="audio" src="" oncanplay="loadAudioDuration()" controls>
+								<p>Fallback content goes here.</p>
+							</audio>
+
+							<!-- <a href="#" ng-click="palyMidiMusic()">Play midi</a>-->
+							<div class="wrapper">
+								<canvas id="pdfCanvas" style="border: 1px solid #d3d3d3;">
+									<!-- width="480" height="480"> -->
+								</canvas>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-4">
+						<br />
+						<div>
+							<div class="col-sm-1"></div>
+							<div class="col-sm-8">
+								<p>
+									Uploaded by: <span class="glyphicon glyphicon-user"> </span>
+									{{Sheetmusic.user.userName}}
+								</p>
+								<p>
+									Mail: <a href="mailto:Sheetmusic.user.userMail">{{Sheetmusic.user.userMail}}</a>
+									<br />
+							</div>
+						</div>
+
+						<div class="btn-group">
+							<button class="btn btn-primary" data-label-placement>
+								<span class="glyphicon glyphicon-download-alt"></span> Download
+							</button>
+							<button data-toggle="dropdown"
+								class="btn btn-primary dropdown-toggle">
+								<span class="caret"></span>
+							</button>
+							<ul class="dropdown-menu">
+								<li><a role="menuitem" href="#"
+									ng-click="downloadSheetMusic()"><span
+										class="glyphicon glyphicon-floppy-disk"></span> PDF File</a></li>
+								<li><a role="menuitem" href="#"
+									ng-click="downloadSoundFile()"><span
+										class="glyphicon glyphicon-music"></span> MP3 File </a></li>
+								<li><a role="menuitem" href="#" ng-click="load()"><span
+										class="glyphicon glyphicon-music"></span> Test </a></li>
+
+								<!-- Other items -->
+							</ul>
+						</div>
+
+						<div class="btn-group">
+							<button class="btn btn-success" data-label-placement>
+								<span class="glyphicon glyphicon-star"></span> Favorite
+							</button>
+						</div>
+					</div>
+
+					<div class="col-xs-4">
+						<div class="col-padding text-left">
+							<h3>Informations</h3>
+							<hr />
+							<div class="col-md-5">
+								<p>Uploaded date</p>
+								<p>Pages</p>
+								<p>Duration</p>
+								<p>Licence</p>
+								<p>Song genre</p>
+								<p>Current Time</p>
+
+							</div>
+
+							<div class="col-md-6">
+								<p>{{Sheetmusic.uploadDate}}.</p>
+								<p id="pdfLength"></p>
+								<p id="audioDuration">{{Sheetmusic.duration}}.</p>
+								<p>{{Sheetmusic.license}}.</p>
+								<p>{{Sheetmusic.songGenre.songGenreName}}.</p>
+								<p id="currentTime">{{currentTime}}}</p>
+							</div>
+						</div>
+					</div>
+
+				</div>
+				
+				<br/>
+				<div class="col-xs-12 col-md-7" align="left">
+					<div class="form-group">
+						<label class="col-padding text-left">Comment</label>
+						<textarea class="form-control" rows="4" id="comment"></textarea>
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
 

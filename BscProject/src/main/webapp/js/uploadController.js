@@ -88,7 +88,6 @@ App.controller('uploadSheetCtrl',function($scope, $http, $timeout) {
 						console.log(response);
 						$scope.message = response.message;
 						$scope.showUploadAlert = true;
-						// $scope.display_type = response.display_type;
 						$scope.alert_type = response.alert_type;
 
 						$timeout(function() {
@@ -99,13 +98,11 @@ App.controller('uploadSheetCtrl',function($scope, $http, $timeout) {
 				} else {
 					$scope.message = "Not filled correctly!";
 					$scope.showUploadAlert = true;
-					// $scope.display_type = "initial";
 					$scope.alert_type = "alert alert-danger";
 				}
 			} catch (e) {
 				$scope.message = "Error! " + e;
 				$scope.showUploadAlert = true;
-				// $scope.display_type = "initial";
 				$scope.alert_type = "alert alert-danger";
 			}
 		}
