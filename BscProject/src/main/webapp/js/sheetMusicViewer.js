@@ -1,5 +1,5 @@
 /**
- * 
+ * Controlling sheetMusicViewer.html page
  */
 var linkToMusic;
 var pdfAsArray;
@@ -66,18 +66,48 @@ App.controller('ctrlSheetViewer', function($scope, $http, $location, $window) {
 								.join('-') + ' ' + [ d.getHours().padLeft(),d.getMinutes().padLeft(),d.getSeconds().padLeft() ].join(':');
 
 						$scope.Sheetmusic.uploadDate = dformat;
-
+						
+						//GET comments on the sheetmusic
+						var smId = response.sheetMusicId;
+						$http.get(urlSheetMusic + "postComment/"+smId).success(function(response) {
+							console.log(response);
+							
+							if (response != null){
+								$scope.commentsNumber = response.sheetmusicComment.length;
+								if (response.sheetmusicComment.length === undefined){
+									$scope.userFirstName = response.sheetmusicComment.user.userFirstName;
+									$scope.userLastName = response.sheetmusicComment.user.userLastName;
+									$scope.postedDate = response.sheetmusicComment.postedDate;
+//									var d = new Date(response.sheetmusicComment.postedDate);
+//									dformat = [ (d.getMonth()+1).padLeft(), d.getDate().padLeft(),d.getFullYear()].join('-')+
+//							                    ' ' +
+//							                  [ d.getHours().padLeft(), d.getMinutes().padLeft(), d.getSeconds().padLeft()].join(':');
+//									$scope.postedDate = dformat;
+									$scope.comment = response.sheetmusicComment.comment;
+									$scope.commentsNumber = 1;
+									$scope.showMultiCommnet = false;
+									$scope.showSingleCommnet = true;
+								}else{
+									$scope.sheetmusicComment = response.sheetmusicComment;
+									$scope.showSingleCommnet = false;
+									$scope.showMultiCommnet = true;
+								}
+							}else{
+								$scope.commentsNumber = "No Comments Yet";
+								$scope.showSingleCommnet = false;
+								$scope.showMultiCommnet = false;
+							}
+						});
+						
 						//time array
 						audio.addEventListener('play', function(e) {
 							timeInOnePage = audio.duration / maxPageNumber;
-							console.log(timeInOnePage);
-							console.log(maxPageNumber);
 							
 							timeArray = [timeInOnePage];
 							for (var i = 1; i < maxPageNumber; i++) {
 								timeArray[i] = timeArray[i-1]+timeInOnePage;
 							}
-							console.log(timeArray);
+							//console.log(timeArray);
 							
 						}, false);
 						
@@ -97,17 +127,68 @@ App.controller('ctrlSheetViewer', function($scope, $http, $location, $window) {
 					});
 		} else {
 			$scope.showLoader = false;
-			alert("Sheet music not selected!");
+			//alert("Sheet music not selected!");
 			$window.location = 'sheetmusic.html';
 		}
 	}
 
-	$scope.load = function() {
-		// var x = document.getElementById("audio").duration;
-		// $scope.Sheetmusic.duration = x+".sec";
-		// $("#audioDuration").text(x+".sec");
-		// alert(x);
+	$scope.saveComment = function() {
+		console.log($scope.commentText);
+		console.log($scope.Sheetmusic.sheetMusicId);
+
+		var fd = new FormData();
+		fd.append("id", parseInt($scope.Sheetmusic.sheetMusicId));
+		fd.append("comment", $scope.commentText);
+		
+		$http.put(urlSheetMusic + "postComment", fd, {
+			transformRequest : angular.identity,
+			headers : {
+				'Content-Type' : undefined
+			}
+		}).success(function(response) {
+			if (response == null){
+				alert("Only logged in users can write posts!");
+			}
+			console.log(response);
+			
+			if (response != null){
+				
+				$scope.commentsNumber = response.sheetmusicComment.length;
+				if (response.sheetmusicComment.length === undefined){
+					$scope.userFirstName = response.sheetmusicComment.user.userFirstName;
+					$scope.userLastName = response.sheetmusicComment.user.userLastName;
+					
+					$scope.postedDate = response.sheetmusicComment.postedDate;
+
+					$scope.comment = response.sheetmusicComment.comment;
+					$scope.commentsNumber = 1;
+					$scope.showMultiCommnet = false;
+					$scope.showSingleCommnet = true;
+					
+				}else{
+					$scope.sheetmusicComment = response.sheetmusicComment;
+					$scope.showMultiCommnet = true;
+					$scope.showSingleCommnet = false;
+				}
+			}else{
+				$scope.commentsNumber = "No Comments Yet";
+				$scope.showMultiCommnet = false;
+				$scope.showSingleCommnet = false;
+			}
+			
+			
+//				for (var respInd = 0; respInd < respLength; respInd++) {
+//					console.log(response.sheetmusicComment[respInd]);
+//					var d = new Date(response.sheetmusicComment[respInd].postedDate);
+//					dformat = [ (d.getMonth()+1).padLeft(), d.getDate().padLeft(),d.getFullYear()].join('-')+
+//			                    ' ' +
+//			                  [ d.getHours().padLeft(), d.getMinutes().padLeft(), d.getSeconds().padLeft()].join(':');
+//					$scope.sheetmusicComment[respInd].postedDate = dformat;
+//				}
+		});
+		
 	}
+	
 	$scope.downloadSheetMusic = function() {
 		downloadFile(pdfAsArray, "SheetMusic.pdf");
 	}
@@ -119,17 +200,16 @@ App.controller('ctrlSheetViewer', function($scope, $http, $location, $window) {
 	$scope.palyMidiMusic = function() {
 		linkToMusic = link.href;
 		MIDIjs.play(linkToMusic);
-
 		// midi file
 		// link.download = "file.mid";
 		// link.click();
-
 		// MIDIjs.play(link.href);
 
 	}
 });
 
 App.controller('logoutController', function($scope, $http, $location, $window) {
+	
 	$scope.logout = function(user) {
 		$http.get(urlLogin + "logout").success(function(response) {
 			console.log(response);
@@ -176,7 +256,6 @@ function loadCanvas(page, pdfAsArray) {
 	var pdf = PDFJS.getDocument(pdfAsArray).then(function(pdf) {
 		maxPageNumber = pdf.numPages;
 		$("#pdfLength").text(maxPageNumber);
-		
 		pdf.getPage(page).then(function(page) {
 			var scale = 1.0;
 			var viewport = page.getViewport(scale);
@@ -195,6 +274,7 @@ function loadCanvas(page, pdfAsArray) {
 		});
 	});
 }
+
 
 function clearCanvas(){
 	var canvas = document.getElementById('pdfCanvas');

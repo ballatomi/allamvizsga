@@ -2,7 +2,7 @@
  * 
  */
 var App = angular.module('controllSheetMusic', []);
-
+var urlSheetMusic = "http://localhost:8080/BscProject/rest/";
 /**
  * Controlling upload sheet music
  */
@@ -29,13 +29,13 @@ App.controller('uploadSheetCtrl',function($scope, $http, $timeout) {
 		$scope.showUploadAlert = false;
 		$scope.init = function() {
 
-			$http.post(urlSheetMusic + "getAllGenre").success(
+			$http.post(urlSheetMusic + "sheet/getAllGenre").success(
 					function(response) {
 						console.log(response);
 						$scope.songGenreList = response.songGenre;
 					});
 
-			$http.post(urlSheetMusic + "getAllInstrument").success(
+			$http.post(urlSheetMusic + "sheet/getAllInstrument").success(
 					function(response) {
 						console.log(response);
 						$scope.instrumentsList = response.instrument;
@@ -78,7 +78,7 @@ App.controller('uploadSheetCtrl',function($scope, $http, $timeout) {
 					// uploading spinner
 					$scope.uploadButtonText = "Uploading";
 
-					$http.post(urlSheetMusic + "upload", fd, {
+					$http.post(urlSheetMusic + "sheetUpload/upload", fd, {
 
 						transformRequest : angular.identity,
 						headers : {
@@ -114,7 +114,7 @@ App.controller('uploadSheetCtrl',function($scope, $http, $timeout) {
  */
 App.controller('logoutController', function($scope, $http, $location, $window) {
 	$scope.logout = function(user) {
-		$http.get(urlLogin + "logout").success(function(response) {
+		$http.get(urlLogin + "sheet/logout").success(function(response) {
 			console.log(response);
 			$window.location = '../';
 		});

@@ -1,9 +1,13 @@
 package edu.ubb.bsc.repo.test;
 
+import org.junit.Test;
+
 import edu.ubb.bsc.repo.DAOFactory;
+import edu.ubb.bsc.repo.SheetMusicCommentDAO;
 import edu.ubb.bsc.repo.SheetMusicDAO;
 import edu.ubb.bsc.repo.UserDAO;
 import edu.ubb.bsc.repo.model.SheetMusic;
+import edu.ubb.bsc.repo.model.SheetmusicComment;
 import edu.ubb.bsc.repo.model.User;
 
 public class TestDB {
@@ -34,9 +38,25 @@ public class TestDB {
 		System.out.println(sm);
 	}
 	
+	public void testSheetMusicComment(){
+		SheetMusicCommentDAO sd = df.getSheetMusicCommentDAO();
+		SheetmusicComment smc = new SheetmusicComment();
+		User u = new User();
+		u.setUserId(12);
+		smc.setUser(u);
+		
+		SheetMusic sm = new SheetMusic();
+		sm.setSheetMusicId(38);
+		smc.setSheetMusic(sm);
+		smc.setComment("It is a new comment");
+		sd.insertSheetmusicComment(smc);
+	}
+	
+	
 	public static void main(String[] args) {
 		TestDB test = new TestDB();
 		test.testSheetMusic();
+		test.testSheetMusicComment();
 		
 	}
 

@@ -32,4 +32,9 @@ public class JdbcDAOFactory extends DAOFactory {
 		return new JdbcInstrumentDAO();
 	}
 
+	@Override
+	public SheetMusicCommentDAO getSheetMusicCommentDAO() {
+		return new JdbcSheetMusicCommentDAO();
+	}
+
 }

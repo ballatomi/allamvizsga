@@ -2,9 +2,7 @@ package edu.ubb.bsc.repo;
 
 import java.util.List;
 
-import edu.ubb.bsc.repo.model.Instrument;
 import edu.ubb.bsc.repo.model.InstrumentSheetmusic;
-import edu.ubb.bsc.repo.model.SheetMusic;
 
 public interface InstrumentSheetMusicDAO {
 	List<InstrumentSheetmusic> getAllInstrumentSheetmusic() throws RepositoryException;

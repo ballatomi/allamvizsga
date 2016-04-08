@@ -6,22 +6,20 @@ import java.util.List;
 import edu.ubb.bsc.repo.DAOFactory;
 import edu.ubb.bsc.repo.InstrumentSheetMusicDAO;
 import edu.ubb.bsc.repo.JdbcInstrumentSheetMusicDAO;
-import edu.ubb.bsc.repo.JdbcSongGenreDAO;
 import edu.ubb.bsc.repo.RepositoryException;
 import edu.ubb.bsc.repo.model.InstrumentSheetmusic;
-import edu.ubb.bsc.repo.model.SongGenre;
 
-public class InstrumentSheetMusicImpl implements InstrumentSheetMusic{
+public class InstrumentSheetMusicServiceImpl implements InstrumentSheetMusicService{
 
 	private DAOFactory df;
 	private InstrumentSheetMusicDAO sd;
 	
-	public InstrumentSheetMusicImpl() throws ServiceException {
+	public InstrumentSheetMusicServiceImpl() throws ServiceException {
 		try {
 			df = DAOFactory.getInstance();
 			sd = df.getInstrumentSheetMusicDAO();
 		} catch (RepositoryException e) {
-			new ServiceException();
+			new ServiceException("Error in Service InstrumentSheetMusic",e);
 		}
 	}
 	
@@ -30,7 +28,7 @@ public class InstrumentSheetMusicImpl implements InstrumentSheetMusic{
 		try {
 			object = sd.getAllInstrumentSheetmusic();
 		} catch (RepositoryException e) {
-			new ServiceException();
+			new ServiceException("Error in Service InstrumentSheetMusic",e);
 		}
 		return object;
 	}
@@ -40,7 +38,7 @@ public class InstrumentSheetMusicImpl implements InstrumentSheetMusic{
 		try {
 			object = sd.getInstrumentSheetmusicById(id);
 		} catch (RepositoryException e) {
-			new ServiceException();
+			new ServiceException("Error in Service InstrumentSheetMusic",e);
 		}
 		return object;
 	}
@@ -50,7 +48,7 @@ public class InstrumentSheetMusicImpl implements InstrumentSheetMusic{
 		try {
 			object = sd.getInstrumentSheetmusicByInstrumentId(id);
 		} catch (RepositoryException e) {
-			new ServiceException();
+			new ServiceException("Error in Service InstrumentSheetMusic",e);
 		}
 		return object;
 	}
@@ -60,7 +58,7 @@ public class InstrumentSheetMusicImpl implements InstrumentSheetMusic{
 		try {
 			object = sd.getInstrumentSheetmusicBySheetmusicId(id);
 		} catch (RepositoryException e) {
-			new ServiceException();
+			new ServiceException("Error in Service InstrumentSheetMusic",e);
 		}
 		return object;
 	}
@@ -70,7 +68,7 @@ public class InstrumentSheetMusicImpl implements InstrumentSheetMusic{
 		try {
 			retmess = sd.insertInstrumentSheetmusic(is);
 		} catch (RepositoryException e) {
-			new ServiceException();
+			new ServiceException("Error in Service InstrumentSheetMusic",e);
 		}
 		return retmess;
 	}
@@ -79,7 +77,7 @@ public class InstrumentSheetMusicImpl implements InstrumentSheetMusic{
 		try {
 			sd.updateInstrumentSheetmusic(is);
 		} catch (RepositoryException e) {
-			new ServiceException();
+			new ServiceException("Error in Service InstrumentSheetMusic",e);
 		}
 	}
 
@@ -87,7 +85,7 @@ public class InstrumentSheetMusicImpl implements InstrumentSheetMusic{
 		try {
 			sd.deleteInstrumentSheetmusic(is);
 		} catch (RepositoryException e) {
-			new ServiceException();
+			new ServiceException("Error in Service InstrumentSheetMusic",e);
 		}
 		
 	}
@@ -100,8 +98,6 @@ public class InstrumentSheetMusicImpl implements InstrumentSheetMusic{
 			InstrumentSheetmusic a = (InstrumentSheetmusic) iterator.next();
 			System.out.println(a.getInstrument());
 			System.out.println(a.getSheetMusic());
-			
-
 		}
 	}
 }

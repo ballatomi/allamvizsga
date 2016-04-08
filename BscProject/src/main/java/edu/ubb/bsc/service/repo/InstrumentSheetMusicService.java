@@ -4,7 +4,7 @@ import java.util.List;
 
 import edu.ubb.bsc.repo.model.InstrumentSheetmusic;
 
-public interface InstrumentSheetMusic {
+public interface InstrumentSheetMusicService {
 	List<InstrumentSheetmusic> getAllInstrumentSheetmusic() throws ServiceException;
 
 	InstrumentSheetmusic getInstrumentSheetmusicById(int id) throws ServiceException;

@@ -26,7 +26,7 @@ import edu.ubb.bsc.service.repo.UserServiceImpl;
 public class Authenticate {
 
 	private final static Logger log = LoggerFactory.getLogger(Authenticate.class);
-	
+
 	@POST
 	@Path("/log")
 	@Consumes({ MediaType.APPLICATION_JSON })
@@ -39,20 +39,20 @@ public class Authenticate {
 			user = service.loginAuthenticateUser(user.getUserName(), user.getUserPassword());
 		} catch (ServiceException e) {
 			jo.put("Message", "Login error!");
-			jo.put("login","false");
+			jo.put("login", "false");
 			return jo.toString();
 		}
 
 		if (user == null) {
 			jo.put("Message", "Incorrect username or password!");
-			jo.put("login","false");
+			jo.put("login", "false");
 		} else {
 			HttpSession session = request.getSession();
 			session.setAttribute("logged-user", user);
 
 			System.out.println(user);
 			jo.put("Message", "Log in success!");
-			jo.put("login","true");
+			jo.put("login", "true");
 			log.info("User login was successfull!");
 		}
 		return jo.toString();
@@ -80,6 +80,18 @@ public class Authenticate {
 			jo.put("regMessage", "Registration not was successfull!");
 		}
 		return jo.toString();
+	}
+
+	@GET
+	@Path("/loggedIn")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public User loggedIn(@Context HttpServletRequest request) {
+
+		HttpSession session = request.getSession();
+		User user = new User();
+		user = (User) session.getAttribute("logged-user");
+
+		return user;
 	}
 
 	@GET

@@ -3,7 +3,6 @@ package edu.ubb.bsc.repo;
 import java.util.List;
 
 import edu.ubb.bsc.repo.model.SongGenre;
-import edu.ubb.bsc.repo.model.User;
 
 public interface SongGenreDAO {
 

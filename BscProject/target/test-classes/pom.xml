@@ -1,0 +1,61 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>edu.ubb.cs.idde</groupId>
+	<artifactId>lab2-btim1293_client</artifactId>
+	<version>0.0.1</version>
+
+	<organization>
+		<name>Babes-Bolyai University</name>
+		<url> www.cs.ubbcluj.ro </url>
+	</organization>
+	<developers>
+		<developer>
+			<name> Balla Tamas </name>
+			<email>balla_tomi@yahoo.com</email>
+			<organization> Babes-Bolyai University </organization>
+			<organizationUrl> http://cs.ubbcluj.ro </organizationUrl>
+		</developer>
+	</developers>
+
+	<parent>
+		<groupId>edu.ubb.cs.idde</groupId>
+		<artifactId>lab2-btim1293_application</artifactId>
+		<version>0.0.1</version>
+	</parent>
+
+		
+	<distributionManagement> 
+		<snapshotRepository> 
+		  <id>nexus-snapshot</id> 
+		  <url>http://pdae.cs.ubbcluj.ro/nexus/content/repositories/snapshots</url> 
+		</snapshotRepository> 
+		<repository> 
+		  <id>nexus-release</id> 
+		  <url>http://pdae.cs.ubbcluj.ro/nexus/content/repositories/releases</url> 
+		</repository> 
+	</distributionManagement> 
+
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.8.2</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>5.1.6</version>
+		</dependency>
+
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>1.1.3</version>
+		</dependency>
+
+	</dependencies>
+
+</project>

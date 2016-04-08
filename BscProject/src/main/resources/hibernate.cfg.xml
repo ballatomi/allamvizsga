@@ -18,5 +18,6 @@
 		<mapping class="edu.ubb.bsc.repo.model.SheetMusic" />
 		<mapping class="edu.ubb.bsc.repo.model.SongGenre" />
 		<mapping class="edu.ubb.bsc.repo.model.User" />
+		<mapping class="edu.ubb.bsc.repo.model.SheetmusicComment" />
 	</session-factory>
 </hibernate-configuration>

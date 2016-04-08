@@ -28,9 +28,8 @@
 
 	</appender>
 
-	<logger name="org.hibernate.type" level="INFO ERROR" />
-	<logger name="org.hibernate" level="INFO" />
-
+	<logger name="org.hibernate.type" level="ERROR" />
+	<logger name="org.hibernate" level="" />
 	<root level="INFO">
 		<appender-ref ref="FILE" />
 		<appender-ref ref="STDOUT" />

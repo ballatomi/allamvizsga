@@ -77,9 +77,10 @@
 			<div class="container-fluid text-center" ng-show="!showLoader">
 				<div class="row content">
 					<div class="col-xs-7 text-left">
+						<p hidden>{{Sheetmusic.sheetMusicId}}</p>
 						<h2>{{Sheetmusic.name}}</h2>
 
-						<div class="containerView">
+						<div class="containerView" id="pdfContainer">
 							<audio id="audio" src="" oncanplay="loadAudioDuration()" controls>
 								<p>Fallback content goes here.</p>
 							</audio>
@@ -122,8 +123,7 @@
 								<li><a role="menuitem" href="#"
 									ng-click="downloadSoundFile()"><span
 										class="glyphicon glyphicon-music"></span> MP3 File </a></li>
-								<li><a role="menuitem" href="#" ng-click="load()"><span
-										class="glyphicon glyphicon-music"></span> Test </a></li>
+			
 
 								<!-- Other items -->
 							</ul>
@@ -161,15 +161,50 @@
 						</div>
 					</div>
 
-				</div>
 				
-				<br/>
-				<div class="col-xs-12 col-md-7" align="left">
-					<div class="form-group">
-						<label class="col-padding text-left">Comment</label>
-						<textarea class="form-control" rows="4" id="comment"></textarea>
+					<br/>
+					<div class="col-xs-12 col-md-7" align="left">
+						<div class="form-group">
+							<label class="col-padding text-left">Comment</label>
+							<textarea class="form-control" rows="4" ng-model="$parent.commentText" id="comment"></textarea>
+						</div>
+						<button class="btn btn-primary" ng-click="saveComment()">
+							Post
+						</button>
+						<br/><br/>
+						<div>
+							<h3>Comments <small>({{commentsNumber}})</small></h3>
+							<hr/>
+					        <div ng-repeat="item in sheetmusicComment" ng-show="showMultiCommnet">
+					        	<span class="glyphicon glyphicon-user"></span><b style="color: #80aaff;"> 
+					        		{{item.user.userFirstName}}
+					        		{{item.user.userLastName}}
+	
+					        		</b> · Posted: <em><small> {{item.postedDate}}</small> </em>
+					        		<pre>{{item.comment}}</pre>
+					        	<hr/>
+					        	<br/>
+					        </div>
+					        
+					        
+					        <div ng-show="showSingleCommnet">
+					        	<span class="glyphicon glyphicon-user"></span><b style="color: #80aaff;"> 
+					        		{{userFirstName}}
+					        		{{userLastName}}
+	
+					        		</b> · Posted: <em><small> {{postedDate}}</small> </em>
+					        		<pre>{{comment}}</pre>
+					        	<hr/>
+					        	<br/>
+					        </div>
+					        
+				        </div>
+				        
 					</div>
+					<br/>
+					
 				</div>
+					
 			</div>
 		</div>
 	</div>

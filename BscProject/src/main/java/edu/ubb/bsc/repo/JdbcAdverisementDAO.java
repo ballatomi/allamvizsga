@@ -112,6 +112,7 @@ public class JdbcAdverisementDAO implements AdvertisementDAO {
 
 	}
 
+	@SuppressWarnings("null")
 	public void deleteAdvertisement(Advertisement adv) throws RepositoryException {
 		Session session = factoryAdv.openSession();
 		Transaction tx = null;

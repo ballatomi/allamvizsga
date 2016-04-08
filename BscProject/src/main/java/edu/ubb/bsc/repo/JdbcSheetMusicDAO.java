@@ -4,6 +4,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.hibernate.HibernateException;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -81,8 +82,32 @@ public class JdbcSheetMusicDAO implements SheetMusicDAO {
 	}
 
 	public List<SheetMusic> getSheetmusicByFilter(String pattern) throws RepositoryException {
-		// TODO Auto-generated method stub
-		return null;
+		Session session = factory.openSession();
+		Transaction tx = null;
+		List<SheetMusic> sm = null;
+		try {
+			tx = session.beginTransaction();
+			Query query = session
+					.createQuery("FROM SheetMusic WHERE name like :pattern");
+			query.setParameter("pattern", "%"+pattern+"%");
+			
+			sm = query.list();
+			
+//			List<?> u = query.list();
+//			for (Iterator<?> iterator = u.iterator(); iterator.hasNext();) {
+//				sm = (List<SheetMusic>) iterator.next();
+//			}
+			log.info("SheetMusic was getted by pattern: " + pattern);
+			
+			tx.commit();
+		} catch (HibernateException e) {
+			if (tx != null)
+				tx.rollback();
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return sm;
 	}
 
 	public String insertSheetmusic(SheetMusic sheetmusic) throws RepositoryException {
@@ -157,12 +182,13 @@ public class JdbcSheetMusicDAO implements SheetMusicDAO {
 	public static void main(String[] args) {
 		JdbcSheetMusicDAO cd = new JdbcSheetMusicDAO();
 		// cd.getCategoryById(2);
-		List<SheetMusic> sm = cd.getAllSheetmusic();
+		//List<SheetMusic> sm = cd.getAllSheetmusic();
+		List<SheetMusic> sm = cd.getSheetmusicByFilter("See");
+		
 		for (Iterator<?> iterator = sm.iterator(); iterator.hasNext();) {
 			SheetMusic a = (SheetMusic) iterator.next();
+			System.out.println(a.getSheetMusicId());
 			System.out.println(a.getName());
-			System.out.println(a.getFilePdf());
-
 		}
 	}
 
