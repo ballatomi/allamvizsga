@@ -3,7 +3,6 @@
  */
 
 
-
 /**
  * required-icon in registration form
  */

@@ -64,9 +64,9 @@ public class RestSheetMusic {
 	}
 
 	/**
-	 * get Sheetmusic by sheetmusic ID
-	 * 
-	 * @return
+	 * Get Sheetmusic by sheetmusic ID
+	 * @param id
+	 * @return SheetMusic
 	 */
 	@GET
 	@Path("/getSheetmusicBySheetID/{id}")
@@ -84,6 +84,24 @@ public class RestSheetMusic {
 			log.error("Error in getting sheetMusic", e);
 		}
 		return sm;
+	}
+	
+	@GET
+	@Path("/getSheetMusicByInstrument/{id}")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public List<SheetMusic> getSheetMusicByInstrumentID(@PathParam("id") Integer id) {
+		InstrumentSheetMusicServiceImpl ismService;
+		List<SheetMusic> is = new ArrayList<SheetMusic>();
+		try {
+			ismService = new InstrumentSheetMusicServiceImpl();
+//			is = ismService.getInstrumentSheetmusicByInstrumentId(id);
+			is = ismService.getSheetMusicByInstrumentId(id);
+
+			log.info("Get InstrumentSheetmusic by Instrument ID");
+		} catch (ServiceException e) {
+			log.error("Error in getting sheetMusic", e);
+		}
+		return is;
 	}
 
 	/**
@@ -156,6 +174,11 @@ public class RestSheetMusic {
 		return commentList;
 	}
 
+	/**
+	 * Get sheet music by pattern, search in sheet music name
+	 * @param pattern 
+	 * @return List<SheetMusic>
+	 */
 	@GET
 	@Path("/getSheetMusicByPattern/{pattern}")
 	@Produces({ MediaType.APPLICATION_JSON })
@@ -174,6 +197,9 @@ public class RestSheetMusic {
 		}
 		return smList;
 	}
+	
+
+	
 	
 	
 	
@@ -240,7 +266,7 @@ public class RestSheetMusic {
 	 * 
 	 * @return List<Sheetmusic>
 	 */
-	@POST
+	@GET
 	@Path("/getAllGenre")
 	@Produces({ MediaType.APPLICATION_JSON })
 	public List<SongGenre> getSongGenre() {
@@ -270,7 +296,7 @@ public class RestSheetMusic {
 	 * 
 	 * @return List<Sheetmusic>
 	 */
-	@POST
+	@GET
 	@Path("/getAllInstrument")
 	@Produces({ MediaType.APPLICATION_JSON })
 	public List<Instrument> getInstruments() {

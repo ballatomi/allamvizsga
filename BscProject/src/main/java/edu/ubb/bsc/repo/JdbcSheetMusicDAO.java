@@ -62,12 +62,12 @@ public class JdbcSheetMusicDAO implements SheetMusicDAO {
 				System.out.print("\t" + object.getSheetMusicId());
 				System.out.print("\t" + object.getName());
 				System.out.print("\t" + object.getUploadDate());
-			}
 
-			// increment the views number
-			int viewsNum = object.getViewsNum();
-			object.setViewsNum(viewsNum + 1);
-			this.updateSheetmusic(object);
+				// increment the views number
+				int viewsNum = object.getViewsNum();
+				object.setViewsNum(viewsNum + 1);
+				this.updateSheetmusic(object);
+			}
 
 			tx.commit();
 		} catch (HibernateException e) {

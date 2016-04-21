@@ -8,6 +8,7 @@ import edu.ubb.bsc.repo.InstrumentSheetMusicDAO;
 import edu.ubb.bsc.repo.JdbcInstrumentSheetMusicDAO;
 import edu.ubb.bsc.repo.RepositoryException;
 import edu.ubb.bsc.repo.model.InstrumentSheetmusic;
+import edu.ubb.bsc.repo.model.SheetMusic;
 
 public class InstrumentSheetMusicServiceImpl implements InstrumentSheetMusicService{
 
@@ -47,6 +48,16 @@ public class InstrumentSheetMusicServiceImpl implements InstrumentSheetMusicServ
 		List<InstrumentSheetmusic> object = null;
 		try {
 			object = sd.getInstrumentSheetmusicByInstrumentId(id);
+		} catch (RepositoryException e) {
+			new ServiceException("Error in Service InstrumentSheetMusic",e);
+		}
+		return object;
+	}
+
+	public List<SheetMusic> getSheetMusicByInstrumentId(int id) throws ServiceException {
+		List<SheetMusic> object = null;
+		try {
+			object = sd.getSheetMusicByInstrumentId(id);
 		} catch (RepositoryException e) {
 			new ServiceException("Error in Service InstrumentSheetMusic",e);
 		}
@@ -100,4 +111,5 @@ public class InstrumentSheetMusicServiceImpl implements InstrumentSheetMusicServ
 			System.out.println(a.getSheetMusic());
 		}
 	}
+
 }

@@ -97,6 +97,33 @@ public class JdbcInstrumentSheetMusicDAO implements InstrumentSheetMusicDAO {
 		}
 		return object;
 	}
+	
+	public List<SheetMusic> getSheetMusicByInstrumentId(int id) throws RepositoryException {
+		Session session = factory.openSession();
+		Transaction tx = null;
+		List<SheetMusic> object = null;
+		try {
+			tx = session.beginTransaction();
+			//object = (InstrumentSheetmusic) session.get(Instrument.class, id);
+			//object = session.createCriteria(Instrument.class).list();
+			
+			tx = session.beginTransaction();
+			Query query = session
+					.createQuery("select sheetMusic FROM InstrumentSheetmusic WHERE instrumentID = :instrumentID");
+			query.setParameter("instrumentID", id);
+			object = query.list();
+
+			tx.commit();
+		} catch (HibernateException e) {
+			if (tx != null)
+				tx.rollback();
+			log.error("Error get Instrument by ID!", e);
+			throw new RepositoryException("Error get Instrument by ID", e);
+		} finally {
+			session.close();
+		}
+		return object;
+	}
 
 	public List<InstrumentSheetmusic> getInstrumentSheetmusicBySheetmusicId(int id) throws RepositoryException {
 		Session session = factory.openSession();
@@ -193,20 +220,16 @@ public class JdbcInstrumentSheetMusicDAO implements InstrumentSheetMusicDAO {
 //
 //		System.out.println(is.getName());
 
-		List<InstrumentSheetmusic> sm = (List<InstrumentSheetmusic>) cd.getInstrumentSheetmusicBySheetmusicId(29);
+		List<SheetMusic> sm = cd.getSheetMusicByInstrumentId(18);
 		//List<InstrumentSheetmusic> sm = (List<InstrumentSheetmusic>) cd.getInstrumentSheetmusicByInstrumentId(1);
 
 		for (Iterator<?> iterator = sm.iterator(); iterator.hasNext();) {
-			InstrumentSheetmusic a = (InstrumentSheetmusic) iterator.next();
-			System.out.println(a.getInstrument());
-			System.out.println(a.getSheetMusic());
+			SheetMusic a = (SheetMusic) iterator.next();
+			System.out.println(a);
 		}
 
-		// for (Iterator<?> iterator = sm.iterator(); iterator.hasNext();) {
-		// InstrumentSheetmusic a = (InstrumentSheetmusic) iterator.next();
-		// System.out.println(a.getInstrument().getName());
-		// System.out.println(a.getSheetMusic().getName());
-		// }
 	}
+
+
 
 }

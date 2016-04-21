@@ -47,10 +47,10 @@ public class Authenticate {
 			jo.put("Message", "Incorrect username or password!");
 			jo.put("login", "false");
 		} else {
+			
 			HttpSession session = request.getSession();
 			session.setAttribute("logged-user", user);
 
-			System.out.println(user);
 			jo.put("Message", "Log in success!");
 			jo.put("login", "true");
 			log.info("User login was successfull!");
@@ -74,10 +74,13 @@ public class Authenticate {
 
 			System.out.println(user);
 			jo.put("regMessage", "Registration was successfull!");
+			jo.put("color", "green");
 			log.info("User Registration was successfull!");
 
 		} catch (ServiceException e) {
 			jo.put("regMessage", "Registration not was successfull!");
+			jo.put("color", "red");
+			
 		}
 		return jo.toString();
 	}
@@ -86,11 +89,9 @@ public class Authenticate {
 	@Path("/loggedIn")
 	@Produces({ MediaType.APPLICATION_JSON })
 	public User loggedIn(@Context HttpServletRequest request) {
-
 		HttpSession session = request.getSession();
 		User user = new User();
 		user = (User) session.getAttribute("logged-user");
-
 		return user;
 	}
 
@@ -99,7 +100,6 @@ public class Authenticate {
 	@Produces({ MediaType.APPLICATION_JSON })
 	public String logout(@Context HttpServletRequest request) throws LoginException, JSONException, ServiceException {
 		JSONObject jo = new JSONObject();
-
 		HttpSession session = request.getSession();
 		session.invalidate();
 

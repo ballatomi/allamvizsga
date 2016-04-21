@@ -87,7 +87,7 @@ public class UserServiceImpl implements UserService {
 			
 			user = ud.loginAuthenticateUser(userName, password);
 		} catch (RepositoryException e) {
-			new ServiceException();
+			new ServiceException("Login authenticate error!");
 		}
 		return user;
 	}

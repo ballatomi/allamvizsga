@@ -1,0 +1,145 @@
+
+<nav class="navbar navbar-default navbar-fixed-top" ng-controller="logoutController">
+	<div class="container"
+		data-ng-init="getLoggedUser()">
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle collapsed"
+				data-toggle="collapse" data-target="#navbar" aria-expanded="false"
+				aria-controls="navbar">
+				<span class="sr-only">Sheet Music</span> <span class="icon-bar"></span>
+			</button>
+			<a class="navbar-brand" href="#/sheetmusic">Sheet Music</a>
+		</div>
+		<div id="navbar" class="navbar-collapse collapse">
+			<ul class="nav navbar-nav">
+				<li class="active"><a href="#/sheetmusic">Home</a></li>
+				<li><a href="#/upload">Upload Sheet music</a></li>
+				<li><a href="#about">About</a></li>
+				<li><a href="#contact">Contact</a></li>
+			</ul>
+
+			<ul class="nav navbar-nav navbar-right">
+				<li><a href=""><span class="glyphicon glyphicon-user"></span>
+						Logged in : <em><b>{{loggedUser}}</b></em></a></li>
+				<li><a href="" ng-click="logout()">Log out </a></li>
+			</ul>
+		</div>
+		<!-- nav-collapse /end -->
+	</div>
+</nav>
+
+
+
+<div class="view-content">
+	<div class="container" data-ng-init="init()">
+
+		<div class="container">
+
+			<!-- ng-controller="ctrlSheetViewer" -->
+			<h3>Sheet</h3>
+
+			<div class="spinner" ng-show="showLoader">
+				<h4>Loading...</h4>
+				<div class="rect1"></div>
+				<div class="rect2"></div>
+				<div class="rect3"></div>
+				<div class="rect4"></div>
+				<div class="rect5"></div>
+			</div>
+
+			<div class="container-fluid" ng-show="!showLoader">
+				<div class="row content">
+					<div class="col-sm-3 sidenav">
+						<br />
+						<div class="form-group">
+							<div class="input-group">
+								<input type="text" class="form-control" ng-model="searchText"
+									placeholder="Search for sheet music"> <span
+									class="input-group-btn">
+									<button class="btn btn-default"
+										ng-click="searchByName(searchText)" type="button">
+										<span class="glyphicon glyphicon-search"> </span>
+									</button>
+								</span>
+							</div>
+
+							<br />
+							<h4>
+								<b>Filter by Instruments</b>
+							</h4>
+
+							<div class="list-group">
+								<a href="#" class="list-group-item"
+									ng-repeat="instrument in instrumentsList"
+									ng-click="searchByInstrument(instrument.instrumentId)">
+									{{instrument.name}} </a>
+							</div>
+
+							<!-- /input-group -->
+						</div>
+						<!-- /.col-lg-6 -->
+					</div>
+
+					<div class="col-sm-9">
+						<table align="center" class="table">
+							<tbody>
+								<tr ng-show="not_found">
+									<td></td>
+									<td>
+										<h3 style="color: red">
+											<b>Sheet music not found!</b>
+										</h3>
+									</td>
+								</tr>
+								<tr ng-repeat="sheet in Sheetmusic" colspan="2" valign="bottom"
+									height="10" width="70%">
+									<td><a
+										href="#/smView?page={{sheet.sheetMusicId}}">
+											<div class="wrapper" style="border: 1px solid #d3d3d3;">
+												<canvas id="{{ sheet.sheetMusicId }}"></canvas>
+											</div>
+									</a></td>
+									<td valign="bottom" height="10" width="80%">
+										<div class="views-field-title">
+											<h3>
+												<a href="#/smView?page={{sheet.sheetMusicId}}"
+													style="color: #80aaff;">Title: <b> {{sheet.name}} </b>
+												</a>
+											</h3>
+										</div>
+										<table>
+											<tr>
+												<td>By: <em>{{sheet.user.userName}}</em> | <em>{{sheet.length}}</em>
+													pages | <em>{{sheet.viewsNum}}</em> views | Upload Date:
+													{{sheet.uploadDate}}</br>
+												</td>
+											</tr>
+
+											<tr>
+												<td><p>Music style:
+														{{sheet.songGenre.songGenreName}}</p></td>
+											</tr>
+
+											<tr>
+												<td><p>
+														Instruments: <em>{{sheet.instrument}}</em>
+													</p></td>
+											</tr>
+
+										</table>
+									</td>
+
+								</tr>
+							</tbody>
+						</table>
+					</div>
+
+				</div>
+			</div>
+			<!-- container-fluid text-center -->
+
+		</div>
+		<!-- controller - Container /end -->
+	</div>
+	<!--/ view-content -->
+</div>
