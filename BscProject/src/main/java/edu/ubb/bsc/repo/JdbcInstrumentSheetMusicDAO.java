@@ -109,7 +109,7 @@ public class JdbcInstrumentSheetMusicDAO implements InstrumentSheetMusicDAO {
 			
 			tx = session.beginTransaction();
 			Query query = session
-					.createQuery("select sheetMusic FROM InstrumentSheetmusic WHERE instrumentID = :instrumentID");
+					.createQuery("select SheetMusic FROM InstrumentSheetmusic WHERE instrumentID = :instrumentID");
 			query.setParameter("instrumentID", id);
 			object = query.list();
 

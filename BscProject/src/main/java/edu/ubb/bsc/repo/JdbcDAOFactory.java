@@ -37,4 +37,9 @@ public class JdbcDAOFactory extends DAOFactory {
 		return new JdbcSheetMusicCommentDAO();
 	}
 
+	@Override
+	public SheetMusicFavoriteDAO getSheetMusicFavoriteDAO() {
+		return new JdbcSheetMusicFavoriteDAO(); 
+	}
+
 }

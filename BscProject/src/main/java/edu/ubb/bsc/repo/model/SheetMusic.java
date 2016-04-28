@@ -111,7 +111,7 @@ public class SheetMusic implements java.io.Serializable {
 		this.length = length;
 	}
 
-	@Column(name = "license", length = 45)
+	@Column(name = "license", length = 100)
 	public String getLicense() {
 		return this.license;
 	}

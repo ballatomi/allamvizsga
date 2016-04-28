@@ -10,8 +10,6 @@ var instrumentListId = [];
 var instrumentSheetMusicListlength = 0;
 var instrumentSheetMusicList;
 
-//var app = angular.module('ngMusicApp.listController', []);
-//app.controller('ctrlSheetViewer', function($scope, $http, $location, $window) {
 function ctrlSheetViewer($scope, $http, $location, $window) {
 
 	$scope.showLoader = true;
@@ -52,12 +50,8 @@ function ctrlSheetViewer($scope, $http, $location, $window) {
 		var respLength = response.sheetMusic.length;
 		
 		for (var respInd = 0; respInd < respLength; respInd++) {
-			//console.log(response.sheetMusic[respInd].uploadDate);
-			var d = new Date(response.sheetMusic[respInd].uploadDate);
-			var dformat = [ (d.getMonth()+1).padLeft(), d.getDate().padLeft(),d.getFullYear()].join('-')+
-	                    ' ' +
-	                  [ d.getHours().padLeft(), d.getMinutes().padLeft(), d.getSeconds().padLeft()].join(':');
-			$scope.Sheetmusic[respInd].uploadDate = dformat;
+
+			$scope.Sheetmusic[respInd].uploadDate = response.sheetMusic[respInd].uploadDate;
 			
 			//console.log(response.sheetMusic[respInd].name);
 			
@@ -113,11 +107,7 @@ function ctrlSheetViewer($scope, $http, $location, $window) {
 						
 						console.log(list);
 						
-						var d = new Date(list[0].sheetMusic.uploadDate);
-						var dformat = [ (d.getMonth()+1).padLeft(), d.getDate().padLeft(),d.getFullYear()].join('-')+
-				                    ' ' +
-				                  [ d.getHours().padLeft(), d.getMinutes().padLeft(), d.getSeconds().padLeft()].join(':');
-						list[0].sheetMusic.uploadDate = dformat;
+						list[0].sheetMusic.uploadDate = list[0].sheetMusic.uploadDate;
 						
 						var data = atob(list[0].sheetMusic.filePdf);
 						var pdfAsArray = new Array(data.length);
@@ -164,11 +154,7 @@ function ctrlSheetViewer($scope, $http, $location, $window) {
 						
 						console.log(list);
 						
-						var d = new Date(list[0].sheetMusic.uploadDate);
-						dformat = [ (d.getMonth()+1).padLeft(), d.getDate().padLeft(),d.getFullYear()].join('-')+
-				                    ' ' +
-				                  [ d.getHours().padLeft(), d.getMinutes().padLeft(), d.getSeconds().padLeft()].join(':');
-						list[0].sheetMusic.uploadDate = dformat;
+						list[0].sheetMusic.uploadDate = list[0].sheetMusic.uploadDate;
 						
 						var data = atob(list[0].sheetMusic.filePdf);
 						var pdfAsArray = new Array(data.length);
@@ -194,17 +180,6 @@ function ctrlSheetViewer($scope, $http, $location, $window) {
 				}
 			});
 	}
-}
-
-
-
-
-/**
- * convert datetime to simple format
- */
-Number.prototype.padLeft = function(base,chr){
-   var  len = (String(base || 10).length - String(this).length)+1;
-   return len > 0? new Array(len).join(chr || '0')+this : this;
 }
 
 /**

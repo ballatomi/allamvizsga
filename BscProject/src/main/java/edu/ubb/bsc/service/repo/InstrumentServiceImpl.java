@@ -17,7 +17,7 @@ public class InstrumentServiceImpl implements InstrumentService{
 			df = DAOFactory.getInstance();
 			ud = df.getInstrumentDAO();
 		} catch (RepositoryException e) {
-			new ServiceException();
+			throw new ServiceException();
 		}
 	}
 	
@@ -26,7 +26,7 @@ public class InstrumentServiceImpl implements InstrumentService{
 		try {
 			object = ud.getAllInstrument();
 		} catch (RepositoryException e) {
-			new ServiceException();
+			throw new ServiceException();
 		}
 		return object;
 	}
@@ -36,7 +36,7 @@ public class InstrumentServiceImpl implements InstrumentService{
 		try {
 			object = ud.getInstrumentById(id);
 		} catch (RepositoryException e) {
-			new ServiceException();
+			throw new ServiceException();
 		}
 		return object;
 	}
@@ -46,7 +46,7 @@ public class InstrumentServiceImpl implements InstrumentService{
 		try {
 			object = ud.getInstrumentByFilter(pattern);
 		} catch (RepositoryException e) {
-			new ServiceException();
+			throw new ServiceException();
 		}
 		return object;
 	}

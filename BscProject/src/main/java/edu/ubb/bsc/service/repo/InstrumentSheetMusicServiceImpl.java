@@ -20,7 +20,7 @@ public class InstrumentSheetMusicServiceImpl implements InstrumentSheetMusicServ
 			df = DAOFactory.getInstance();
 			sd = df.getInstrumentSheetMusicDAO();
 		} catch (RepositoryException e) {
-			new ServiceException("Error in Service InstrumentSheetMusic",e);
+			throw new ServiceException("Error in Service InstrumentSheetMusic",e);
 		}
 	}
 	
@@ -29,7 +29,7 @@ public class InstrumentSheetMusicServiceImpl implements InstrumentSheetMusicServ
 		try {
 			object = sd.getAllInstrumentSheetmusic();
 		} catch (RepositoryException e) {
-			new ServiceException("Error in Service InstrumentSheetMusic",e);
+			throw new ServiceException("Error in Service InstrumentSheetMusic",e);
 		}
 		return object;
 	}
@@ -39,7 +39,7 @@ public class InstrumentSheetMusicServiceImpl implements InstrumentSheetMusicServ
 		try {
 			object = sd.getInstrumentSheetmusicById(id);
 		} catch (RepositoryException e) {
-			new ServiceException("Error in Service InstrumentSheetMusic",e);
+			throw new ServiceException("Error in Service InstrumentSheetMusic",e);
 		}
 		return object;
 	}
@@ -49,7 +49,7 @@ public class InstrumentSheetMusicServiceImpl implements InstrumentSheetMusicServ
 		try {
 			object = sd.getInstrumentSheetmusicByInstrumentId(id);
 		} catch (RepositoryException e) {
-			new ServiceException("Error in Service InstrumentSheetMusic",e);
+			throw new ServiceException("Error in Service InstrumentSheetMusic",e);
 		}
 		return object;
 	}
@@ -59,7 +59,7 @@ public class InstrumentSheetMusicServiceImpl implements InstrumentSheetMusicServ
 		try {
 			object = sd.getSheetMusicByInstrumentId(id);
 		} catch (RepositoryException e) {
-			new ServiceException("Error in Service InstrumentSheetMusic",e);
+			throw new ServiceException("Error in Service InstrumentSheetMusic",e);
 		}
 		return object;
 	}
@@ -69,7 +69,7 @@ public class InstrumentSheetMusicServiceImpl implements InstrumentSheetMusicServ
 		try {
 			object = sd.getInstrumentSheetmusicBySheetmusicId(id);
 		} catch (RepositoryException e) {
-			new ServiceException("Error in Service InstrumentSheetMusic",e);
+			throw new ServiceException("Error in Service InstrumentSheetMusic",e);
 		}
 		return object;
 	}
@@ -79,7 +79,7 @@ public class InstrumentSheetMusicServiceImpl implements InstrumentSheetMusicServ
 		try {
 			retmess = sd.insertInstrumentSheetmusic(is);
 		} catch (RepositoryException e) {
-			new ServiceException("Error in Service InstrumentSheetMusic",e);
+			throw new ServiceException("Error in Service InstrumentSheetMusic",e);
 		}
 		return retmess;
 	}
@@ -88,7 +88,7 @@ public class InstrumentSheetMusicServiceImpl implements InstrumentSheetMusicServ
 		try {
 			sd.updateInstrumentSheetmusic(is);
 		} catch (RepositoryException e) {
-			new ServiceException("Error in Service InstrumentSheetMusic",e);
+			throw new ServiceException("Error in Service InstrumentSheetMusic",e);
 		}
 	}
 
@@ -96,7 +96,7 @@ public class InstrumentSheetMusicServiceImpl implements InstrumentSheetMusicServ
 		try {
 			sd.deleteInstrumentSheetmusic(is);
 		} catch (RepositoryException e) {
-			new ServiceException("Error in Service InstrumentSheetMusic",e);
+			throw new ServiceException("Error in Service InstrumentSheetMusic",e);
 		}
 		
 	}

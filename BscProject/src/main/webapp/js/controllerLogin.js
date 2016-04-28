@@ -6,21 +6,21 @@ var urlLogin = "http://localhost:8080/BscProject/rest/login/";
 
 
 function LoginController($scope, $http, $location) {
-		$scope.showLoginAlert = false;
-	
+	$scope.showLoginAlert = false;
 	$scope.login = function(user) {
 		// with user - angular model parameter
 		if (user.userName != undefined && user.userPassword != undefined) {
 			$http.post(urlLogin + "log", user).success(function(response) {
-				console.log(response);
-				$scope.message = response.Message;
+				$scope.loginMessage = response.Message;
 				$scope.showLoginAlert = true;
+				
+				console.log(response);
 				if (response.login == "true") {
 					$location.path('/sheetmusic');
 				}
 			});
 		} else {
-			$scope.message = "Username/password not filled!";
+			$scope.loginMessage = "Username/password not filled!";
 			$scope.showLoginAlert = true;
 		}
 	};
@@ -28,10 +28,10 @@ function LoginController($scope, $http, $location) {
 	$scope.showRegistrationAlert = false;
 	$scope.registration = function(user) {
 		console.log(user);
-		console.log(user.userName);
-		console.log(angular.isUndefined(user.userPassword));
-		console.log(user.re_password);
-		console.log(user.userMail);
+//		console.log(user.userName);
+//		console.log(angular.isUndefined(user.userPassword));
+//		console.log(user.re_password);
+//		console.log(user.userMail);
 
 		if (!angular.isUndefined(user.userName)
 				&& !angular.isUndefined(user.userPassword)
@@ -63,7 +63,6 @@ function LoginController($scope, $http, $location) {
  */
 
  function logoutController($scope, $http, $location, $window) {
-//angular.module('ngMusicApp.loginControllers').controller('logoutController', function($scope, $http, $location, $window) {
 	$scope.getLoggedUser = function() {
 		$http.get(urlLogin + "loggedIn").success(function(response) {
 			console.log(response);

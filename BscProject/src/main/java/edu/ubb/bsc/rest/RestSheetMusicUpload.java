@@ -97,22 +97,25 @@ public class RestSheetMusicUpload {
 			service.insertSheetmusic(sm);
 
 			// Insert InstrumentSheetmusic n-m relation
-			for (FormDataBodyPart instrId : v1) {
-				String v = instrId.getValueAs(String.class);
-				System.out.println("Form: " + v);
-				String[] id = v.split(",");
-				for (String string : id) {
-					Instrument i = new Instrument();
-					InstrumentSheetMusicServiceImpl ishmImpl = new InstrumentSheetMusicServiceImpl();
-					i.setInstrumentId(Integer.parseInt(string));
-					InstrumentSheetmusic ism = new InstrumentSheetmusic();
+			try {
+				for (FormDataBodyPart instrId : v1) {
+					String v = instrId.getValueAs(String.class);
+					System.out.println("Form: " + v);
+					String[] id = v.split(",");
+					for (String string : id) {
+						Instrument i = new Instrument();
+						InstrumentSheetMusicServiceImpl ishmImpl = new InstrumentSheetMusicServiceImpl();
+						i.setInstrumentId(Integer.parseInt(string));
+						InstrumentSheetmusic ism = new InstrumentSheetmusic();
 
-					ism.setInstrument(i);
-					ism.setSheetMusic(sm);
+						ism.setInstrument(i);
+						ism.setSheetMusic(sm);
 
-					ishmImpl.insertInstrumentSheetmusic(ism);
+						ishmImpl.insertInstrumentSheetmusic(ism);
+					}
 				}
-			}
+			} catch (NumberFormatException ex){}
+			
 			log.info("Sheetmusic uploaded");
 
 		} catch (ServiceException e) {
@@ -124,6 +127,11 @@ public class RestSheetMusicUpload {
 			jo.put("message", "Error, file failed!");
 			jo.put("alert_type", "alert alert-danger");
 			log.error("Error, file failed!", e);
+			return jo.toString();
+		} catch (Exception e) {
+			jo.put("message", "Error in saving sheet music! " + e);
+			jo.put("alert_type", "alert alert-danger");
+			log.error("Error in saving sheet music!", e);
 			return jo.toString();
 		}
 

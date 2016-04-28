@@ -1,5 +1,11 @@
 package edu.ubb.bsc.repo.test;
 
+import java.util.List;
+
+import edu.ubb.bsc.repo.JdbcSheetMusicFavoriteDAO;
+import edu.ubb.bsc.repo.model.SheetMusic;
+import edu.ubb.bsc.repo.model.SheetmusicFavorite;
+import edu.ubb.bsc.repo.model.User;
 
 public class TestDB {
 
@@ -48,6 +54,24 @@ public class TestDB {
 //		TestDB test = new TestDB();
 //		test.testSheetMusic();
 //		test.testSheetMusicComment();
+		
+		JdbcSheetMusicFavoriteDAO cd = new JdbcSheetMusicFavoriteDAO();
+//		SheetmusicFavorite fav = new SheetmusicFavorite();
+//		
+//		User u = new User();u.setUserId(14);
+//		SheetMusic sm = new SheetMusic();
+//		sm.setSheetMusicId(39);
+//		
+//		fav.setUser(u);
+//		fav.setSheetMusic(sm);
+//		
+//		cd.insertSheetmusicFavorite(fav);
+		
+		List<SheetmusicFavorite> sm1 = cd.getSheetmusicFavoritesByUserId(14);
+		for (SheetmusicFavorite sheetMusic : sm1) {
+			System.out.println(sheetMusic);
+		}
+		
 		
 	}
 

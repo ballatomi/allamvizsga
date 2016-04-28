@@ -43,14 +43,7 @@ public class JdbcUserDAO implements UserDAO {
 			tx = session.beginTransaction();
 			user = (User) session.get(User.class, id);
 
-			if (user != null) {
-				System.out.print("\t" + user.getUserId());
-				System.out.print("\t" + user.getUserName());
-				System.out.print("\t" + user.getUserPassword());
-				System.out.println("\t" + user.getUserMail());
-				System.out.println("\t" + user.getUserTel());
-				System.out.println("\t" + user.getUserRight());
-			}
+			log.info("Get user");
 			tx.commit();
 		} catch (HibernateException e) {
 			if (tx != null)

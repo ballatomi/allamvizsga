@@ -13,13 +13,13 @@
 		<div id="navbar" class="navbar-collapse collapse">
 			<ul class="nav navbar-nav">
 				<li class="active"><a href="#/sheetmusic">Home</a></li>
-				<li><a href="#/upload">Upload Sheet music</a></li>
+				<li><a href="#upload">Upload Sheet music</a></li>
 				<li><a href="#about">About</a></li>
-				<li><a href="#contact">Contact</a></li>
+				<li><a href="#profile">My Profile</a></li>
 			</ul>
 
 			<ul class="nav navbar-nav navbar-right">
-				<li><a href=""><span class="glyphicon glyphicon-user"></span>
+				<li><a href="#profile"><span class="glyphicon glyphicon-user"></span>
 						Logged in : <em><b>{{loggedUser}}</b></em></a></li>
 				<li><a href="" ng-click="logout()">Log out </a></li>
 			</ul>
@@ -69,7 +69,7 @@
 							</h4>
 
 							<div class="list-group">
-								<a href="#" class="list-group-item"
+								<a href="" class="list-group-item"
 									ng-repeat="instrument in instrumentsList"
 									ng-click="searchByInstrument(instrument.instrumentId)">
 									{{instrument.name}} </a>
@@ -111,7 +111,7 @@
 											<tr>
 												<td>By: <em>{{sheet.user.userName}}</em> | <em>{{sheet.length}}</em>
 													pages | <em>{{sheet.viewsNum}}</em> views | Upload Date:
-													{{sheet.uploadDate}}</br>
+													{{sheet.uploadDate | datetime}}</br>
 												</td>
 											</tr>
 

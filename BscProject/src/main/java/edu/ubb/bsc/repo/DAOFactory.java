@@ -12,5 +12,6 @@ public abstract class DAOFactory {
 	public abstract InstrumentSheetMusicDAO getInstrumentSheetMusicDAO();
 	public abstract InstrumentDAO getInstrumentDAO();
 	public abstract SheetMusicCommentDAO getSheetMusicCommentDAO();
-
+	public abstract SheetMusicFavoriteDAO getSheetMusicFavoriteDAO();
+	
 }

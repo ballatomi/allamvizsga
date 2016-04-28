@@ -1,0 +1,118 @@
+
+<nav class="navbar navbar-default navbar-fixed-top"
+	ng-controller="logoutController">
+	<div class="container" data-ng-init="getLoggedUser()">
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle collapsed"
+				data-toggle="collapse" data-target="#navbar" aria-expanded="false"
+				aria-controls="navbar">
+				<span class="sr-only">Sheet Music</span> <span class="icon-bar"></span>
+			</button>
+			<a class="navbar-brand" href="#/sheetmusic">Sheet Music</a>
+		</div>
+		<div id="navbar" class="navbar-collapse collapse">
+			<ul class="nav navbar-nav">
+				<li><a href="#/sheetmusic">Home</a></li>
+				<li><a href="#/upload">Upload Sheet music</a></li>
+				<li><a href="#about">About</a></li>
+				<li class="active"><a href="#profile">My Profile</a></li>
+			</ul>
+
+			<ul class="nav navbar-nav navbar-right">
+				<li><a href=""><span class="glyphicon glyphicon-user"></span>
+						Logged in : <em><b>{{loggedUser}}</b></em></a></li>
+				<li><a href="" ng-click="logout()">Log out </a></li>
+			</ul>
+		</div>
+		<!-- nav-collapse /end -->
+	</div>
+</nav>
+<br/><br/><br/>
+
+
+<div class="view-content">
+
+	<div class="container" data-ng-init="init()">
+
+		<ul class="nav nav-tabs" id="myTabs">
+			<li><a data-toggle="tab" href="#menu1">Favorites</a></li>
+			<li><a data-toggle="tab" href="#menu2">Tab2</a></li>
+			<li><a data-toggle="tab" href="#menu3">Tab3</a></li>
+		</ul>
+
+		<div class="tab-content">
+
+
+			<!-- Tab 1 -->
+			<div id="menu1" class="tab-pane fade in active">
+
+				<div class="col-sm-9">
+						<table align="center" class="table">
+							<tbody>
+								<tr ng-show="not_found">
+									<td></td>
+									<td>
+										<h3>
+											<b>No Sheet music added to favorites!</b>
+										</h3>
+									</td>
+								</tr>
+								<tr ng-repeat="sheet in Sheetmusic" colspan="2" valign="bottom"
+									height="10" width="70%">
+									<td><a
+										href="#/smView?page={{sheet.sheetMusic.sheetMusicId}}">
+											<div class="wrapper" style="border: 1px solid #d3d3d3;">
+												<canvas id="{{ sheet.sheetMusic.sheetMusicId }}"></canvas>
+											</div>
+									</a></td>
+									<td valign="bottom" height="10" width="80%">
+										<div class="views-field-title">
+											<h3>
+												<a href="#/smView?page={{sheet.sheetMusic.sheetMusicId}}"
+													style="color: #80aaff;">Title: <b> {{sheet.sheetMusic.name}} </b>
+												</a>
+											</h3>
+										</div>
+										<table>
+											<tr>
+												<td>By: <em>{{sheet.user.userName}}</em> | <em>{{sheet.sheetMusic.length}}</em>
+													pages | <em>{{sheet.sheetMusic.viewsNum}}</em> views | Upload Date:
+													{{sheet.sheetMusic.uploadDate | datetime}}</br>
+												</td>
+											</tr>
+
+											<tr>
+												<br/>
+												<td><p>Music style:
+														{{sheet.sheetMusic.songGenre.songGenreName}}</p></td>
+											</tr>
+
+										</table>
+									</td>
+
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				
+
+			</div>
+
+
+			<!-- Tab 2 -->
+			<div id="menu2" class="tab-pane fade">
+
+				tab2
+			</div>
+
+
+			<!-- Tab 3 -->
+			<div id="menu3" class="tab-pane fade">
+				
+				tab3
+			</div>
+		</div>
+	</div>
+
+</div>
+

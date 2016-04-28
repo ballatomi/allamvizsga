@@ -17,7 +17,7 @@ public class SheetMusicCommentServiceImpl implements SheetMusicCommentService{
 			df = DAOFactory.getInstance();
 			sd = df.getSheetMusicCommentDAO();
 		} catch (RepositoryException e) {
-			new ServiceException("Error in Service SheetMusicComment",e);
+			throw new ServiceException("Error in Service SheetMusicComment",e);
 		}
 	}
 	
@@ -26,7 +26,7 @@ public class SheetMusicCommentServiceImpl implements SheetMusicCommentService{
 		try {
 			object = sd.getAllSheetMusicComment();
 		} catch (RepositoryException e) {
-			new ServiceException();
+			throw new ServiceException();
 		}
 		return object;
 	}
@@ -36,7 +36,7 @@ public class SheetMusicCommentServiceImpl implements SheetMusicCommentService{
 		try {
 			object = sd.getSheetmusicCommentById(id);
 		} catch (RepositoryException e) {
-			new ServiceException();
+			throw new ServiceException();
 		}
 		return object;
 	}
@@ -46,7 +46,7 @@ public class SheetMusicCommentServiceImpl implements SheetMusicCommentService{
 		try {
 			object = sd.getSheetmusicCommentBySheetMusicId(id);
 		} catch (RepositoryException e) {
-			new ServiceException();
+			throw new ServiceException();
 		}
 		return object;
 	}
@@ -56,7 +56,7 @@ public class SheetMusicCommentServiceImpl implements SheetMusicCommentService{
 		try {
 			retmess = sd.insertSheetmusicComment(comment);
 		} catch (RepositoryException e) {
-			new ServiceException();
+			throw new ServiceException();
 		}
 		return retmess;
 	}
@@ -65,7 +65,7 @@ public class SheetMusicCommentServiceImpl implements SheetMusicCommentService{
 		try {
 			sd.updateSheetmusicComment(comment);
 		} catch (RepositoryException e) {
-			new ServiceException();
+			throw new ServiceException();
 		}
 	}
 
@@ -73,7 +73,7 @@ public class SheetMusicCommentServiceImpl implements SheetMusicCommentService{
 		try {
 			sd.deleteSheetmusicComment(comment);
 		} catch (RepositoryException e) {
-			new ServiceException();
+			throw new ServiceException();
 		}
 	}
 

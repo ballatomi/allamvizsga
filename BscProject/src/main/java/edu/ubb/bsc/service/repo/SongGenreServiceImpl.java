@@ -17,7 +17,7 @@ public class SongGenreServiceImpl implements SongGenreService{
 			df = DAOFactory.getInstance();
 			ud = df.getSongGenreDAO();
 		} catch (RepositoryException e) {
-			new ServiceException();
+			throw new ServiceException();
 		}
 	}
 	
@@ -26,7 +26,7 @@ public class SongGenreServiceImpl implements SongGenreService{
 		try {
 			object = ud.getAllGenre();
 		} catch (RepositoryException e) {
-			new ServiceException();
+			throw new ServiceException();
 		}
 		return object;
 	}

@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE hibernate-configuration PUBLIC
+
+<!--  <!DOCTYPE hibernate-configuration PUBLIC
 "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
 "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+ -->
+<!DOCTYPE hibernate-configuration SYSTEM 
+    "classpath://org/hibernate/hibernate-configuration-3.0.dtd">  
+   
 <hibernate-configuration>
 	<session-factory>
 		<property name="hibernate.bytecode.use_reflection_optimizer">false</property>
@@ -19,5 +24,6 @@
 		<mapping class="edu.ubb.bsc.repo.model.SongGenre" />
 		<mapping class="edu.ubb.bsc.repo.model.User" />
 		<mapping class="edu.ubb.bsc.repo.model.SheetmusicComment" />
+		<mapping class="edu.ubb.bsc.repo.model.SheetmusicFavorite" />
 	</session-factory>
 </hibernate-configuration>

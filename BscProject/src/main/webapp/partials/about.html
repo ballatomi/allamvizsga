@@ -1,0 +1,74 @@
+<nav class="navbar navbar-default navbar-fixed-top"
+	ng-controller="logoutController">
+	<div class="container" data-ng-init="getLoggedUser()">
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle collapsed"
+				data-toggle="collapse" data-target="#navbar" aria-expanded="false"
+				aria-controls="navbar">
+				<span class="sr-only">Sheet Music</span> <span class="icon-bar"></span>
+			</button>
+			<a class="navbar-brand" href="#/sheetmusic">Sheet Music</a>
+		</div>
+		<div id="navbar" class="navbar-collapse collapse">
+			<ul class="nav navbar-nav">
+				<li><a href="#/sheetmusic">Home</a></li>
+				<li><a href="#/upload">Upload Sheet music</a></li>
+				<li class="active"><a href="#about">About</a></li>
+				<li><a href="#profile">My Profile</a></li>
+			</ul>
+
+			<ul class="nav navbar-nav navbar-right">
+				<li><a href=""><span class="glyphicon glyphicon-user"></span>
+						Logged in : <em><b>{{loggedUser}}</b></em></a></li>
+				<li><a href="" ng-click="logout()">Log out </a></li>
+			</ul>
+		</div>
+		<!-- nav-collapse /end -->
+	</div>
+</nav>
+<br />
+<br />
+<br />
+<div class="view-content">
+
+	<div class="container">
+
+		<ul class="nav nav-tabs" id="myTabs">
+			<li><a data-toggle="tab" href="#menu1">License</a></li>
+			<li><a data-toggle="tab" href="#menu2">Tab2</a></li>
+			<li><a data-toggle="tab" href="#menu3">Tab3</a></li>
+		</ul>
+
+		<div class="tab-content">
+
+
+			<!-- Tab 1 -->
+			<div id="menu1" class="tab-pane fade in active">
+
+				<h2>License</h2>
+				<br /> With a Creative Commons license, you keep your copyright.<br />
+				Once you apply a CC(Creative Commons) license to your material, anyone who receives it
+				may rely on that license for as long as the material is protected by
+				copyright and similar rights, even if you later stop distributing
+				it. <br /> If you want to offer your work with no conditions or you
+				want to certify a work as public domain, choose one of the public
+				domain tools. <a href="https://creativecommons.org/licenses/">About
+					Licenses</a> <br />
+					
+				<h4>Type of licenses</h4>
+				<img src="resources/photo/license.png" alt="HTML5 Icon"> <br />
+				<br/><br/><br/>
+			</div>
+
+
+			<!-- Tab 2 -->
+			<div id="menu2" class="tab-pane fade">tab2</div>
+
+
+			<!-- Tab 3 -->
+			<div id="menu3" class="tab-pane fade">tab3</div>
+		</div>
+	</div>
+
+</div>
+

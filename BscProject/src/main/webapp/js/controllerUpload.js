@@ -74,6 +74,7 @@ function UploadController ($scope, $http, $timeout) {
 					fd.append("license", sheet.license);
 					fd.append("instrumentList", instrumentListId);
 
+					console.log(fd);
 					// uploading spinner
 					$scope.uploadButtonText = "Uploading";
 

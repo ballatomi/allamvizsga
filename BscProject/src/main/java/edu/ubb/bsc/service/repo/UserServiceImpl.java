@@ -18,7 +18,7 @@ public class UserServiceImpl implements UserService {
 			df = DAOFactory.getInstance();
 			ud = df.getUserDAO();
 		} catch (RepositoryException e) {
-			new ServiceException();
+			throw new ServiceException();
 		}
 	}
 
@@ -27,7 +27,7 @@ public class UserServiceImpl implements UserService {
 		try {
 			users = ud.getAllUsers();
 		} catch (RepositoryException e) {
-			new ServiceException();
+			throw new ServiceException();
 		}
 		return users;
 	}
@@ -37,7 +37,7 @@ public class UserServiceImpl implements UserService {
 		try {
 			user = ud.getUserById(id);
 		} catch (RepositoryException e) {
-			new ServiceException();
+			throw new ServiceException();
 		}
 		return user;
 	}
@@ -47,7 +47,7 @@ public class UserServiceImpl implements UserService {
 		try {
 			users = ud.getUsersByFilter(pattern);
 		} catch (RepositoryException e) {
-			new ServiceException();
+			throw new ServiceException();
 		}
 		return users;
 	}
@@ -58,7 +58,7 @@ public class UserServiceImpl implements UserService {
 			user.setUserPassword(PasswordEncrypter.generateHashedPassword(user.getUserPassword()));
 			retmess = ud.insertUser(user);
 		} catch (RepositoryException e) {
-			new ServiceException();
+			throw new ServiceException();
 		}
 		return retmess;
 	}
@@ -68,7 +68,7 @@ public class UserServiceImpl implements UserService {
 			user.setUserPassword(PasswordEncrypter.generateHashedPassword(user.getUserPassword()));
 			ud.updateUser(user);
 		} catch (RepositoryException e) {
-			new ServiceException();
+			throw new ServiceException();
 		}
 	}
 
@@ -87,7 +87,7 @@ public class UserServiceImpl implements UserService {
 			
 			user = ud.loginAuthenticateUser(userName, password);
 		} catch (RepositoryException e) {
-			new ServiceException("Login authenticate error!");
+			throw new ServiceException("Login authenticate error!");
 		}
 		return user;
 	}
@@ -97,7 +97,7 @@ public class UserServiceImpl implements UserService {
 		try {
 			user = ud.getUserByName(name);
 		} catch (RepositoryException e) {
-			new ServiceException();
+			throw new ServiceException();
 		}
 		return user;
 	}

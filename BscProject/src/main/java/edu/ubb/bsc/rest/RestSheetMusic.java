@@ -156,7 +156,7 @@ public class RestSheetMusic {
 	 * @return List<SheetMusic>
 	 */
 	@GET
-	@Path("/postComment/{id}")
+	@Path("/getComments/{id}")
 	@Produces({ MediaType.APPLICATION_JSON })
 	public List<SheetmusicComment> getCommentListBySMID(@PathParam("id") Integer id) {
 		SheetMusicCommentServiceImpl smcService;
@@ -225,12 +225,6 @@ public class RestSheetMusic {
 
 			log.info("Get all sheet music");
 
-			// for (Iterator<?> iterator = smList.iterator();
-			// iterator.hasNext();) {
-			// SheetMusic a = (SheetMusic) iterator.next();
-			// System.out.println(a.getName());
-			// System.out.println(a.getFilePdf());
-			// }
 		} catch (ServiceException e) {
 			log.error("Error in getting sheetMusic", e);
 		}
@@ -279,12 +273,6 @@ public class RestSheetMusic {
 
 			log.info("Get all sheet music");
 
-			// for (Iterator<?> iterator = smList.iterator();
-			// iterator.hasNext();) {
-			// Sheetmusic a = (Sheetmusic) iterator.next();
-			// System.out.println(a.getName());
-			// System.out.println(a.getFilePdf());
-			// }
 		} catch (ServiceException e) {
 			log.error("Error in getting sheetMusic", e);
 		}

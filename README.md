@@ -16,3 +16,6 @@ Set Up:
 
 3. Import the Dynamic Web Project in Eclipse.
 4. Run the project. 
+
+(5. Or run with maven, jetty server
+	- mvn jetty:run)

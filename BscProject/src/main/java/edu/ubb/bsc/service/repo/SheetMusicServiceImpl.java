@@ -17,7 +17,7 @@ public class SheetMusicServiceImpl implements SheetMusicService{
 			df = DAOFactory.getInstance();
 			sd = df.getSheetMusicDAO();
 		} catch (RepositoryException e) {
-			new ServiceException();
+			throw new ServiceException();
 		}
 	}
 	
@@ -26,7 +26,7 @@ public class SheetMusicServiceImpl implements SheetMusicService{
 		try {
 			object = sd.getAllSheetmusic();
 		} catch (RepositoryException e) {
-			new ServiceException();
+			throw new ServiceException();
 		}
 		return object;
 	}
@@ -36,7 +36,7 @@ public class SheetMusicServiceImpl implements SheetMusicService{
 		try {
 			object = sd.getSheetmusicById(id);
 		} catch (RepositoryException e) {
-			new ServiceException();
+			throw new ServiceException();
 		}
 		return object;
 	}
@@ -46,7 +46,7 @@ public class SheetMusicServiceImpl implements SheetMusicService{
 		try {
 			object = sd.getSheetmusicByFilter(pattern);
 		} catch (RepositoryException e) {
-			new ServiceException();
+			throw new ServiceException();
 		}
 		return object;
 	}
@@ -56,7 +56,7 @@ public class SheetMusicServiceImpl implements SheetMusicService{
 		try {
 			retmess = sd.insertSheetmusic(user);
 		} catch (RepositoryException e) {
-			new ServiceException();
+			throw new ServiceException();
 		}
 		return retmess;
 	}
@@ -65,7 +65,7 @@ public class SheetMusicServiceImpl implements SheetMusicService{
 		try {
 			sd.updateSheetmusic(user);
 		} catch (RepositoryException e) {
-			new ServiceException();
+			throw new ServiceException();
 		}
 	}
 
@@ -73,7 +73,7 @@ public class SheetMusicServiceImpl implements SheetMusicService{
 		try {
 			sd.deleteSheetmusic(user);
 		} catch (RepositoryException e) {
-			new ServiceException();
+			throw new ServiceException();
 		}
 	}
 
@@ -82,7 +82,7 @@ public class SheetMusicServiceImpl implements SheetMusicService{
 		try {
 			object = sd.getSheetmusicByName(name);
 		} catch (RepositoryException e) {
-			new ServiceException();
+			throw new ServiceException();
 		}
 		return object;
 	}

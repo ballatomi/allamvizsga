@@ -13,14 +13,14 @@
 			</div>
 			<div id="navbar" class="navbar-collapse collapse">
 				<ul class="nav navbar-nav">
-					<li class="active"><a href="#">Home</a></li>
-					<li><a href="#/upload">Upload Sheet music</a></li>
-					<li><a href="#about">About</a></li>
-					<li><a href="#contact">Contact</a></li>
+					<li class="active"><a href="">Home</a></li>
+					<li><a href="#upload">Upload Sheet music</a></li>
+					<li><a href="#/about">About</a></li>
+					<li><a href="#profile">My Profile</a></li>
 				</ul>
 	
 				<ul class="nav navbar-nav navbar-right">
-					<li><a href="#"><span class="glyphicon glyphicon-user"></span>
+					<li><a href="#profile"><span class="glyphicon glyphicon-user"></span>
 							Logged in : <em><b>{{loggedUser}}</b></em></a></li>
 					<li><a href="#" ng-click="logout()">Log out </a></li>
 				</ul>
@@ -74,7 +74,7 @@
 									{{Sheetmusic.user.userName}}
 								</p>
 								<p>
-									Mail: <a href="mailto:Sheetmusic.user.userMail">{{Sheetmusic.user.userMail}}</a>
+									Mail: <a href="mailto:{{Sheetmusic.user.userMail}}">{{Sheetmusic.user.userMail}}</a>
 									<br />
 							</div>
 						</div>
@@ -88,10 +88,10 @@
 								<span class="caret"></span>
 							</button>
 							<ul class="dropdown-menu">
-								<li><a role="menuitem" href="#"
+								<li><a role="menuitem" href=""
 									ng-click="downloadSheetMusic()"><span
 										class="glyphicon glyphicon-floppy-disk"></span> PDF File</a></li>
-								<li><a role="menuitem" href="#"
+								<li><a role="menuitem" href=""
 									ng-click="downloadSoundFile()"><span
 										class="glyphicon glyphicon-music"></span> MP3 File </a></li>
 			
@@ -101,9 +101,14 @@
 						</div>
 
 						<div class="btn-group">
-							<button class="btn btn-success" data-label-placement>
+							<button class="btn btn-success" ng-show="!addedToFavorite" ng-click="saveToFavorites()">
 								<span class="glyphicon glyphicon-star"></span> Favorite
 							</button>
+							
+							<button class="btn btn-warning" ng-show="addedToFavorite" ng-click="deleteFromFavorites()">
+								<span class="glyphicon glyphicon-star"></span> Unfavorite
+							</button>
+							
 						</div>
 					</div>
 
@@ -115,14 +120,14 @@
 								<p>Uploaded date</p>
 								<p>Pages</p>
 								<p>Duration</p>
-								<p>Licence</p>
+								<p>Licence &copy</p>
 								<p>Song genre</p>
 								<p>Current Time</p>
 
 							</div>
 
 							<div class="col-md-6">
-								<p>{{Sheetmusic.uploadDate}}.</p>
+								<p>{{Sheetmusic.uploadDate | datetime}}.</p>
 								<p id="pdfLength"></p>
 								<p id="audioDuration">{{Sheetmusic.duration}}.</p>
 								<p>{{Sheetmusic.license}}.</p>
@@ -132,7 +137,6 @@
 						</div>
 					</div>
 
-				
 					<br/>
 					<div class="col-xs-12 col-md-7" align="left">
 						<div class="form-group">
@@ -150,7 +154,7 @@
 					        	<span class="glyphicon glyphicon-user"></span><b style="color: #80aaff;"> 
 					        		{{item.user.userFirstName}}
 					        		{{item.user.userLastName}}
-					        		</b> * Posted: <em><small> {{item.postedDate}}</small> </em>
+					        		</b>  Posted: <em><small> {{item.postedDate | datetime}}</small> </em>
 					        		<pre>{{item.comment}}</pre>
 					        	<hr/>
 					        	<br/>
@@ -161,7 +165,7 @@
 					        	<span class="glyphicon glyphicon-user"></span><b style="color: #80aaff;"> 
 					        		{{userFirstName}}
 					        		{{userLastName}}
-					        		</b> * Posted: <em><small> {{postedDate}}</small> </em>
+					        		</b> * Posted: <em><small> {{postedDate | datetime}}</small> </em>
 					        		<pre>{{comment}}</pre>
 					        	<hr/>
 					        	<br/>

@@ -1,171 +1,211 @@
-	
-	<nav class="navbar navbar-default navbar-fixed-top" ng-controller="logoutController">
-		<div class="container"
-			data-ng-init="getLoggedUser()">
-			<div class="navbar-header">
-				<button type="button" class="navbar-toggle collapsed"
-					data-toggle="collapse" data-target="#navbar" aria-expanded="false"
-					aria-controls="navbar">
-					<span class="sr-only">Sheet Music</span> <span class="icon-bar"></span>
-				</button>
-				<a class="navbar-brand" href="#/sheetmusic">Sheet Music</a>
-			</div>
-			<div id="navbar" class="navbar-collapse collapse">
-				<ul class="nav navbar-nav">
-					<li class="active"><a href="#">Home</a></li>
-					<li><a href="upload.html">Upload Sheet music</a></li>
-					<li><a href="#about">About</a></li>
-					<li><a href="#contact">Contact</a></li>
-				</ul>
-	
-				<ul class="nav navbar-nav navbar-right">
-					<li><a href="#"><span class="glyphicon glyphicon-user"></span>
-							Logged in : <em><b>{{loggedUser}}</b></em></a></li>
-					<li><a href="#" ng-click="logout()">Log out </a></li>
-				</ul>
-			</div>
-			<!-- nav-collapse /end -->
+
+<nav class="navbar navbar-default navbar-fixed-top"
+	ng-controller="logoutController">
+	<div class="container" data-ng-init="getLoggedUser()">
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle collapsed"
+				data-toggle="collapse" data-target="#navbar" aria-expanded="false"
+				aria-controls="navbar">
+				<span class="sr-only">Sheet Music</span> <span class="icon-bar"></span>
+			</button>
+			<a class="navbar-brand" href="#/sheetmusic">Sheet Music</a>
 		</div>
-	</nav>
-	
-	<br/>
+		<div id="navbar" class="navbar-collapse collapse">
+			<ul class="nav navbar-nav">
+				<li><a href="#/sheetmusic">Home</a></li>
+				<li class="active"><a href="upload.html">Upload Sheet music</a></li>
+				<li><a href="#about">About</a></li>
+				<li><a href="#profile">My Profile</a></li>
+			</ul>
 
-	<div class="container"
-		data-ng-init="init()">
-		<div class="row">
-			<form class="form-horizontal">
-				<fieldset>
+			<ul class="nav navbar-nav navbar-right">
+				<li><a href="#profile"><span
+						class="glyphicon glyphicon-user"></span> Logged in : <em><b>{{loggedUser}}</b></em></a></li>
+				<li><a href="#" ng-click="logout()">Log out </a></li>
+			</ul>
+		</div>
+		<!-- nav-collapse /end -->
+	</div>
+</nav>
+<br />
 
-					<!-- Form Name -->
-					<legend>About sheet music</legend>
+<script type="text/javascript" src="js/util.js"></script>
 
-					<div class="form-group">
-						<label class="col-md-3 control-label" for="Title">Title</label>
-						<div class="col-md-5">
-							<input id="title" ng-model="adv.name" name="title" type="text"
-								class="form-control input-md">
-						</div>
+<div class="container" data-ng-init="init()">
+	<div class="row">
+		<form class="form-horizontal">
+			<fieldset>
+
+				<!-- Form Name -->
+				<legend>About sheet music</legend>
+
+				<div class="form-group">
+					<label class="col-md-3 control-label" for="Title">Title</label>
+					<div class="col-md-5">
+						<input id="title" ng-model="adv.name" name="title" type="text"
+							class="form-control input-md">
 					</div>
+				</div>
 
-					<div class="form-group">
-						<label class="col-md-3 control-label" for="Page numbers">Page
-							numbers</label>
-						<div class="col-md-5">
-							<input id="pagenumber" ng-model="adv.length" name="pagenumber"
-								type="number" min="0" class="form-control input-md">
-						</div>
+				<div class="form-group">
+					<label class="col-md-3 control-label" for="Page numbers">Page
+						numbers</label>
+					<div class="col-md-5">
+						<input id="pagenumber" ng-model="adv.length" name="pagenumber"
+							type="number" min="0" class="form-control input-md">
 					</div>
+				</div>
 
-					<div class="form-group">
-						<label class="col-md-3 control-label" for="Page numbers">License
-							© </label>
-						<div class="col-md-5">
-							<input id="license" ng-model="adv.license" name="license"
+				<div class="form-group">
+
+					<label class="col-md-3 control-label" for="Page numbers">License
+						&copy </label>
+
+					<div class="col-md-5">
+						<!-- <input id="license" ng-model="adv.license" name="license"
 								type="text"
 								placeholder="With a Creative Commons license, you keep your copyright"
-								class="form-control input-md">
-						</div>
+								class="form-control input-md"> -->
+
+						<select name="license"
+							class="form-select creativecommons creativecommons-license-select"
+							id="license" ng-model="adv.license">
+							<option value="None (All Rights
+								Reserved)"
+								selected="selected">None (All Rights Reserved)</option>
+							<optgroup label="Creative Commons">
+								<option value="CC0
+									1.0 Universal">CC0 1.0
+									Universal</option>
+								<option value="Public
+									Domain Mark 1.0">Public
+									Domain Mark 1.0</option>
+								<option value="Attribution
+									3.0 Unported">Attribution
+									3.0 Unported</option>
+								<option value="Attribution-ShareAlike
+									3.0 Unported">Attribution-ShareAlike
+									3.0 Unported</option>
+								<option value="Attribution-NoDerivs
+									3.0 Unported">Attribution-NoDerivs
+									3.0 Unported</option>
+								<option value="Attribution-NonCommercial
+									3.0 Unported">Attribution-NonCommercial
+									3.0 Unported</option>
+								<option
+									value="Attribution-NonCommercial-ShareAlike
+									3.0 Unported">Attribution-NonCommercial-ShareAlike
+									3.0 Unported</option>
+								<option
+									value="Attribution-NonCommercial-NoDerivs
+									3.0 Unported">Attribution-NonCommercial-NoDerivs
+									3.0 Unported</option>
+							</optgroup>
+							<optgroup label="Public Domain">
+								<option value=">CC0
+									1.0 Universal">CC0 1.0
+									Universal</option>
+							</optgroup>
+						</select> <br /> <small>With a Creative Commons license, you keep
+							your copyright</small>
 					</div>
 
-					<div class="form-group">
-						<label class="col-md-3 control-label" for="Page numbers">Upload
-							pdf file</label>
+				</div>
 
-						<div class="col-md-5">
-							<span id="fileselector"> <label class="btn btn-default"
-								for="upload-file-selector"> <input
-									id="upload-file-selector-pdf" accept="application/pdf"
-									type="file"> <i
-									class="fa_icon icon-upload-alt margin-correction"></i>upload
-									file
-							</label>
-							</span>
-						</div>
 
-						<!-- style="display: {{display_type}} none" -->
-						<div ng-show="showUploadAlert" id="alert"
-							class="{{alert_type}} col-sm-3">
-							<p>{{message}}</p>
-						</div>
+				<div class="form-group">
+					<label class="col-md-3 control-label" for="Page numbers">Upload
+						pdf file</label>
+
+					<div class="col-md-5">
+						<span id="fileselector"> <label class="btn btn-default"
+							for="upload-file-selector"> <input
+								id="upload-file-selector-pdf" accept="application/pdf"
+								type="file"> <i
+								class="fa_icon icon-upload-alt margin-correction"></i>upload
+								file
+						</label>
+						</span>
 					</div>
 
-					<div class="form-group">
-						<label class="col-md-3 control-label" for="Page numbers">Upload
-							sound file</label>
+					<!-- style="display: {{display_type}} none" -->
 
-						<div class="col-md-5">
-							<span id="fileselector"> <label class="btn btn-default"
-								for="upload-file-selector"> <input
-									id="upload-file-selector-sound" accept="audio/*" type="file">
-									<i class="fa_icon icon-upload-alt margin-correction"></i>upload
-									file
-							</label>
-							</span>
-						</div>
+				</div>
+
+				<div class="form-group">
+					<label class="col-md-3 control-label" for="Page numbers">Upload
+						sound file</label>
+
+					<div class="col-md-5">
+						<span id="fileselector"> <label class="btn btn-default"
+							for="upload-file-selector"> <input
+								id="upload-file-selector-sound" accept="audio/*" type="file">
+								<i class="fa_icon icon-upload-alt margin-correction"></i>upload
+								file
+						</label>
+						</span>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label class="col-md-3 control-label" for="Song genre">Instruments</label>
+					<div class="col-md-5">
+
+						<section class="container">
+							<div>
+								<select id="leftValues" size="5" multiple></select>
+							</div>
+							<div>
+								<input type="button" id="btnLeft" value="&lt;&lt;" /> <input
+									type="button" id="btnRight" value="&gt;&gt;" />
+							</div>
+							<div>
+
+								<select id="rightValues" size="5" multiple
+									name="adv.selectedInstrument" ng-model="instrument">
+									<option ng:repeat="instrument in instrumentsList"
+										value="{{instrument.instrumentId}}">
+										{{instrument.name}}</option>
+								</select>
+							</div>
+						</section>
+					</div>
+				</div>
+
+
+				<div class="form-group">
+					<label class="col-md-3 control-label" for="Song genre">Song
+						genre</label>
+					<div class="col-md-5">
+						<select name="adv.selectedGenre" ng-model="adv.selectedGenre">
+							<option selected="selected" ng:repeat="genre in songGenreList"
+								value="{{genre.songGenreId}}">{{genre.songGenreName}}</option>
+						</select>
+					</div>
+				</div>
+
+				<!-- Button -->
+				<div class="form-group">
+					<label class="col-md-3 control-label" for="singlebutton">Submit</label>
+					<div class="col-md-4">
+						<button id="singlebutton" name="singlebutton"
+							class="btn btn-primary" ng-click="uploadSheet(adv)">
+							<span ng-show="uploadButtonText == 'Uploading'"> <i
+								class="glyphicon glyphicon-refresh spinning"></i></span> {{
+							uploadButtonText }}
+						</button>
+						<br /> <br />
 					</div>
 
-					<div class="form-group">
-						<label class="col-md-3 control-label" for="Song genre">Instruments</label>
-						<div class="col-md-5">
-
-							<!-- 	<select id="example-getting-started" multiple="multiple"> -->
-							<!-- 							<select id="multi-selectbox" multiple="multiple" size="6" ng-model="adv.selectedInstrument">
-								<option selected="selected"
-									ng:repeat="instrument in instrumentsList"
-									value="{{instrument.instrumentID}}">{{instrument.name}}
-								</option>
-							</select> -->
-
-							<section class="container">
-								<div>
-									<select id="leftValues" size="5" multiple></select>
-								</div>
-								<div>
-									<input type="button" id="btnLeft" value="&lt;&lt;" /> <input
-										type="button" id="btnRight" value="&gt;&gt;" />
-								</div>
-								<div>
-
-									<select id="rightValues" size="5" multiple
-										name="adv.selectedInstrument" ng-model="instrument">
-										<option ng:repeat="instrument in instrumentsList"
-											value="{{instrument.instrumentId}}">
-											{{instrument.name}}</option>
-									</select>
-								</div>
-							</section>
-						</div>
+					<div ng-show="showUploadAlert" id="alert"
+						class="{{alert_type}} col-sm-3">
+						<p>{{message}}</p>
 					</div>
 
-
-					<div class="form-group">
-						<label class="col-md-3 control-label" for="Song genre">Song
-							genre</label>
-						<div class="col-md-5">
-							<select name="adv.selectedGenre" ng-model="adv.selectedGenre">
-								<option selected="selected" ng:repeat="genre in songGenreList"
-									value="{{genre.songGenreId}}">{{genre.songGenreName}}
-								</option>
-							</select>
-						</div>
-					</div>
-
-					<!-- Button -->
-					<div class="form-group">
-						<label class="col-md-3 control-label" for="singlebutton">Submit</label>
-						<div class="col-md-4">
-							<button id="singlebutton" name="singlebutton"
-								class="btn btn-primary" ng-click="uploadSheet(adv)">
-								<span ng-show="uploadButtonText == 'Uploading'"> <i
-									class="glyphicon glyphicon-refresh spinning"></i></span> {{
-								uploadButtonText }}
-							</button>
-							<br /> <br />
-						</div>
-					</div>
-				</fieldset>
-			</form>
-
-		</div>
+				</div>
+			</fieldset>
+		</form>
 
 	</div>
+
+</div>
