@@ -1,0 +1,156 @@
+
+<nav class="navbar navbar-default navbar-fixed-top">
+	<div class="container" data-ng-init="getLoggedUser()">
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle collapsed"
+				data-toggle="collapse" data-target="#navbar" aria-expanded="false"
+				aria-controls="navbar">
+				<span class="sr-only">Sheet Music</span> <span class="icon-bar"></span>
+			</button>
+			<a class="navbar-brand" href="#/sheetmusic">Sheet Music</a>
+		</div>
+		<div id="navbar" class="navbar-collapse collapse">
+			<ul class="nav navbar-nav">
+				<li><a href="#/sheetmusic">Home</a></li>
+				<li><a href="#/upload">Upload Sheet music</a></li>
+				<li><a href="#about">About</a></li>
+				<li class="active"><a href="#profile">My Profile</a></li>
+				<li><a href="#admin">Admin view</a></li>
+			</ul>
+
+			<ul class="nav navbar-nav navbar-right">
+				<li><a href=""><span class="glyphicon glyphicon-user"></span>
+						Logged in : <em><b>{{loggedUser}}</b></em></a></li>
+				<li><a href="" ng-click="logout()">Log out </a></li>
+			</ul>
+		</div>
+		<!-- nav-collapse /end -->
+	</div>
+</nav>
+<br />
+<br />
+<br />
+
+
+<div class="view-content">
+	<div class="container" data-ng-init="init()">
+
+		<ul class="nav nav-tabs" id="myTabs">
+			<li><a data-toggle="tab" href="#menu1">Instruments</a></li>
+			<li><a data-toggle="tab" href="#menu2">Song Genre</a></li>
+			<li><a data-toggle="tab" href="#menu3">Tab3</a></li>
+		</ul>
+
+		<div class="tab-content">
+
+			<!-- Tab 1 -->
+			<div id="menu1" class="tab-pane fade in active">
+
+				<!--  TODO edit update delete -->
+				<div class="row" id="exSelects">
+					<div class="col-sm-8">
+						<h4>Add new</h4>
+
+						<table class="table table-striped table-bordered">
+							<thead>
+								<tr>
+									<th>Instrument name
+										<p style="color: red;">{{ErrorMessage}}</p>
+									</th>
+									<th></th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td><input type="text" class="form-control"
+										ng-model="instrumentName" required /></td>
+									<td><input type="button" value="Save"
+										class="btn btn-success" ng-click="addNewInstrument()" /></td>
+								</tr>
+							</tbody>
+						</table>
+
+					</div>
+					<!--/col-->
+
+					<div class="col-sm-6">
+						<table class="table table-striped table-bordered">
+							<tr>
+								<th>ID</th>
+								<th>Name</th>
+								<th>Action (Will be deleted from sheetmusic)</th>
+							</tr>
+							<tr ng-repeat="instrument in instrumentsList">
+								<td>{{instrument.instrumentId}}</td>
+								<td>{{instrument.name}}</td>
+								<td><input type="button" value="Delete"
+									class="btn btn-primary"
+									ng-click="removeInstrument(instrument.instrumentId)" /></td>
+							</tr>
+						</table>
+					</div>
+
+				</div>
+				<!--/row-->
+			</div>
+
+
+			<!-- Tab 2 -->
+			<div id="menu2" class="tab-pane fade">
+
+				<div class="row" id="exSelects">
+					<div class="col-sm-8">
+						<h4>Add new</h4>
+
+
+						<table class="table table-striped table-bordered">
+							<thead>
+								<tr>
+									<th>Genre name 
+										<p style="color: red;">{{MessageGenre}}</p>
+									</th>
+									<th></th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td><input type="text" class="form-control"
+										ng-model="genreName" required /></td>
+									<td><input type="button" value="Save"
+										class="btn btn-success" ng-click="addNewGenre()" /></td>
+								</tr>
+							</tbody>
+						</table>
+
+
+					</div>
+					<!--/col-->
+
+					<div class="col-sm-6">
+						<table class="table table-striped table-bordered">
+							<tr>
+								<th>ID</th>
+								<th>Name</th>
+								<th>Action (Will be deleted from sheetmusic)</th>
+							</tr>
+							<tr ng-repeat="genre in songGenreList">
+								<td>{{genre.songGenreId}}</td>
+								<td>{{genre.songGenreName}}</td>
+								<td><input type="button" value="Delete"
+									class="btn btn-primary"
+									ng-click="removeGenre(genre.songGenreId)" /></td>
+							</tr>
+						</table>
+					</div>
+
+				</div>
+				<!--/row-->
+			</div>
+
+
+			<!-- Tab 3 -->
+			<div id="menu3" class="tab-pane fade">tab3</div>
+		</div> <!-- tab content end -->
+	</div> <!-- container end -->
+
+</div>

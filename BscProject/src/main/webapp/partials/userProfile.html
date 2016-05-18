@@ -31,11 +31,10 @@
 
 
 <div class="view-content">
-
 	<div class="container" data-ng-init="init()">
 
 		<ul class="nav nav-tabs" id="myTabs">
-			<li><a data-toggle="tab" href="#menu1">Favorites</a></li>
+			<li><a data-toggle="tab" href="#menu1">Favorites <span class="glyphicon glyphicon-star"></span> </a></li>
 			<li><a data-toggle="tab" href="#menu2">Tab2</a></li>
 			<li><a data-toggle="tab" href="#menu3">Tab3</a></li>
 		</ul>
@@ -45,16 +44,13 @@
 
 			<!-- Tab 1 -->
 			<div id="menu1" class="tab-pane fade in active">
-
 				<div class="col-sm-9">
 						<table align="center" class="table">
 							<tbody>
 								<tr ng-show="not_found">
 									<td></td>
 									<td>
-										<h3>
-											<b>No Sheet music added to favorites!</b>
-										</h3>
+										<b>No Sheet music added to favorites!</b>
 									</td>
 								</tr>
 								<tr ng-repeat="sheet in Sheetmusic" colspan="2" valign="bottom"

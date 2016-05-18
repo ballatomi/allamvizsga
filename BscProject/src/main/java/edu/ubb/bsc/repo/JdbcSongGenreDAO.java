@@ -4,6 +4,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.hibernate.HibernateException;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -11,7 +12,6 @@ import org.hibernate.cfg.AnnotationConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import edu.ubb.bsc.repo.model.SheetMusic;
 import edu.ubb.bsc.repo.model.SongGenre;
 
 public class JdbcSongGenreDAO implements SongGenreDAO {
@@ -60,8 +60,25 @@ public class JdbcSongGenreDAO implements SongGenreDAO {
 	}
 
 	public String insertGenre(SongGenre user) throws RepositoryException {
-		// TODO Auto-generated method stub
-		return null;
+		Session session = factory.openSession();
+		Transaction tx = null;
+		Integer id = 0;
+
+		try {
+			tx = session.beginTransaction();
+			id = (Integer) session.save(user); // save to DB
+			tx.commit();
+
+		} catch (HibernateException e) {
+			if (tx != null)
+				tx.rollback();
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+
+		log.info("New Genre Inserted!");
+		return id.toString();
 	}
 
 	public void updateGenre(SongGenre user) throws RepositoryException {
@@ -69,8 +86,32 @@ public class JdbcSongGenreDAO implements SongGenreDAO {
 
 	}
 
-	public void deleteGenre(SongGenre user) throws RepositoryException {
-		// TODO Auto-generated method stub
+	public void deleteGenre(SongGenre genre) throws RepositoryException {
+		Session session = factory.openSession();
+		Transaction tx = null;
+		try {
+			tx = session.beginTransaction();
+			if (genre != null) {
+				
+				//delete the foreign keys from sheet music
+				Query query = session
+						.createQuery("DELETE FROM SheetMusic WHERE song_genreID = :song_genreID");
+				query.setParameter("song_genreID", genre.getSongGenreId());
+				query.executeUpdate();
+				
+				session.delete(genre);
+				log.info("User with ID= " + genre + " deleted!");
+			} else {
+				log.info("User with ID= " + genre+ " not exist!");
+			}
+			tx.commit();
+		} catch (HibernateException e) {
+			if (tx != null)
+				tx.rollback();
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
 
 	}
 
@@ -82,12 +123,10 @@ public class JdbcSongGenreDAO implements SongGenreDAO {
 	public static void main(String[] args) {
 		JdbcSongGenreDAO cd = new JdbcSongGenreDAO();
 		// cd.getCategoryById(2);
-		List<SongGenre> sm = cd.getAllGenre();
-		for (Iterator<?> iterator = sm.iterator(); iterator.hasNext();) {
-			SongGenre a = (SongGenre) iterator.next();
-			System.out.println(a.getSongGenreId());
-			System.out.println(a.getSongGenreName());
 
-		}
+		SongGenre genre = new SongGenre();
+		genre.setSongGenreId(21);
+		cd.deleteGenre(genre);
+		
 	}
 }

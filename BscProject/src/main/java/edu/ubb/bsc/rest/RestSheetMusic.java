@@ -7,6 +7,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -16,6 +17,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
+import org.codehaus.jettison.json.JSONException;
+import org.codehaus.jettison.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,6 +36,7 @@ import edu.ubb.bsc.service.repo.InstrumentSheetMusicServiceImpl;
 import edu.ubb.bsc.service.repo.ServiceException;
 import edu.ubb.bsc.service.repo.SheetMusicCommentServiceImpl;
 import edu.ubb.bsc.service.repo.SheetMusicServiceImpl;
+import edu.ubb.bsc.service.repo.SongGenreService;
 import edu.ubb.bsc.service.repo.SongGenreServiceImpl;
 
 @Path("sheet")
@@ -65,6 +69,7 @@ public class RestSheetMusic {
 
 	/**
 	 * Get Sheetmusic by sheetmusic ID
+	 * 
 	 * @param id
 	 * @return SheetMusic
 	 */
@@ -85,7 +90,7 @@ public class RestSheetMusic {
 		}
 		return sm;
 	}
-	
+
 	@GET
 	@Path("/getSheetMusicByInstrument/{id}")
 	@Produces({ MediaType.APPLICATION_JSON })
@@ -94,7 +99,7 @@ public class RestSheetMusic {
 		List<SheetMusic> is = new ArrayList<SheetMusic>();
 		try {
 			ismService = new InstrumentSheetMusicServiceImpl();
-//			is = ismService.getInstrumentSheetmusicByInstrumentId(id);
+			// is = ismService.getInstrumentSheetmusicByInstrumentId(id);
 			is = ismService.getSheetMusicByInstrumentId(id);
 
 			log.info("Get InstrumentSheetmusic by Instrument ID");
@@ -106,6 +111,7 @@ public class RestSheetMusic {
 
 	/**
 	 * Post comment to Sheetmusic
+	 * 
 	 * @param id
 	 * @param comment
 	 * @param request
@@ -152,6 +158,7 @@ public class RestSheetMusic {
 
 	/**
 	 * Get comments on a SheetMusic
+	 * 
 	 * @param id
 	 * @return List<SheetMusic>
 	 */
@@ -176,7 +183,8 @@ public class RestSheetMusic {
 
 	/**
 	 * Get sheet music by pattern, search in sheet music name
-	 * @param pattern 
+	 * 
+	 * @param pattern
 	 * @return List<SheetMusic>
 	 */
 	@GET
@@ -191,18 +199,13 @@ public class RestSheetMusic {
 			smList = service.getSheetmusicByFilter(pattern);
 
 			log.info("Get sheet music by pattern");
-			
+
 		} catch (ServiceException e) {
 			log.error("Error in getting sheetMusic", e);
 		}
 		return smList;
 	}
-	
 
-	
-	
-	
-	
 	/////////////////////////////////////////////////////
 	//// Get ALL
 	/////////////////////////////////////////////////////
@@ -228,6 +231,7 @@ public class RestSheetMusic {
 		} catch (ServiceException e) {
 			log.error("Error in getting sheetMusic", e);
 		}
+
 		return smList;
 	}
 
@@ -252,6 +256,7 @@ public class RestSheetMusic {
 		} catch (ServiceException e) {
 			log.error("Error in getting sheetMusic", e);
 		}
+
 		return is;
 	}
 
@@ -297,15 +302,144 @@ public class RestSheetMusic {
 
 			log.info("Get all Instrument");
 
-			// for (Iterator<?> iterator = smList.iterator();
-			// iterator.hasNext();) {
-			// Sheetmusic a = (Sheetmusic) iterator.next();
-			// System.out.println(a.getName());
-			// System.out.println(a.getFilePdf());
-			// }
 		} catch (ServiceException e) {
 			log.error("Error in getting sheetMusic", e);
 		}
 		return list;
 	}
+
+	/////////////////////////////////////////////////////
+	//// Save elements
+	/////////////////////////////////////////////////////
+
+	/**
+	 * Add new instrument
+	 * 
+	 * @param instrument
+	 * @return
+	 */
+	@PUT
+	@Path("/addInstrument/{instr}")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public String addInstrument(@PathParam("instr") String instrument) {
+		InstrumentService service;
+
+		JSONObject jo = new JSONObject();
+		try {
+			service = new InstrumentServiceImpl();
+
+			Instrument instr = new Instrument();
+			instr.setName(instrument);
+			String resp = service.insertInstrument(instr);
+
+			try {
+				jo.put("instrumentID", resp);
+				jo.put("response", "Instrument was added succesfull");
+
+			} catch (JSONException e) {
+			}
+
+			log.info("Get all Instrument");
+
+		} catch (ServiceException e) {
+			log.error("Error in adding Instrument", e);
+		}
+		return jo.toString();
+	}
+
+	/**
+	 * Delete instrument 
+	 * @param sid
+	 * @return
+	 */
+	@DELETE
+	@Path("/deleteInstrument/{id}")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public String deleteInstrument(@PathParam("id") Integer sid) {
+		InstrumentService service;
+		JSONObject jo = new JSONObject();
+
+		try {
+			service = new InstrumentServiceImpl();
+
+			Instrument instr = new Instrument();
+			instr.setInstrumentId(sid);
+
+			System.out.println("delete "+ sid);
+			service.deleteInstrument(instr);
+			try {
+				jo.put("response", "Delete was succesfull");
+			} catch (JSONException e) {
+			}
+		} catch (ServiceException e) {
+			log.error("Error in deleting Instrument", e);
+		}
+
+		return jo.toString();
+	}
+	
+	/**
+	 * Add genre
+	 * @param genre
+	 * @return
+	 */
+	@PUT
+	@Path("/addGenre/{g}")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public String addGenre(@PathParam("g") String genre) {
+		SongGenreService service;
+		
+		JSONObject jo = new JSONObject();
+		try {
+			service = new SongGenreServiceImpl();
+
+
+			SongGenre sg = new SongGenre();
+			sg.setSongGenreName(genre);
+			String resp = service.insertGenre(sg);
+
+			try {
+				jo.put("genreID", resp);
+				jo.put("response", "Genre was added succesfull");
+
+			} catch (JSONException e) {
+			}
+
+			log.info("Get all Instrument");
+
+		} catch (ServiceException e) {
+			log.error("Error in adding Instrument", e);
+		}
+		return jo.toString();
+	}
+	
+	/**
+	 * Delete genre
+	 * @param sid
+	 * @return
+	 */
+	@DELETE
+	@Path("/deleteGenre/{id}")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public String deleteGenre(@PathParam("id") Integer sid) {
+		SongGenreService service;
+		JSONObject jo = new JSONObject();
+
+		try {
+			service = new SongGenreServiceImpl();
+			SongGenre sg = new SongGenre();
+			sg.setSongGenreId(sid);
+			
+			System.out.println("delete "+ sid);
+			service.deleteGenre(sg);
+			try {
+				jo.put("response", "Delete was succesfull");
+			} catch (JSONException e) {
+			}
+		} catch (ServiceException e) {
+			log.error("Error in deleting Genre", e);
+		}
+		return jo.toString();
+	}
+
 }

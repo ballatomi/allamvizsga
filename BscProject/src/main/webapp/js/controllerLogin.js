@@ -8,15 +8,24 @@ var urlLogin = "http://localhost:8080/BscProject/rest/login/";
 function LoginController($scope, $http, $location) {
 	$scope.showLoginAlert = false;
 	$scope.login = function(user) {
+		
+		//regenerate session
+		sessionStorage.clear();
+		
 		// with user - angular model parameter
 		if (user.userName != undefined && user.userPassword != undefined) {
 			$http.post(urlLogin + "log", user).success(function(response) {
 				$scope.loginMessage = response.Message;
 				$scope.showLoginAlert = true;
 				
-				console.log(response);
 				if (response.login == "true") {
-					$location.path('/sheetmusic');
+					$http.get(urlLogin + "loggedIn").success(function(response) {
+						if (response.userRight == 0){
+							$location.path('/admin');
+						}else{
+							$location.path('/sheetmusic');
+						}
+					});
 				}
 			});
 		} else {
@@ -28,10 +37,6 @@ function LoginController($scope, $http, $location) {
 	$scope.showRegistrationAlert = false;
 	$scope.registration = function(user) {
 		console.log(user);
-//		console.log(user.userName);
-//		console.log(angular.isUndefined(user.userPassword));
-//		console.log(user.re_password);
-//		console.log(user.userMail);
 
 		if (!angular.isUndefined(user.userName)
 				&& !angular.isUndefined(user.userPassword)

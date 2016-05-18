@@ -52,17 +52,27 @@ public class InstrumentServiceImpl implements InstrumentService{
 	}
 
 	public String insertInstrument(Instrument user) throws ServiceException {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			return ud.insertInstrument(user);
+		} catch (RepositoryException e) {
+			throw new ServiceException();
+		}
 	}
 
 	public void updateInstrument(Instrument user) throws ServiceException {
-		// TODO Auto-generated method stub
-		
+		try {
+			ud.updateInstrument(user);
+		} catch (RepositoryException e) {
+			throw new ServiceException();
+		}
 	}
 
 	public void deleteInstrument(Instrument user) throws ServiceException {
-		// TODO Auto-generated method stub
+		try {
+			ud.deleteInstrument(user);
+		} catch (RepositoryException e) {
+			throw new ServiceException();
+		}
 	}
 
 }

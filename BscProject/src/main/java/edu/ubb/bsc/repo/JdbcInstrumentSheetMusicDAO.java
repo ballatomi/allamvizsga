@@ -109,7 +109,7 @@ public class JdbcInstrumentSheetMusicDAO implements InstrumentSheetMusicDAO {
 			
 			tx = session.beginTransaction();
 			Query query = session
-					.createQuery("select SheetMusic FROM InstrumentSheetmusic WHERE instrumentID = :instrumentID");
+					.createQuery("select sheetMusic FROM InstrumentSheetmusic WHERE instrumentID = :instrumentID");
 			query.setParameter("instrumentID", id);
 			object = query.list();
 
@@ -219,14 +219,9 @@ public class JdbcInstrumentSheetMusicDAO implements InstrumentSheetMusicDAO {
 //		Instrument is = cd.getInstrumentSheetmusicByInstrumentId(1);
 //
 //		System.out.println(is.getName());
+//		List<InstrumentSheetmusic> smi = cd.getInstrumentSheetmusicByInstrumentId(18);
+//
 
-		List<SheetMusic> sm = cd.getSheetMusicByInstrumentId(18);
-		//List<InstrumentSheetmusic> sm = (List<InstrumentSheetmusic>) cd.getInstrumentSheetmusicByInstrumentId(1);
-
-		for (Iterator<?> iterator = sm.iterator(); iterator.hasNext();) {
-			SheetMusic a = (SheetMusic) iterator.next();
-			System.out.println(a);
-		}
 
 	}
 

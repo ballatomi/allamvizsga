@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import edu.ubb.bsc.repo.model.Instrument;
+import edu.ubb.bsc.repo.model.InstrumentSheetmusic;
 
 public class JdbcInstrumentDAO implements InstrumentDAO {
 
@@ -103,18 +104,57 @@ public class JdbcInstrumentDAO implements InstrumentDAO {
 	}
 
 	public String insertInstrument(Instrument user) throws RepositoryException {
-		// TODO Auto-generated method stub
-		return null;
-	}
+		Session session = factory.openSession();
+		Transaction tx = null;
+		Integer id = 0;
 
+		try {
+			tx = session.beginTransaction();
+			id = (Integer) session.save(user); // save to DB
+			tx.commit();
+
+		} catch (HibernateException e) {
+			if (tx != null)
+				tx.rollback();
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+
+		log.info("New Instrument Inserted!");
+		return id.toString();
+	}
 	public void updateInstrument(Instrument user) throws RepositoryException {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void deleteInstrument(Instrument user) throws RepositoryException {
-		// TODO Auto-generated method stub
-
+	public void deleteInstrument(Instrument instrument) throws RepositoryException {
+		Session session = factory.openSession();
+		Transaction tx = null;
+		try {
+			tx = session.beginTransaction();
+			if (instrument != null) {
+				
+				//delete the foreign keys
+				Query query = session
+						.createQuery("DELETE FROM InstrumentSheetmusic WHERE instrumentId = :instrumentId");
+				query.setParameter("instrumentId", instrument.getInstrumentId());
+				query.executeUpdate();
+				
+				session.delete(instrument);
+				log.info("Instrument with ID= " + instrument + " deleted!");
+			} else {
+				log.info("Instrument with ID= " + instrument+ " not exist!");
+			}
+			tx.commit();
+		} catch (HibernateException e) {
+			if (tx != null)
+				tx.rollback();
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
 	}
 
 	public Instrument getInstrumentByName(String username) throws RepositoryException {
@@ -126,12 +166,12 @@ public class JdbcInstrumentDAO implements InstrumentDAO {
 		JdbcInstrumentDAO cd = new JdbcInstrumentDAO();
 		// cd.getCategoryById(2);
 		//List<Instrument> sm = cd.getAllInstrument();
-		List<Instrument> sm = cd.getInstrumentByFilter("Trumpet");
+//		List<Instrument> sm = cd.getInstrumentByFilter("Trumpet");
 		
-		for (Iterator<?> iterator = sm.iterator(); iterator.hasNext();) {
-			Instrument a = (Instrument) iterator.next();
-			System.out.println(a.getName());
-		}
+		Instrument i = new Instrument();
+		i.setInstrumentId(21);
+		cd.deleteInstrument(i);
+		
 	}
 
 }

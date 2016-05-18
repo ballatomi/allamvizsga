@@ -23,6 +23,11 @@ var app = angular.module('ngMusicApp', [ 'ngMusicApp.filters',
 				templateUrl : 'partials/PermissionDenied.html',
 			});
 
+			$routeProvider.when('/permission', {
+				templateUrl : 'partials/permission.html',
+			});
+
+			
 			$routeProvider.when('/upload', {
 				templateUrl : 'partials/sheetmusicUpload.html',
 				controller : UploadController
@@ -33,7 +38,11 @@ var app = angular.module('ngMusicApp', [ 'ngMusicApp.filters',
 				controller : ViewController
 			});
 			
-			///TODO
+			$routeProvider.when('/admin', {
+				templateUrl : 'partials/admin.html',
+				controller : AdminController
+			});
+			
 			$routeProvider.when('/profile', {
 				templateUrl : 'partials/userProfile.html',
 				controller : UserPersonalController

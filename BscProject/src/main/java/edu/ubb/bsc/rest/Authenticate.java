@@ -53,6 +53,7 @@ public class Authenticate {
 
 			jo.put("Message", "Log in success!");
 			jo.put("login", "true");
+			
 			log.info("User login was successfull!");
 		}
 		return jo.toString();

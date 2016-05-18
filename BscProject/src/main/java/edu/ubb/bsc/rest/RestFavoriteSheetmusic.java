@@ -60,6 +60,7 @@ public class RestFavoriteSheetmusic {
 		} catch (ServiceException e) {
 			log.error("Error in get SheetmusicFavorite", e);
 		}
+		
 		return favList;
 	}
 
@@ -121,6 +122,7 @@ public class RestFavoriteSheetmusic {
 		}
 	}
 
+	
 	@DELETE
 	@Path("/deleteFromFavorites/{id}")
 	@Produces({ MediaType.APPLICATION_JSON })

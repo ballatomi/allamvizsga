@@ -41,6 +41,39 @@ function ViewController($scope, $http, $location, $window) {
 					var pdfUint = new Uint8Array(pdfAsArray);
 					// loading the first page of PDF
 					loadCanvas(actualPage, pdfUint);
+					
+					//pdf feldolgozas
+					self.getDataFromPDF(pdfUint).then(function(result) {
+					    
+						console.log(result);
+					    
+					    for (var i = 0; i < result.length; i++) {
+//							console.log(result[i]);
+							processedData = buildBareNumbersWithPosition(result[i]);
+							console.log(processedData);
+					    }
+						
+//						angular.forEach(result, function(value,index){
+//			                console.log(value[index]);
+			                
+//			                angular.forEach(value, function(v,i){
+//				                console.log(i);
+//				            });
+//						});
+						
+//					    for (var key in result) {
+//							if (result.hasOwnProperty(key)) {
+//								console.log(key + " -> " + result[key]);
+//								Object.keys(result[key]).forEach(function(k) {
+//							        console.log(key);
+//							    });
+//							}
+//				    	}
+					    
+					      
+					});
+					
+					///////////////////
 
 					// load audio
 					var audiodata = atob(response.fileSound);
@@ -105,6 +138,9 @@ function ViewController($scope, $http, $location, $window) {
 	}
 	
 	
+	/**
+	 * Verify the sheet music is favorite of user
+	 */
 	$scope.isFavoriteUserSheetmusic = function(smId) {
 		$http.get(urlSheetMusicView + "favorite/isFavoriteUserSheetmusic/"+smId).success(function(response) {
 			if (response == "false"){
@@ -222,7 +258,72 @@ function ViewController($scope, $http, $location, $window) {
 		downloadFile(audioArray, "SoundFile.mp3");
 	}
 }
+//////////////////////////////////////
+//////////// Functions ///////////////
+//////////////////////////////////////
 
+/**
+ * Processing PDF 
+ * @param data pdf stream
+ * @returns pdf as array - text, only numbers
+ * 			array - an element on a page
+ */
+function getDataFromPDF(data) {
+	return PDFJS.getDocument(data).then(function(pdf) {
+        var pages = [];
+        for (var i = 0; i < pdf.numPages; i++) {
+            pages.push(i);
+        }
+        
+        return Promise.all(pages.map(function(pageNumber) {
+            return pdf.getPage(pageNumber + 1).then(function(page) {
+                return page.getTextContent().then(function(textContent) {
+                    return textContent.items.map(function(item) {
+//                    	console.log(item);
+                    	
+                    	//select the bars(beat) marker numbers
+                    	if (!isNaN(item.str) && item.height > 7.0 && item.height < 9.0){
+                        	console.log(item);
+                        	
+                        	return [pageNumber + 1, item.str, item.transform[4], item.transform[5]+"\n\r"];
+                    	}
+                    }).join(' ');
+                });
+            });
+        })).then(function(pages) {
+        	return pages;//pages.join("\r\n");
+        });
+    });
+    
+}
+
+
+/**
+ * Parsing and filtering the data with page, bare numbers and positions on pdf 
+ * 
+ * @param resultFromPdf
+ * @returns JSON with parsed data
+ */
+function buildBareNumbersWithPosition(resultFromPdf) {
+	var endLine = resultFromPdf.split("\n\r");
+	var prevNumber = 0;
+	var jsonData = {};
+	for (var i = 0; i < endLine.length; i++) {
+		var splitComma = endLine[i].split(",");
+//		console.log("str:"+splitComma[1]+ " prev:"+prevNumber);
+//		console.log(parseInt(splitComma[1]) > prevNumber);
+		
+		if (parseInt(splitComma[1]) > prevNumber){
+			console.log("page:"+splitComma[0] + "str: "+splitComma[1] + " x:"+splitComma[2]+ " y:"+splitComma[3]);
+			jsonData[i] = {page:splitComma[0] , str:splitComma[1], x:splitComma[2], y:splitComma[3]};
+		}
+		
+		if(splitComma[1] != undefined){
+			prevNumber = splitComma[1];
+		}
+	}
+	return jsonData;
+}
 
 
 /**
@@ -250,7 +351,6 @@ function loadAudioDuration() {
 	// $scope.Sheetmusic.duration = audio.duration;
 	$("#audioDuration").text(audio.duration + ".sec");
 	$("#currentTime").text(audio.currentTime + ".sec");
-	
 	// currentTime = $("#currentTime").val();
 }
 

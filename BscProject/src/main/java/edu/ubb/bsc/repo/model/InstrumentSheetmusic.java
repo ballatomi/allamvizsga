@@ -65,4 +65,9 @@ public class InstrumentSheetmusic implements java.io.Serializable {
 		this.sheetMusic = sheetMusic;
 	}
 
+	@Override
+	public String toString() {
+		return "InstrumentSheetmusic [id=" + id + ", instrument=" + instrument + ", sheetMusic=" + sheetMusic + "]";
+	}
+
 }

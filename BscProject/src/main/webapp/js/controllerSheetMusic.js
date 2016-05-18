@@ -13,7 +13,7 @@ var instrumentSheetMusicList;
 function ctrlSheetViewer($scope, $http, $location, $window) {
 
 	$scope.showLoader = true;
-	/**
+	/**	
 	 * initialize sheetMusci.html page
 	 */
 	$scope.init = function() {
@@ -35,7 +35,6 @@ function ctrlSheetViewer($scope, $http, $location, $window) {
 		});
 	}
 	
-
 	
 	/**
 	 * Load sheet music to surface
@@ -94,7 +93,7 @@ function ctrlSheetViewer($scope, $http, $location, $window) {
 				//list = response == null ? [] : (response instanceof Array ? response : [response]);
 				console.log(resp);
 				
-				if (resp === null){
+				if (resp == "null"){
 					//alert('Not match!');
 					$scope.not_found = true;
 				} else {
@@ -142,7 +141,7 @@ function ctrlSheetViewer($scope, $http, $location, $window) {
 		$http.get(urlSheetMusic + "getSheetMusicByInstrument/" + id).success(function(response) {
 				console.log(response);
 
-				if (response === null){
+				if (response == "null"){
 					$scope.not_found = true;
 				} else {
 					$scope.not_found = false;

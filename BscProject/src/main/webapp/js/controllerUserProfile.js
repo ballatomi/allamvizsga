@@ -1,5 +1,5 @@
 /**
- * 
+ * Controlling user profile page
  */
 
 function UserPersonalController($scope, $http, $location, $window) {
@@ -9,7 +9,7 @@ function UserPersonalController($scope, $http, $location, $window) {
 		$http.get(urlSheetMusicView + "favorite/getUsersFavorite").success(function(response) {
 			resp = response;
 			
-			if (resp === null){
+			if (resp == "null"){
 				$scope.not_found = true;
 			} else {
 				$scope.not_found = false;
@@ -61,8 +61,6 @@ function UserPersonalController($scope, $http, $location, $window) {
 			var id = response[respInd].sheetMusic.sheetMusicId;
 			
 			loadCanvasElements(1, pdfUint, id);
-
-//			getDataFromPDF(pdfUint);
 		}	
 	}
 
@@ -99,33 +97,4 @@ function loadCanvasElementsFavorites(page, pdfAsArray, musicId) {
 			page.render(renderContext);
 		});
 	});
-}
-
-
-/**
- * PDF feldolgozasa
- * @param data
- * @returns
- */
-function getDataFromPDF(data) {
-    return PDFJS.getDocument(data).then(function(pdf) {
-        var pages = [];
-        for (var i = 0; i < pdf.numPages; i++) {
-            pages.push(i);
-        }
-        
-        return Promise.all(pages.map(function(pageNumber) {
-            return pdf.getPage(pageNumber + 1).then(function(page) {
-                return page.getTextContent().then(function(textContent) {
-                    return textContent.items.map(function(item) {
-//                    	console.log(item);
-                        return item.str;
-                    }).join(' ');
-                });
-            });
-        })).then(function(pages) {
-        	console.log(pages);
-        	return pages.join("\r\n");
-        });
-    });
 }
