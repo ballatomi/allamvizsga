@@ -10,7 +10,7 @@ var instrumentListId = [];
 var instrumentSheetMusicListlength = 0;
 var instrumentSheetMusicList;
 
-function ctrlSheetViewer($scope, $http, $location, $window) {
+function ctrlSheetLister($scope, $http, $location, $window) {
 
 	$scope.showLoader = true;
 	/**	

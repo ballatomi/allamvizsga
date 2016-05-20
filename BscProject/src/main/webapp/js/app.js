@@ -11,7 +11,7 @@ var app = angular.module('ngMusicApp', [ 'ngMusicApp.filters',
 
 			$routeProvider.when('/sheetmusic', {
 				templateUrl : 'partials/sheetmusicMain.html',
-				controller : ctrlSheetViewer
+				controller : ctrlSheetLister
 			});
 
 			$routeProvider.when('/header', {

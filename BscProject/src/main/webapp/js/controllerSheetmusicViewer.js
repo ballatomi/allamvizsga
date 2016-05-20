@@ -1,6 +1,15 @@
 
 /**
  * Controlling sheetMusicViewer.html page
+ * 
+ * 	
+ * 	Loading sheet music and informations about, sound file, comments on sheet music
+ *  and write new comments
+ *  Downloading sheet music, and sound file, set sheet music to favorites
+ *  
+ *  Playing sound file change automatically pages of sheet music, 
+ *  and follow the playing with an indicator 
+ *  
  */
 
 var linkToMusic;
@@ -8,11 +17,15 @@ var pdfAsArray;
 var audioArray;
 var maxPageNumber;
 var audio;
-var timeInOnePage;
+
 var actualPage = 1;
 var ellapsedTime = 0;
-var timeArray;
 var audioDuration;
+
+var tactsNumber = 0;
+var timeInOneTact;
+var tactArray = [];
+
 
 var urlSheetMusicView = "http://localhost:8080/BscProject/rest/sheet/";
 
@@ -42,40 +55,34 @@ function ViewController($scope, $http, $location, $window) {
 					// loading the first page of PDF
 					loadCanvas(actualPage, pdfUint);
 					
-					//pdf feldolgozas
+					processedData = [];
+					/**
+					 * Processing pdf file, getting data (line informations, 
+					 * numbers in each line, and coordinates) 
+					 */
 					self.getDataFromPDF(pdfUint).then(function(result) {
 					    
 						console.log(result);
-					    
 					    for (var i = 0; i < result.length; i++) {
-//							console.log(result[i]);
-							processedData = buildBareNumbersWithPosition(result[i]);
-							console.log(processedData);
+							processedData[i] = buildTactNumbersWithPosition(result[i]);
 					    }
-						
-//						angular.forEach(result, function(value,index){
-//			                console.log(value[index]);
-			                
-//			                angular.forEach(value, function(v,i){
-//				                console.log(i);
-//				            });
-//						});
-						
-//					    for (var key in result) {
-//							if (result.hasOwnProperty(key)) {
-//								console.log(key + " -> " + result[key]);
-//								Object.keys(result[key]).forEach(function(k) {
-//							        console.log(key);
-//							    });
-//							}
-//				    	}
+					    processedData = addFirstLineToLines_CalculateHight(processedData);
+
+					    console.log(processedData);
 					    
-					      
+
+//					    putRectangleToCanvas(1, pdfAsArray, 62, 176, 100);
+						console.log("Tacts number " + tactsNumber);
+						
 					});
 					
 					///////////////////
 
-					// load audio
+					/**
+					 * Loading sound file from response
+					 * converting to Blob (format for binary data)
+					 * with Uint8Array (is similar with Array) where each item is an 8 bit (unsigned integer)
+					 */
 					var audiodata = atob(response.fileSound);
 					audioArray = new Array(audiodata.length);
 					for (var i = 0; i < audiodata.length; i++) {
@@ -84,47 +91,105 @@ function ViewController($scope, $http, $location, $window) {
 					var file = new Blob([ new Uint8Array(audioArray) ]);
 					var link = document.createElement('a');
 					link.href = window.URL.createObjectURL(file);
-					//console.log(link.href);
-
+					
 					var audio = document.getElementById('audio');
 					audio.src = link.href;
-					audio.load();
-					// call this to just preload the audio without playing
+					audio.load(); // call this to just preload the audio without playing
 					// audio.play();
 					
 					
-					//GET comments on the sheetmusic
+					//GET comments by the sheetmusic
 					var smId = response.sheetMusicId;
 					$scope.loadComments(smId);
 					
-					// Sheetmusic its Favorite of User's
+					// Sheetmusic it's Favorite of User's
 					$scope.isFavoriteUserSheetmusic(smId);
 					
-					//time array - loading 
+					/**
+					 *  Event listener to loading sound file  
+					 *  make an array with time for each tact
+					 *  
+					 *  time during in a tact - 
+					 *  calculating by length of audio file 
+					 *  and maximum number of tacts
+					 *  
+					 *  time = sound.length / maxTactNumber
+					 *  	
+					 */
 					audio.addEventListener('play', function(e) {
-						timeInOnePage = audio.duration / maxPageNumber;
 						
-						timeArray = [timeInOnePage];
-						for (var i = 1; i < maxPageNumber; i++) {
-							timeArray[i] = timeArray[i-1]+timeInOnePage;
+						var timeInOneTact = audio.duration / tactsNumber;
+						console.log("timeInOneTact: "+timeInOneTact);
+						
+						tactArray = [0, timeInOneTact];
+						for (var i = 1; i < tactsNumber+1; i++) {
+							tactArray[i] = tactArray[i-1] + timeInOneTact;
 						}
-						//console.log(timeArray);
+						console.log(tactArray);
 						
 					}, false);
 					
 					//when need to change the page - listen this with EventListener
 					var prevPage = 1;
+					var previousTact = 1;
+					var previousLine;
+					
+					/**
+					 * Handle the indicator on sheet music
+					 * 
+					 * put a rectangle to actually place 
+					 * 
+					 * - get actual tact by time
+					 * - get actual line by tact
+					 * - put rectangle to actual line 
+					 * 
+					 */
 					audio.addEventListener('timeupdate', function(e) {
 						$("#currentTime").text(audio.currentTime + ".sec");
 
-						var pages = getIndexOfTimeArrayCurrentTime(timeArray, audio.currentTime, prevPage);
-						//console.log("Pageindex: " + pages["0"].prev+ " next: "+ pages["0"].next + "; time: " + audio.currentTime);
-						prevPage = pages["0"].next;
-						if (pages["0"].next != pages["0"].prev){
-							clearCanvas();
-							loadCanvas(pages["0"].next, pdfUint);
-						}
+						//megadok egy idot, ez alaljan visszad egy indexet ami a taktus szamaval egyezik meg
+						//megkeresve az adott taktust kirajzoljuk az adott sorra
+						
+						///tacts (beats)
+						var acutalTact = getTactNumberByTime(tactArray, audio.currentTime, previousTact);
+						previousTact = acutalTact.tact;
+						
+						//print only the tact is changed
+						if (acutalTact.tact != acutalTact.prevTact){
+							console.log(acutalTact);
+							
+							var actualLine = getActualLineByTactNumber(processedData, acutalTact.prevTact-1);
+							/* returned type example 
+							 lineInfo: {page: "1" - page in pdf
+									  	str: "5"  - line in page
+										x: "36.87439815187499" - coordinates of line
+										y: "575.2495112"
+							}*/
+							console.log(actualLine);
+							
+							if (prevPage != parseInt(actualLine.lineInfo.page) && actualLine.lineInfo != 0){ // need to change page
+								clearCanvas();
+								loadCanvasPutRectangle(parseInt(actualLine.lineInfo.page), pdfUint, actualLine);
+								
+								previousLine = actualLine;
+								prevPage = parseInt(actualLine.lineInfo.page);
+							}
 
+							if (actualLine.lineInfo != 0){ // paint rectangle
+								console.log(actualLine);
+								
+								putRectangleToCanvas(actualLine.lineInfo.x, actualLine.lineInfo.y, actualLine.lineInfo.h);
+								previousLine = actualLine;
+								
+								prevPage = parseInt(actualLine.lineInfo.page);
+							}else{
+								//novelni
+
+							}
+
+							
+						}
+						
 					}, false);
 				} else {
 					$scope.errorMessage = "Sheetmusic not exists!"
@@ -279,19 +344,16 @@ function getDataFromPDF(data) {
             return pdf.getPage(pageNumber + 1).then(function(page) {
                 return page.getTextContent().then(function(textContent) {
                     return textContent.items.map(function(item) {
-//                    	console.log(item);
-                    	
                     	//select the bars(beat) marker numbers
                     	if (!isNaN(item.str) && item.height > 7.0 && item.height < 9.0){
-                        	console.log(item);
-                        	
+                        	//console.log(item);
                         	return [pageNumber + 1, item.str, item.transform[4], item.transform[5]+"\n\r"];
                     	}
                     }).join(' ');
                 });
             });
         })).then(function(pages) {
-        	return pages;//pages.join("\r\n");
+        	return pages;
         });
     });
     
@@ -299,48 +361,144 @@ function getDataFromPDF(data) {
 
 
 /**
- * Parsing and filtering the data with page, bare numbers and positions on pdf 
+ * Parsing and filtering the data with page, tact numbers and positions on pdf 
+ * 
+ * page, tact, coordinates x,y \n\r
+ * example: 2, 2, 28.341294251625, 44.9934032000001\n\r
  * 
  * @param resultFromPdf
  * @returns JSON with parsed data
  */
-function buildBareNumbersWithPosition(resultFromPdf) {
+function buildTactNumbersWithPosition(resultFromPdf) {
 	var endLine = resultFromPdf.split("\n\r");
+	
 	var prevNumber = 0;
-	var jsonData = {};
+	var jsonData = [];
 	for (var i = 0; i < endLine.length; i++) {
 		var splitComma = endLine[i].split(",");
-//		console.log("str:"+splitComma[1]+ " prev:"+prevNumber);
-//		console.log(parseInt(splitComma[1]) > prevNumber);
 		
 		if (parseInt(splitComma[1]) > prevNumber){
-			console.log("page:"+splitComma[0] + "str: "+splitComma[1] + " x:"+splitComma[2]+ " y:"+splitComma[3]);
-			jsonData[i] = {page:splitComma[0] , str:splitComma[1], x:splitComma[2], y:splitComma[3]};
+			jsonData[i] = {page:splitComma[0] , str:splitComma[1], x:splitComma[2], y:splitComma[3], h:"100"};
+			tactsNumber = parseInt(splitComma[1]);
 		}
-		
 		if(splitComma[1] != undefined){
 			prevNumber = splitComma[1];
 		}
 	}
+	
 	return jsonData;
+}
+
+/**
+ * The first line is not signed with tact number, therefore need to calculate this poition.
+ * 
+ * Set line hight by to each line by neighbor (before and acutal) 
+ * calculated distances between lines.
+ * 
+ * @param processedData
+ * @returns
+ */
+function addFirstLineToLines_CalculateHight(processedData){
+	var first = processedData[0][0];
+	 
+	console.log(processedData);
+	 var firstLineYPos = "700";
+	 if (processedData[0].length == 0){ // only one line exist in a page
+	 	 processedData[0][0] = {page:1, str:1, x:processedData[1][0].x, y:"150", h:"100"};
+	 } else {
+			try {
+				 if (processedData[0][0].x != undefined && processedData[0][1].y != undefined){ // exists two line in a page
+					 firstLineYPos = parseInt(processedData[0][0].y) + (parseInt(processedData[0][0].y) - parseInt(processedData[0][1].y));
+				 }
+			} catch (e) {
+				 firstLineYPos = parseInt(processedData[0][0].y) + (parseInt(processedData[0][0].y)) - 100;
+			}
+	
+		 for (var j = processedData[0].length; j > 0 ; j--) {
+			 processedData[0][j] = processedData[0][j-1];
+		 }
+		 processedData[0][0] = {page:"1", str:"1", x:processedData[0][0].x, y:""+firstLineYPos+"", h:"100"};
+	 }
+	 
+	 
+	 /**
+	  * set high to each line
+	  * calculated distances between lines
+	  */
+	 for (var i = 0; i < processedData.length; i++) {
+		for (var j = 1; j < processedData[i].length; j++) {
+				processedData[i][j-1].h = ""+((processedData[i][j-1].y - processedData[i][j].y)-30)+""; 
+		}
+		if (processedData[i].length == 1){ // exist only one line in a page
+			processedData[i][j-1].h = "400"; 
+		}
+	}
+	 
+	 console.log(processedData);
+	 return processedData;
+}
+
+/**
+ * Get actual tact number by time 
+ * @param tactArray
+ * @param currentTime
+ * @param previousLine
+ * @returns
+ */
+function getTactNumberByTime(tactArray, currentTime, previousTact){
+	currentTime = currentTime -1; 
+	for (var i = 1; i < tactArray.length; i++) {
+		if (currentTime >= tactArray[i-1] && currentTime < tactArray[i]){
+			return { tact : i+1, prevTact : previousTact };
+		}
+	}	
+	return { tact : 1, prevTact : previousTact };
 }
 
 
 /**
- * Get page number by Time
  * 
- * @param timeArray
- * @param currentTime
- * @param prevPage
- * @returns {Array} - current page and the previous page
+ * Get actual line informations by tact number
+ * @param processedData
+ * @param tact
+ * @returns
  */
-function getIndexOfTimeArrayCurrentTime(timeArray, currentTime, prevPage){
-	for (var int = 1; int < timeArray.length; int++) {
-		if (currentTime > timeArray[int-1] && currentTime < timeArray[int]){
-			return [{prev : prevPage, next : int+1}];
+function getActualLineByTactNumber(processedData, tact){
+	
+	for (var j = 0; j < processedData.length; j++) {
+		for (var int = 0; int < processedData[j].length; int++) {
+			
+//			if (tact > parseInt(processedData[j][int].str) && tact < parseInt(processedData[j][int].str)  ) {
+			if (tact == parseInt(processedData[j][int].str)){
+				return { lineInfo:processedData[j][int] };
+			}
 		}
 	}
-	return [{prev:prevPage, next:1}];
+	
+	return { lineInfo : 0 };
+}
+
+
+/**
+ * Megjelenites, hol tart a lejatszas
+ * Fill a rectangle to show/follow playing music
+ * @param page
+ * @param pdfAsArray
+ */
+function putRectangleToCanvas(x, y, h) {
+	var canvas = document.getElementById('pdfCanvas');
+	var context = canvas.getContext('2d');
+	context.fillStyle="#aaff80";
+	context.globalAlpha = 0.4;
+	
+	var rect = canvas.getBoundingClientRect();
+//	context.fillRect(x, rect.height-y, rect.width-70, 100);
+	
+	context.fillRect(x, rect.height-y, rect.width-70, h);
+	
+//	context.fillRect(20,20,150,100);
+	context.stroke();
+	
 }
 
 /**
@@ -357,10 +515,8 @@ function loadAudioDuration() {
 /**
  * Loading the sheet music in canvas with
  * 
- * @param page -
- *            number
- * @param pdfAsArray -
- *            pdf File
+ * @param page - number
+ * @param pdfAsArray - pdf File
  */
 
 function loadCanvas(page, pdfAsArray) {
@@ -382,6 +538,34 @@ function loadCanvas(page, pdfAsArray) {
 				viewport : viewport
 			};
 			page.render(renderContext);
+			
+		});
+	});
+}
+
+
+function loadCanvasPutRectangle(page, pdfAsArray, actualLine) {
+	var pdf = PDFJS.getDocument(pdfAsArray).then(function(pdf) {
+		maxPageNumber = pdf.numPages;
+		$("#pdfLength").text(maxPageNumber);
+		pdf.getPage(page).then(function(page) {
+			var scale = 1.0;
+			var viewport = page.getViewport(scale);
+			var canvas = document.getElementById('pdfCanvas');
+
+			var context = canvas.getContext('2d');
+
+			canvas.height = viewport.height;
+			canvas.width = viewport.width;
+
+			var renderContext = {
+				canvasContext : context,
+				viewport : viewport
+			};
+			page.render(renderContext);
+			
+			//put rectangle
+			putRectangleToCanvas(actualLine.lineInfo.x, actualLine.lineInfo.y, actualLine.lineInfo.h);
 		});
 	});
 }
