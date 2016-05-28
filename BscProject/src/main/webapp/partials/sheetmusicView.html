@@ -49,9 +49,21 @@
 				<div class="row content">
 					<div class="col-xs-7 text-left">
 						<p hidden>{{Sheetmusic.sheetMusicId}}</p>
-						<h2>{{Sheetmusic.name}}</h2>
-
+						<h2>{{Sheetmusic.name}}
+						</h2>
+						
 						<div class="containerView" id="pdfContainer">
+							<!-- Change PDF page by UI -->
+							<!-- <div align="center">
+								<button class="btn btn-default" data-label-placement ng-click="previousPageInPdf()">
+										<span class="glyphicon glyphicon-chevron-left"></span> Page
+								</button>
+								<button class="btn btn-default" data-label-placement ng-click="nextPageInPdf()">Page
+										<span class="glyphicon glyphicon-chevron-right"></span> 
+								</button>
+							</div>
+							<br/> -->
+						
 							<audio id="audio" src="" oncanplay="loadAudioDuration()" controls>
 								<p>Fallback content goes here.</p>
 							</audio>

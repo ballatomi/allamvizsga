@@ -4,6 +4,7 @@ bin/
 target/
 .settings/
 .metadata
+.idea
 
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/

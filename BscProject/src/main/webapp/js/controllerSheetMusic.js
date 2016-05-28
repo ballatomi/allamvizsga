@@ -86,52 +86,62 @@ function ctrlSheetLister($scope, $http, $location, $window) {
 	 * Search sheet music by pattern
 	 */
 	$scope.searchByName = function(searchText) {
-		$http.get(urlSheetMusic + "getSheetMusicByPattern/" + searchText).success(function(resp) {
-				//console.log(response.sheetMusic);
-
-				//if is not an array convert it to array
-				//list = response == null ? [] : (response instanceof Array ? response : [response]);
-				console.log(resp);
-				
-				if (resp == "null"){
-					//alert('Not match!');
-					$scope.not_found = true;
-				} else {
-					$scope.not_found = false;
-					if (resp.sheetMusic instanceof Array){
-						$scope.loadSheetMusic(resp);
-					} else {
-						
-						var list = [resp];
-						
-						console.log(list);
-						
-						list[0].sheetMusic.uploadDate = list[0].sheetMusic.uploadDate;
-						
-						var data = atob(list[0].sheetMusic.filePdf);
-						var pdfAsArray = new Array(data.length);
-						for (var i = 0; i < data.length; i++) {
-							pdfAsArray[i] = data.charCodeAt(i);
-						}
-						var pdfUint = new Uint8Array(pdfAsArray);
-						var id = list[0].sheetMusic.sheetMusicId;
-						
-						loadCanvasElements(1, pdfUint, id);
-						
-						//load instruments
-						var ins = "";
-						for (var int = 0; int < instrumentSheetMusicListlength; int++) {
-							if (list[0].sheetMusic.sheetMusicId == instrumentSheetMusicList[int].sheetMusic.sheetMusicId){
-								ins += instrumentSheetMusicList[int].instrument.name + ", ";
-							}
-						}
-						list[0].sheetMusic.instrument = ins;
-					
-						$scope.Sheetmusic = list[0];
-					}
-				}
+		
+		if(searchText == undefined){
+			console.log("Get All SheetMusic");
+			$http.post(urlSheetMusic + "getAllSheetMusic").success(function(response) {
+				$scope.loadSheetMusic(response);
 			});
-	}
+			
+		} else {
+		
+			$http.get(urlSheetMusic + "getSheetMusicByPattern/" + searchText).success(function(resp) {
+					//console.log(response.sheetMusic);
+	
+					//if is not an array convert it to array
+					//list = response == null ? [] : (response instanceof Array ? response : [response]);
+					console.log(resp);
+					
+					if (resp == "null"){
+						//alert('Not match!');
+						$scope.not_found = true;
+					} else {
+						$scope.not_found = false;
+						if (resp.sheetMusic instanceof Array){
+							$scope.loadSheetMusic(resp);
+						} else {
+							
+							var list = [resp];
+							
+							console.log(list);
+							
+							list[0].sheetMusic.uploadDate = list[0].sheetMusic.uploadDate;
+							
+							var data = atob(list[0].sheetMusic.filePdf);
+							var pdfAsArray = new Array(data.length);
+							for (var i = 0; i < data.length; i++) {
+								pdfAsArray[i] = data.charCodeAt(i);
+							}
+							var pdfUint = new Uint8Array(pdfAsArray);
+							var id = list[0].sheetMusic.sheetMusicId;
+							
+							loadCanvasElements(1, pdfUint, id);
+							
+							//load instruments
+							var ins = "";
+							for (var int = 0; int < instrumentSheetMusicListlength; int++) {
+								if (list[0].sheetMusic.sheetMusicId == instrumentSheetMusicList[int].sheetMusic.sheetMusicId){
+									ins += instrumentSheetMusicList[int].instrument.name + ", ";
+								}
+							}
+							list[0].sheetMusic.instrument = ins;
+						
+							$scope.Sheetmusic = list[0];
+						}
+					}
+				});
+		}
+}
 	
 	/**
 	 * Search sheet music by selected instrument instrument

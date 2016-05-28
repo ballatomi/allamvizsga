@@ -26,7 +26,6 @@ var tactsNumber = 0;
 var timeInOneTact;
 var tactArray = [];
 
-
 var urlSheetMusicView = "http://localhost:8080/BscProject/rest/sheet/";
 
 function ViewController($scope, $http, $location, $window) {
@@ -34,7 +33,7 @@ function ViewController($scope, $http, $location, $window) {
 	$scope.showLoader = true;
 	$scope.init = function() {
 		// get the sheetmusic ID from URL
-		var id = getParameterByName('page');
+		var id = getParameterFromURLByName('page');
 		
 		if (id != null) {
 			$http.get(urlSheetMusicView + "getSheetmusicBySheetID/" + id).success(function(response) {
@@ -62,16 +61,14 @@ function ViewController($scope, $http, $location, $window) {
 					 */
 					self.getDataFromPDF(pdfUint).then(function(result) {
 					    
-						console.log(result);
 					    for (var i = 0; i < result.length; i++) {
 							processedData[i] = buildTactNumbersWithPosition(result[i]);
 					    }
 					    processedData = addFirstLineToLines_CalculateHight(processedData);
 
+					    processedData = divideLines(processedData);
 					    console.log(processedData);
-					    
 
-//					    putRectangleToCanvas(1, pdfAsArray, 62, 176, 100);
 						console.log("Tacts number " + tactsNumber);
 						
 					});
@@ -96,7 +93,7 @@ function ViewController($scope, $http, $location, $window) {
 					audio.src = link.href;
 					audio.load(); // call this to just preload the audio without playing
 					// audio.play();
-					
+
 					
 					//GET comments by the sheetmusic
 					var smId = response.sheetMusicId;
@@ -131,8 +128,10 @@ function ViewController($scope, $http, $location, $window) {
 					
 					//when need to change the page - listen this with EventListener
 					var prevPage = 1;
-					var previousTact = 1;
-					var previousLine;
+					var previousTact = 0;
+					var previousLine = 1;
+					var actualTactInLine = 1;
+					var isFirst = true;
 					
 					/**
 					 * Handle the indicator on sheet music
@@ -144,6 +143,7 @@ function ViewController($scope, $http, $location, $window) {
 					 * - put rectangle to actual line 
 					 * 
 					 */
+					
 					audio.addEventListener('timeupdate', function(e) {
 						$("#currentTime").text(audio.currentTime + ".sec");
 
@@ -152,22 +152,25 @@ function ViewController($scope, $http, $location, $window) {
 						
 						///tacts (beats)
 						var acutalTact = getTactNumberByTime(tactArray, audio.currentTime, previousTact);
+//						console.log("Tact: " + acutalTact.prevTact + " - time: " + audio.currentTime);
+						
 						previousTact = acutalTact.tact;
 						
 						//print only the tact is changed
 						if (acutalTact.tact != acutalTact.prevTact){
 							console.log(acutalTact);
 							
-							var actualLine = getActualLineByTactNumber(processedData, acutalTact.prevTact-1);
+							var actualLine = getActualLineByTactNumber(processedData, acutalTact.prevTact);
 							/* returned type example 
 							 lineInfo: {page: "1" - page in pdf
 									  	str: "5"  - line in page
 										x: "36.87439815187499" - coordinates of line
 										y: "575.2495112"
 							}*/
-							console.log(actualLine);
+//							console.log(actualLine);
 							
 							if (prevPage != parseInt(actualLine.lineInfo.page) && actualLine.lineInfo != 0){ // need to change page
+								
 								clearCanvas();
 								loadCanvasPutRectangle(parseInt(actualLine.lineInfo.page), pdfUint, actualLine);
 								
@@ -177,22 +180,40 @@ function ViewController($scope, $http, $location, $window) {
 
 							if (actualLine.lineInfo != 0){ // paint rectangle
 								console.log(actualLine);
+							
+								if (!isFirst){ 
+									putRectangleToCanvas(previousLine.lineInfo.x, previousLine.lineInfo.y, previousLine.lineInfo.h,  "#FFFFFF", 0.4);
+								}else{
+									isFirst = false;
+								}
 								
-								putRectangleToCanvas(actualLine.lineInfo.x, actualLine.lineInfo.y, actualLine.lineInfo.h);
+								putRectangleToCanvas(actualLine.lineInfo.x, actualLine.lineInfo.y, actualLine.lineInfo.h, "#99ccff	", 0.4);
 								previousLine = actualLine;
 								
 								prevPage = parseInt(actualLine.lineInfo.page);
-							}else{
-								//novelni
-
+								actualTactInLine = 1;
+							}else {
+// 							soronkent is vinni a mutatot								
+//								if (previousLine!=1){
+//									var x = previousLine.lineInfo.rect[actualTactInLine-1];
+//									var width = previousLine.lineInfo.rect[actualTactInLine];
+//	
+//									var y = previousLine.lineInfo.y;
+//									var height = previousLine.lineInfo.h;
+//									
+//									console.log("x:"+x+" y:"+y+" w:"+width+" h:"+height);
+//									putRectangleToLine(x, y, width, height);
+//									
+//									actualTactInLine++;
+//								}
 							}
-
-							
 						}
 						
 					}, false);
+					
+					
 				} else {
-					$scope.errorMessage = "Sheetmusic not exists!"
+					$scope.errorMessage = "Sheetmusic not found!"
 					$scope.showLoader = true;
 				}
 			});
@@ -218,6 +239,17 @@ function ViewController($scope, $http, $location, $window) {
 		});
 	}
 	
+	$scope.previousPageInPdf = function() {
+		actualPage--;
+		var pdfUint = new Uint8Array(pdfAsArray);
+		loadCanvas(actualPage, pdfUint);
+	}
+	
+	$scope.nextPageInPdf = function() {
+		actualPage++;
+		var pdfUint = new Uint8Array(pdfAsArray);
+		loadCanvas(actualPage, pdfUint);
+	}
 	
 	/**
 	 * Save sheetmusic to user's favorite
@@ -320,9 +352,12 @@ function ViewController($scope, $http, $location, $window) {
 	}
 
 	$scope.downloadSoundFile = function() {
+		//download only mp3 format
 		downloadFile(audioArray, "SoundFile.mp3");
 	}
 }
+
+
 //////////////////////////////////////
 //////////// Functions ///////////////
 //////////////////////////////////////
@@ -345,7 +380,8 @@ function getDataFromPDF(data) {
                 return page.getTextContent().then(function(textContent) {
                     return textContent.items.map(function(item) {
                     	//select the bars(beat) marker numbers
-                    	if (!isNaN(item.str) && item.height > 7.0 && item.height < 9.0){
+                    	//console.log(item);
+                    	if (!isNaN(item.str) && item.height > 3.0 && item.height < 9.0){
                         	//console.log(item);
                         	return [pageNumber + 1, item.str, item.transform[4], item.transform[5]+"\n\r"];
                     	}
@@ -377,11 +413,12 @@ function buildTactNumbersWithPosition(resultFromPdf) {
 	for (var i = 0; i < endLine.length; i++) {
 		var splitComma = endLine[i].split(",");
 		
-		if (parseInt(splitComma[1]) > prevNumber){
-			jsonData[i] = {page:splitComma[0] , str:splitComma[1], x:splitComma[2], y:splitComma[3], h:"100"};
+		
+		if (parseInt(splitComma[1]) > prevNumber) { //the actual number of tact must be grather than previous
+			jsonData[i] = {page : splitComma[0], str : splitComma[1], x : splitComma[2], y : splitComma[3], h : "100"};
 			tactsNumber = parseInt(splitComma[1]);
 		}
-		if(splitComma[1] != undefined){
+		if(splitComma[1] != undefined) { //save the tact number from previous line 
 			prevNumber = splitComma[1];
 		}
 	}
@@ -478,6 +515,33 @@ function getActualLineByTactNumber(processedData, tact){
 	return { lineInfo : 0 };
 }
 
+/**
+ * Divide the lines by number of tacts to equal parts
+ * @param processedData
+ * @returns
+ */
+function divideLines(processedData){
+	
+	for (var i = 0; i < processedData.length; i++) {
+		for (var j = 1; j < processedData[i].length; j++) {
+//			console.log(j+": "+parseInt(processedData[i][j].str) +" "+ (j-1)+": "+parseInt(processedData[i][j-1].str));
+			
+			var numOfTacts = parseInt(processedData[i][j].str) - parseInt(processedData[i][j-1].str)
+			var rate = 550 / numOfTacts;
+			
+//			console.log(rate);
+			var dataLines = [];
+			dataLines[0] = 0;
+			dataLines[1] = rate;
+			for (var tact = 2; tact < numOfTacts+1; tact++) {
+				dataLines[tact] = (dataLines[tact-1] + rate);
+			}
+			processedData[i][j-1].rect = dataLines;
+		}
+	}
+//	console.log(processedData);
+	return processedData;
+}
 
 /**
  * Megjelenites, hol tart a lejatszas
@@ -485,21 +549,38 @@ function getActualLineByTactNumber(processedData, tact){
  * @param page
  * @param pdfAsArray
  */
-function putRectangleToCanvas(x, y, h) {
+function putRectangleToCanvas(x, y, h, color, oppacity) {
+	var canvas = document.getElementById('pdfCanvas');
+	var context = canvas.getContext('2d');
+	
+	context.fillStyle = color;
+	context.globalAlpha = oppacity;
+
+	var rect = canvas.getBoundingClientRect();
+//	context.fillRect(x, rect.height-y, rect.width-70, 100);
+	
+	context.fillRect(x, rect.height-y, rect.width-70, h);
+	context.stroke();
+}
+
+
+
+function putRectangleToLine(x, y, w, h) {
 	var canvas = document.getElementById('pdfCanvas');
 	var context = canvas.getContext('2d');
 	context.fillStyle="#aaff80";
 	context.globalAlpha = 0.4;
 	
+	console.log("width:" + rect.width);
+	
 	var rect = canvas.getBoundingClientRect();
 //	context.fillRect(x, rect.height-y, rect.width-70, 100);
+//	console.log("width:" + rect.width);
+	context.fillRect(x, rect.height-y, w, h);
 	
-	context.fillRect(x, rect.height-y, rect.width-70, h);
-	
-//	context.fillRect(20,20,150,100);
 	context.stroke();
-	
 }
+
 
 /**
  * Loading informations to view
@@ -522,6 +603,12 @@ function loadAudioDuration() {
 function loadCanvas(page, pdfAsArray) {
 	var pdf = PDFJS.getDocument(pdfAsArray).then(function(pdf) {
 		maxPageNumber = pdf.numPages;
+		if (page <= 0){
+			page = 0;
+		}
+		if (page >= maxPageNumber){
+			page = maxPageNumber;
+		}
 		$("#pdfLength").text(maxPageNumber);
 		pdf.getPage(page).then(function(page) {
 			var scale = 1.0;
@@ -547,6 +634,12 @@ function loadCanvas(page, pdfAsArray) {
 function loadCanvasPutRectangle(page, pdfAsArray, actualLine) {
 	var pdf = PDFJS.getDocument(pdfAsArray).then(function(pdf) {
 		maxPageNumber = pdf.numPages;
+		if (page <= 0){
+			page = 0;
+		}
+		if (page >= maxPageNumber){
+			page = maxPageNumber;
+		}
 		$("#pdfLength").text(maxPageNumber);
 		pdf.getPage(page).then(function(page) {
 			var scale = 1.0;
@@ -565,7 +658,7 @@ function loadCanvasPutRectangle(page, pdfAsArray, actualLine) {
 			page.render(renderContext);
 			
 			//put rectangle
-			putRectangleToCanvas(actualLine.lineInfo.x, actualLine.lineInfo.y, actualLine.lineInfo.h);
+			putRectangleToCanvas(actualLine.lineInfo.x, actualLine.lineInfo.y, actualLine.lineInfo.h, "#99ccff	", 0.4);
 		});
 	});
 }
@@ -601,15 +694,19 @@ function downloadFile(file, filetype) {
 
 /**
  * Get parameter from URL
+ * 
+ *  http://stackoverflow.com/questions/901115/how-can-i-get-query-string-values-in-javascript
+ *
  * @param name
  * @param url
  * @returns Parameter value by name
  */
-function getParameterByName(name) {
+function getParameterFromURLByName(name) {
 	url = window.location.href;
 	
 	url = url.toLowerCase(); // This is just to avoid case sensitiveness
 	name = name.replace(/[\[\]]/g, "\\$&").toLowerCase();
+	
 	var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"), results = regex
 			.exec(url);
 	if (!results)

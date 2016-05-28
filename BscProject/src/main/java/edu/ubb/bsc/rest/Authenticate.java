@@ -32,6 +32,7 @@ public class Authenticate {
 	@Consumes({ MediaType.APPLICATION_JSON })
 	@Produces({ MediaType.APPLICATION_JSON })
 	public String login(User user, @Context HttpServletRequest request) throws LoginException, JSONException {
+
 		UserServiceImpl service;
 		JSONObject jo = new JSONObject();
 		try {
