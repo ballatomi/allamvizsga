@@ -10,7 +10,7 @@ import edu.ubb.bsc.repo.RepositoryException;
 import edu.ubb.bsc.repo.model.InstrumentSheetmusic;
 import edu.ubb.bsc.repo.model.SheetMusic;
 
-public class InstrumentSheetMusicServiceImpl implements InstrumentSheetMusicService{
+public class InstrumentSheetMusicServiceImpl implements InstrumentSheetMusicService {
 
 	private DAOFactory df;
 	private InstrumentSheetMusicDAO sd;
@@ -64,6 +64,17 @@ public class InstrumentSheetMusicServiceImpl implements InstrumentSheetMusicServ
 		return object;
 	}
 
+	
+	public List<SheetMusic> getSheetMusicByGenreId(int id) throws ServiceException {
+		List<SheetMusic> object = null;
+		try {
+			object = sd.getSheetMusicByGenreId(id);
+		} catch (RepositoryException e) {
+			throw new ServiceException("Error in Service InstrumentSheetMusic",e);
+		}
+		return object;
+	}
+	
 	public List<InstrumentSheetmusic> getInstrumentSheetmusicBySheetmusicId(int id) throws ServiceException {
 		List<InstrumentSheetmusic> object = null;
 		try {
@@ -111,5 +122,7 @@ public class InstrumentSheetMusicServiceImpl implements InstrumentSheetMusicServ
 			System.out.println(a.getSheetMusic());
 		}
 	}
+
+
 
 }

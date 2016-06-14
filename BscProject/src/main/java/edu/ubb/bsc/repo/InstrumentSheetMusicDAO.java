@@ -14,6 +14,8 @@ public interface InstrumentSheetMusicDAO {
 	
 	List<SheetMusic> getSheetMusicByInstrumentId(int id) throws RepositoryException;
 	
+	List<SheetMusic> getSheetMusicByGenreId(int id) throws RepositoryException;
+	
 	List<InstrumentSheetmusic> getInstrumentSheetmusicBySheetmusicId(int id) throws RepositoryException;
 	
 	String insertInstrumentSheetmusic(InstrumentSheetmusic user) throws RepositoryException;

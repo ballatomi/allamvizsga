@@ -107,7 +107,6 @@ public class JdbcInstrumentSheetMusicDAO implements InstrumentSheetMusicDAO {
 			//object = (InstrumentSheetmusic) session.get(Instrument.class, id);
 			//object = session.createCriteria(Instrument.class).list();
 			
-			tx = session.beginTransaction();
 			Query query = session
 					.createQuery("select sheetMusic FROM InstrumentSheetmusic WHERE instrumentID = :instrumentID");
 			query.setParameter("instrumentID", id);
@@ -117,13 +116,38 @@ public class JdbcInstrumentSheetMusicDAO implements InstrumentSheetMusicDAO {
 		} catch (HibernateException e) {
 			if (tx != null)
 				tx.rollback();
-			log.error("Error get Instrument by ID!", e);
+			log.error("Error get SheetMusic by Instrument ID!", e);
 			throw new RepositoryException("Error get Instrument by ID", e);
 		} finally {
 			session.close();
 		}
 		return object;
 	}
+	
+	public List<SheetMusic> getSheetMusicByGenreId(int id) throws RepositoryException {
+		Session session = factory.openSession();
+		Transaction tx = null;
+		List<SheetMusic> object = null;
+		try {
+			
+			tx = session.beginTransaction();
+			Query query = session
+					.createQuery("FROM SheetMusic WHERE song_genreId = :songGenreId");
+			query.setParameter("songGenreId", id);
+			object = query.list();
+
+			tx.commit();
+		} catch (HibernateException e) {
+			if (tx != null)
+				tx.rollback();
+			log.error("Error get SheetMusic by GenreID!", e);
+			throw new RepositoryException("Error get Genre by ID", e);
+		} finally {
+			session.close();
+		}
+		return object;
+	}
+	
 
 	public List<InstrumentSheetmusic> getInstrumentSheetmusicBySheetmusicId(int id) throws RepositoryException {
 		Session session = factory.openSession();
@@ -214,16 +238,23 @@ public class JdbcInstrumentSheetMusicDAO implements InstrumentSheetMusicDAO {
 
 	public static void main(String[] args) {
 		JdbcInstrumentSheetMusicDAO cd = new JdbcInstrumentSheetMusicDAO();
+		List<SheetMusic> sm = cd.getSheetMusicByGenreId(3);
+		
+		for (SheetMusic sheetMusic : sm) {
+			System.out.println(sheetMusic);
+		}
 		// cd.getCategoryById(2);
 		// List<InstrumentSheetmusic> sm = cd.getAllInstrumentSheetmusic();
 //		Instrument is = cd.getInstrumentSheetmusicByInstrumentId(1);
 //
+		
 //		System.out.println(is.getName());
 //		List<InstrumentSheetmusic> smi = cd.getInstrumentSheetmusicByInstrumentId(18);
 //
 
 
 	}
+
 
 
 

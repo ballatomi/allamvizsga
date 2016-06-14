@@ -15,6 +15,8 @@ public interface InstrumentSheetMusicService {
 	
 	List<SheetMusic> getSheetMusicByInstrumentId(int id) throws ServiceException;
 	
+	List<SheetMusic> getSheetMusicByGenreId(int id) throws ServiceException;
+	
 	List<InstrumentSheetmusic> getInstrumentSheetmusicBySheetmusicId(int id) throws ServiceException;
 	
 	String insertInstrumentSheetmusic(InstrumentSheetmusic is) throws ServiceException;

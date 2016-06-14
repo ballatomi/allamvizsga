@@ -16,6 +16,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
@@ -91,6 +92,11 @@ public class RestSheetMusic {
 		return sm;
 	}
 
+	/**
+	 * Get SheetMusic by instrument ID
+	 * @param id
+	 * @return SheetMusic
+	 */
 	@GET
 	@Path("/getSheetMusicByInstrument/{id}")
 	@Produces({ MediaType.APPLICATION_JSON })
@@ -102,12 +108,36 @@ public class RestSheetMusic {
 			// is = ismService.getInstrumentSheetmusicByInstrumentId(id);
 			is = ismService.getSheetMusicByInstrumentId(id);
 
-			log.info("Get InstrumentSheetmusic by Instrument ID");
+			log.info("Get Sheetmusic by Instrument ID");
 		} catch (ServiceException e) {
 			log.error("Error in getting sheetMusic", e);
 		}
 		return is;
 	}
+	
+	/**
+	 * Get SheetMusic by music genre ID
+	 * @param id
+	 * @return SheetMusic
+	 */
+	@GET
+	@Path("/getSheetMusicByGenre/{id}")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public List<SheetMusic> getSheetMusicByGenreID(@PathParam("id") Integer id) {
+		InstrumentSheetMusicServiceImpl ismService;
+		List<SheetMusic> is = new ArrayList<SheetMusic>();
+		try {
+			ismService = new InstrumentSheetMusicServiceImpl();
+			// is = ismService.getInstrumentSheetmusicByInstrumentId(id);
+			is = ismService.getSheetMusicByGenreId(id);
+
+			log.info("Get Sheetmusic by Genre ID");
+		} catch (ServiceException e) {
+			log.error("Error in getting sheetMusic", e);
+		}
+		return is;
+	}	
+	
 
 	/**
 	 * Post comment to Sheetmusic
@@ -392,7 +422,6 @@ public class RestSheetMusic {
 		JSONObject jo = new JSONObject();
 		try {
 			service = new SongGenreServiceImpl();
-
 
 			SongGenre sg = new SongGenre();
 			sg.setSongGenreName(genre);

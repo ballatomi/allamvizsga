@@ -7,7 +7,7 @@ Consuming these services using AngularJS
 Used tehnologies:
   DB: MySQL;
   Server: JAVA EE: JAX-RS, Jersey, ORM-Hibernate;
-  Client: HTML, AngularJS
+  Client: HTML, AngularJS, jQuery, CSS (Bootstrap)
 
 Set Up: 
 
@@ -19,3 +19,11 @@ Set Up:
 
 (5. Or run with maven, jetty server
 	- mvn jetty:run)
+
+============================================
+
+## Application functionalities:
+In REST architechture the communication between the client and the server side gets an important role. 
+The application serves the popularization of music. 
+Using this application, people have the possibility to register, after this step they have access to the services provided. They have the opportunity to upload sheet music as a pdf, to attach sound recordings, as well as associated information, other users
+can visualize, add it to the list of favorites, play sound files, or write comments on it.

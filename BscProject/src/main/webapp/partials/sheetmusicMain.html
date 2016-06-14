@@ -61,18 +61,44 @@
 									</button>
 								</span>
 							</div>
-
+	
 							<br />
 							<h4>
-								<b>Filter by Instruments</b>
+								<b>Filtering by </b>
 							</h4>
 
-							<div class="list-group">
-								<a href="" class="list-group-item"
-									ng-repeat="instrument in instrumentsList"
-									ng-click="searchByInstrument(instrument.instrumentId)">
-									{{instrument.name}} </a>
+							<ul class="nav nav-tabs" id="myTabs">
+								<li><a data-toggle="tab" href="#menu1">Instruments</a></li>
+								<li><a data-toggle="tab" href="#menu2">Music style</a></li>
+							</ul>
+					
+							<div class="tab-content">
+					
+								<!-- Tab 1 -->
+								<div id="menu1" class="tab-pane fade in active">
+										
+									<div class="list-group">
+										<a href="" class="list-group-item"
+											ng-repeat="instrument in instrumentsList"
+											ng-click="searchByInstrument(instrument.instrumentId)">
+											{{instrument.name}} </a>
+									</div>
+								</div>
+										
+								<!-- Tab 2 -->
+								<div id="menu2" class="tab-pane fade">
+					
+									<div class="list-group">
+										<a href="" class="list-group-item"
+											ng-repeat="genre in songGenreList"
+											ng-click="searchByGenre(genre.songGenreId)">
+											{{genre.songGenreName}} </a>
+									</div>
+								</div>
+				
 							</div>
+
+							
 
 							<!-- /input-group -->
 						</div>
