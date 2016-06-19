@@ -65,8 +65,19 @@ public class UserServiceImpl implements UserService {
 
 	public void updateUser(User user) throws ServiceException {
 		try {
-			user.setUserPassword(PasswordEncrypter.generateHashedPassword(user.getUserPassword()));
+			if (user.getUserPassword() != null){
+				user.setUserPassword(PasswordEncrypter.generateHashedPassword(user.getUserPassword()));
+			}
 			ud.updateUser(user);
+		} catch (RepositoryException e) {
+			throw new ServiceException();
+		}
+	}
+	
+
+	public void updateUserRigth(User user) throws ServiceException {
+		try {
+			ud.updateUserRigth(user);
 		} catch (RepositoryException e) {
 			throw new ServiceException();
 		}
@@ -101,5 +112,6 @@ public class UserServiceImpl implements UserService {
 		}
 		return user;
 	}
+
 
 }

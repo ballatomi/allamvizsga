@@ -28,13 +28,13 @@ function UploadController ($scope, $http, $timeout) {
 		$scope.showUploadAlert = false;
 		$scope.init = function() {
 
-			$http.get(urlSheetMusicUpload + "sheet/getAllGenre").success(
+			$http.get(urlSheetMusicUpload + "sheet/get/getAllGenre").success(
 					function(response) {
 						console.log(response);
 						$scope.songGenreList = response.songGenre;
 					});
 
-			$http.get(urlSheetMusicUpload + "sheet/getAllInstrument").success(
+			$http.get(urlSheetMusicUpload + "sheet/get/getAllInstrument").success(
 					function(response) {
 						console.log(response);
 						$scope.instrumentsList = response.instrument;

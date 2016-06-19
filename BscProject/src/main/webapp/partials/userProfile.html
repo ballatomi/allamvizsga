@@ -35,8 +35,8 @@
 
 		<ul class="nav nav-tabs" id="myTabs">
 			<li><a data-toggle="tab" href="#menu1">Favorites <span class="glyphicon glyphicon-star"></span> </a></li>
-			<li><a data-toggle="tab" href="#menu2">Tab2</a></li>
-			<li><a data-toggle="tab" href="#menu3">Tab3</a></li>
+			<li><a data-toggle="tab" href="#menu2">Sheet music</a></li>
+			<li><a data-toggle="tab" href="#menu3">My profile</a></li>
 		</ul>
 
 		<div class="tab-content">
@@ -97,15 +97,114 @@
 
 			<!-- Tab 2 -->
 			<div id="menu2" class="tab-pane fade">
+				<h3>Uploaded by me</h3>
+				<br/>
+				<div class="col-sm-9">
+						<table align="center" class="table">
+							<tbody>
+								<tr ng-show="notExitst">
+									<td></td>
+									<td>
+										<b>No Sheet music uploaded yet!</b>
+										
+										<br/>
+										<a href="#/upload">Start adding sheet music to your account</a>
+										
+									</td>
+								</tr>
+							    <tr ng-repeat="sheet in sheetMusicAddedByUser" colspan="2" valign="bottom">
+									
+									<td valign="bottom">
+										<div class="views-field-title">
+											<h4>
+												<a href="#/smView?page={{sheet.sheetMusicId}}"
+													style="color: #80aaff;"><b> {{sheet.name}} :</b>
+												</a>
+											</h4>
+										</div>
+									</td>
+									
+									<td>
+		
+										<table class="table table-striped table-bordered">
+											<tr>
+												<td>Uploaded date</td>
+												<td>{{sheet.uploadDate | datetime}}</td>
+											</tr>
+											
+											<tr>
+												<td>Views number</td>
+												<td>{{sheet.viewsNum}}</td>
+											</tr>
+											<tr>
+												<td>Sheet music Genre</td>
+												<td>{{sheet.songGenre.songGenreName}}</td>
+											</tr>
+											
+											<tr>
+												<td>License</td>
+												<td>{{sheet.license}}</td>
+											</tr>
+										</table>		
+										
+									</td>
 
-				tab2
+								</tr> 
+							</tbody>
+						</table>
+				</div>
+				
+
+
 			</div>
 
 
 			<!-- Tab 3 -->
 			<div id="menu3" class="tab-pane fade">
+			
+				<br/>
 				
-				tab3
+				<div class="col-sm-8">
+					<table class="table table-striped table-bordered">
+						<tr>
+							<th></th>
+							<th>Account</th>
+						</tr>
+						
+						<tr>
+							<td>Last login </td>
+							<td>{{activeUser.userLastLogin | datetime}}</td>
+						</tr>
+						
+						<tr>
+							<td>Username</td>
+							<td>{{activeUser.userName}}</td>
+						</tr>
+						
+						<tr>
+							<td>Firstname</td>
+							<td>{{activeUser.userLastName}}</td>
+						</tr>
+
+						<tr>	
+							<td>Lastname</td>
+							<td>{{activeUser.userLastName}}</td>
+						</tr>
+
+						<tr>	
+							<td>Email</td>
+							<td>{{activeUser.userMail}}</td>
+						</tr>
+						
+						<tr>	
+							<td>Tel. number</td>
+							<td>{{activeUser.userTel}}</td>
+						</tr>
+
+
+					</table>
+				</div>
+				
 			</div>
 		</div>
 	</div>

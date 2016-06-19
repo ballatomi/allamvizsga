@@ -37,8 +37,30 @@ function UserPersonalController($scope, $http, $location, $window) {
 				}
 			}
 		});
+		
+		$http.get(urlLogin + "loggedIn").success(function(response) {
+			console.log(response);
+			$scope.activeUser = response;
+		});
+		
+		$scope.loadSheetMusicByUser();
+		
 	}
 	
+	/**
+	 * Load sheet music uploaded by logged in user
+	 */
+	$scope.loadSheetMusicByUser = function(){
+		$http.get(urlSheetMusic + "getSheetMusicByUser/").success(function(resp) {
+
+			console.log(resp);
+			if (resp == "null") {
+				$scope.notExitst = true;
+			} else {
+				$scope.sheetMusicAddedByUser = resp.sheetMusic;
+			}
+		});
+	}
 
 	/**
 	 * Load sheet music to surface

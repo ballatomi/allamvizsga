@@ -13,19 +13,37 @@ function AdminController($scope, $http, $location, $window) {
 		
 		$scope.loadInstruments();
 		$scope.loadGenres();
+		$scope.loadUsers();
+		
 	}
 
 	$scope.loadInstruments = function() {
-		$http.get(urlSheetMusic + "getAllInstrument").success(
+		$http.get(urlSheetMusic + "get/getAllInstrument").success(
 				function(response) {
 					$scope.instrumentsList = response.instrument;
 				});
 	}
 	
 	$scope.loadGenres = function() {
-		$http.get(urlSheetMusic + "getAllGenre").success(
+		$http.get(urlSheetMusic + "get/getAllGenre").success(
 				function(response) {
 					$scope.songGenreList = response.songGenre;
+				});
+	}
+	
+	$scope.loadUsers = function() {
+		$http.get(urlSheetMusic + "get/getAllUsers").success(
+				function(response) {
+					console.log(response);
+					$scope.usersList = response.user;
+				});
+	}
+	
+	$scope.changeUserRight = function(id, rigth) {
+		console.log(id + " " + rigth);
+		$http.post(urlSheetMusic + "userRight/" + id + "/" + rigth).success(
+				function(response) {
+					$scope.usersList = response.user;
 				});
 	}
 	

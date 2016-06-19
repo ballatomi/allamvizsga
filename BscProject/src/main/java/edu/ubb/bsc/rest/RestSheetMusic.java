@@ -39,6 +39,7 @@ import edu.ubb.bsc.service.repo.SheetMusicCommentServiceImpl;
 import edu.ubb.bsc.service.repo.SheetMusicServiceImpl;
 import edu.ubb.bsc.service.repo.SongGenreService;
 import edu.ubb.bsc.service.repo.SongGenreServiceImpl;
+import edu.ubb.bsc.service.repo.UserServiceImpl;
 
 @Path("sheet")
 public class RestSheetMusic {
@@ -46,8 +47,7 @@ public class RestSheetMusic {
 	private final static Logger log = LoggerFactory.getLogger(RestSheetMusic.class);
 
 	/**
-	 * get Instrument Sheetmusic by sheetmusic ID
-	 * 
+	 * Get Instrument Sheetmusic by sheetmusic ID
 	 * @return
 	 */
 	@GET
@@ -70,7 +70,6 @@ public class RestSheetMusic {
 
 	/**
 	 * Get Sheetmusic by sheetmusic ID
-	 * 
 	 * @param id
 	 * @return SheetMusic
 	 */
@@ -178,7 +177,6 @@ public class RestSheetMusic {
 
 				commentList = smcService.getSheetmusicCommentBySheetMusicId(id);
 				log.info("Get SheetmusicComment by SheetMusicID=" + id);
-
 			}
 		} catch (ServiceException e) {
 			log.error("Error in post SheetmusicComment", e);
@@ -188,7 +186,6 @@ public class RestSheetMusic {
 
 	/**
 	 * Get comments on a SheetMusic
-	 * 
 	 * @param id
 	 * @return List<SheetMusic>
 	 */
@@ -198,13 +195,11 @@ public class RestSheetMusic {
 	public List<SheetmusicComment> getCommentListBySMID(@PathParam("id") Integer id) {
 		SheetMusicCommentServiceImpl smcService;
 		List<SheetmusicComment> commentList = new ArrayList<SheetmusicComment>();
-
 		try {
 			smcService = new SheetMusicCommentServiceImpl();
 			commentList = smcService.getSheetmusicCommentBySheetMusicId(id);
 
 			log.info("Get SheetmusicComment by SheetMusicID");
-
 		} catch (ServiceException e) {
 			log.error("Error in getting SheetmusicComment by SheetMusicID", e);
 		}
@@ -213,7 +208,6 @@ public class RestSheetMusic {
 
 	/**
 	 * Get sheet music by pattern, search in sheet music name
-	 * 
 	 * @param pattern
 	 * @return List<SheetMusic>
 	 */
@@ -223,120 +217,45 @@ public class RestSheetMusic {
 	public List<SheetMusic> getSheetMusicByPattern(@PathParam("pattern") String pattern) {
 		SheetMusicServiceImpl service;
 		List<SheetMusic> smList = new ArrayList<SheetMusic>();
-
 		try {
 			service = new SheetMusicServiceImpl();
 			smList = service.getSheetmusicByFilter(pattern);
 
 			log.info("Get sheet music by pattern");
-
 		} catch (ServiceException e) {
 			log.error("Error in getting sheetMusic", e);
 		}
 		return smList;
 	}
-
-	/////////////////////////////////////////////////////
-	//// Get ALL
-	/////////////////////////////////////////////////////
-
+	
 	/**
-	 * Get all sheet music
-	 * 
-	 * @return List<Sheetmusic>
+	 * Get sheet music by logged user
+	 * @param userID
+	 * @return
 	 */
-	@POST
-	@Path("/getAllSheetMusic")
+	@GET
+	@Path("/getSheetMusicByUser")
 	@Produces({ MediaType.APPLICATION_JSON })
-	public List<SheetMusic> getSheetMusic() {
+	public List<SheetMusic> getSheetMusicByUser(@Context HttpServletRequest request) {
 		SheetMusicServiceImpl service;
 		List<SheetMusic> smList = new ArrayList<SheetMusic>();
-
 		try {
+			HttpSession session = request.getSession();
+			User user = (User) session.getAttribute("logged-user");
+
+			System.out.println(user);
 			service = new SheetMusicServiceImpl();
-			smList = service.getAllSheetmusic();
+			smList = service.getSheetmusicByUserID(user.getUserId());
 
-			log.info("Get all sheet music");
-
+			log.info("Get sheet music by userID");
 		} catch (ServiceException e) {
 			log.error("Error in getting sheetMusic", e);
 		}
-
 		return smList;
 	}
 
-	/**
-	 * get Instrument Sheetmusic
-	 * 
-	 * @return List<InstrumentSheetmusic>
-	 */
-	@POST
-	@Path("/getAllInstrumentSheetmusic")
-	@Produces({ MediaType.APPLICATION_JSON })
-	public List<InstrumentSheetmusic> getInstrumentSheetmusic() {
-		InstrumentSheetMusicServiceImpl ismService;
-		List<InstrumentSheetmusic> is = new ArrayList<InstrumentSheetmusic>();
-		try {
 
-			ismService = new InstrumentSheetMusicServiceImpl();
-			is = ismService.getAllInstrumentSheetmusic();
-
-			log.info("Get all instrument sheet music");
-
-		} catch (ServiceException e) {
-			log.error("Error in getting sheetMusic", e);
-		}
-
-		return is;
-	}
-
-	/**
-	 * Get all song genre
-	 * 
-	 * @return List<Sheetmusic>
-	 */
-	@GET
-	@Path("/getAllGenre")
-	@Produces({ MediaType.APPLICATION_JSON })
-	public List<SongGenre> getSongGenre() {
-		SongGenreServiceImpl service;
-		List<SongGenre> sgList = new ArrayList<SongGenre>();
-
-		try {
-			service = new SongGenreServiceImpl();
-			sgList = service.getAllGenre();
-
-			log.info("Get all sheet music");
-
-		} catch (ServiceException e) {
-			log.error("Error in getting sheetMusic", e);
-		}
-		return sgList;
-	}
-
-	/**
-	 * Get all Instrument
-	 * 
-	 * @return List<Sheetmusic>
-	 */
-	@GET
-	@Path("/getAllInstrument")
-	@Produces({ MediaType.APPLICATION_JSON })
-	public List<Instrument> getInstruments() {
-		InstrumentService service;
-		List<Instrument> list = new ArrayList<Instrument>();
-
-		try {
-			service = new InstrumentServiceImpl();
-			list = service.getAllInstrument();
-
-			log.info("Get all Instrument");
-
-		} catch (ServiceException e) {
-			log.error("Error in getting sheetMusic", e);
-		}
-		return list;
-	}
+	
 
 	/////////////////////////////////////////////////////
 	//// Save elements
@@ -407,6 +326,43 @@ public class RestSheetMusic {
 
 		return jo.toString();
 	}
+	
+	/////////////////////////////////////////////////////
+	//// Modify Elements
+	/////////////////////////////////////////////////////
+
+	/**
+	 * Change user rigth
+	 * @param genre
+	 * @return
+	 */
+	@POST
+	@Path("/userRight/{id}/{right}")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public List<User> updateUserRigth(@PathParam("id") Integer id, @PathParam("right") Integer right) {
+		List<User> list = new ArrayList<User>();
+		try {
+			UserServiceImpl service;
+			service = new UserServiceImpl();
+			
+			User user = new User();
+			user.setUserId(id);
+			user.setUserRight(right == 1 ? 0 : 1);
+			service.updateUserRigth(user);
+			
+			System.out.println(user);
+			log.info("User Update was successfull!");
+
+			service = new UserServiceImpl();
+			list = service.getAllUsers();
+
+		} catch (ServiceException e) {
+			log.info("User Update not was successfull!");
+		}
+
+		return list;
+	}
+	
 	
 	/**
 	 * Add genre

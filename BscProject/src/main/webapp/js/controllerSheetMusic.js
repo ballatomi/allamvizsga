@@ -17,11 +17,11 @@ function ctrlSheetLister($scope, $http, $location, $window) {
 	 * initialize sheetMusci.html page
 	 */
 	$scope.init = function() {
-		$http.post(urlSheetMusic + "getAllInstrumentSheetmusic").success(function(response) {
+		$http.get(urlSheetMusic + "get/getAllInstrumentSheetmusic").success(function(response) {
 			instrumentSheetMusicList = response.instrumentSheetmusic;
 			instrumentSheetMusicListlength = response.instrumentSheetmusic.length;
 		
-			$http.post(urlSheetMusic + "getAllSheetMusic").success(function(response) {
+			$http.get(urlSheetMusic + "get/getAllSheetMusic").success(function(response) {
 				console.log(response.sheetMusic);
 				
 				$scope.loadSheetMusic(response);
@@ -30,11 +30,11 @@ function ctrlSheetLister($scope, $http, $location, $window) {
 			});
 		});
 		
-		$http.get(urlSheetMusic + "getAllInstrument").success(function(response) {
+		$http.get(urlSheetMusic + "get/getAllInstrument").success(function(response) {
 				$scope.instrumentsList = response.instrument;
 		});
 		
-		$http.get(urlSheetMusic + "getAllGenre").success(function(response) {
+		$http.get(urlSheetMusic + "get/getAllGenre").success(function(response) {
 				$scope.songGenreList = response.songGenre;
 		});
 	}
@@ -93,7 +93,7 @@ function ctrlSheetLister($scope, $http, $location, $window) {
 		
 		if(searchText == undefined){
 			console.log("Get All SheetMusic");
-			$http.post(urlSheetMusic + "getAllSheetMusic").success(function(response) {
+			$http.post(urlSheetMusic + "get/getAllSheetMusic").success(function(response) {
 				$scope.loadSheetMusic(response);
 			});
 			

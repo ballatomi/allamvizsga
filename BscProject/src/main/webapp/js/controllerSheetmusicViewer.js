@@ -16,7 +16,6 @@ var linkToMusic;
 var pdfAsArray;
 var audioArray;
 var maxPageNumber;
-var audio;
 
 var actualPage = 1;
 var ellapsedTime = 0;
@@ -55,9 +54,13 @@ function ViewController($scope, $http, $location, $window) {
 					loadCanvas(actualPage, pdfUint);
 					
 					processedData = [];
+					var audio = document.getElementById('audio');
+					
 					/**
 					 * Processing pdf file, getting data (line informations, 
 					 * numbers in each line, and coordinates) 
+					 * 
+					 * Load sound data	after, processing .pdf
 					 */
 					self.getDataFromPDF(pdfUint).then(function(result) {
 					    
@@ -66,34 +69,31 @@ function ViewController($scope, $http, $location, $window) {
 					    }
 					    processedData = addFirstLineToLines_CalculateHight(processedData);
 
-					    processedData = divideLines(processedData);
+					    //processedData = divideLines(processedData);
 					    console.log(processedData);
-
 						console.log("Tacts number " + tactsNumber);
 						
+					
+						/**
+						 * Loading sound file from response
+						 * converting to Blob (format for binary data)
+						 * with Uint8Array (is similar with Array) where each item is an 8 bit (unsigned integer)
+						 */
+						var audiodata = atob(response.fileSound);
+						audioArray = new Array(audiodata.length);
+						for (var i = 0; i < audiodata.length; i++) {
+							audioArray[i] = audiodata.charCodeAt(i);
+						}
+						var file = new Blob([ new Uint8Array(audioArray) ]);
+						var link = document.createElement('a');
+						link.href = window.URL.createObjectURL(file);
+						
+						audio.src = link.href;
+						audio.load(); // call this to just preload the audio without playing
+						// audio.play();
+					
 					});
 					
-					///////////////////
-
-					/**
-					 * Loading sound file from response
-					 * converting to Blob (format for binary data)
-					 * with Uint8Array (is similar with Array) where each item is an 8 bit (unsigned integer)
-					 */
-					var audiodata = atob(response.fileSound);
-					audioArray = new Array(audiodata.length);
-					for (var i = 0; i < audiodata.length; i++) {
-						audioArray[i] = audiodata.charCodeAt(i);
-					}
-					var file = new Blob([ new Uint8Array(audioArray) ]);
-					var link = document.createElement('a');
-					link.href = window.URL.createObjectURL(file);
-					
-					var audio = document.getElementById('audio');
-					audio.src = link.href;
-					audio.load(); // call this to just preload the audio without playing
-					// audio.play();
-
 					
 					//GET comments by the sheetmusic
 					var smId = response.sheetMusicId;
@@ -147,12 +147,12 @@ function ViewController($scope, $http, $location, $window) {
 					audio.addEventListener('timeupdate', function(e) {
 						$("#currentTime").text(audio.currentTime + ".sec");
 
-						//megadok egy idot, ez alaljan visszad egy indexet ami a taktus szamaval egyezik meg
-						//megkeresve az adott taktust kirajzoljuk az adott sorra
+						// megadok egy idot, ez alaljan visszad egy indexet ami a taktus szamaval egyezik meg
+						// megkeresve az adott taktust kirajzoljuk az adott sorra
 						
-						///tacts (beats)
-						var acutalTact = getTactNumberByTime(tactArray, audio.currentTime, previousTact);
-//						console.log("Tact: " + acutalTact.prevTact + " - time: " + audio.currentTime);
+						// tacts (beats)
+						var acutalTact = getTactNumberByTime(tactArray, (audio.currentTime+1), previousTact);
+						//console.log("Tact: " + acutalTact.prevTact + " - time: " + audio.currentTime);
 						
 						previousTact = acutalTact.tact;
 						
@@ -178,7 +178,7 @@ function ViewController($scope, $http, $location, $window) {
 								prevPage = parseInt(actualLine.lineInfo.page);
 							}
 
-							if (actualLine.lineInfo != 0){ // paint rectangle
+							if (actualLine.lineInfo != 0){ // draw rectangle
 								console.log(actualLine);
 							
 								if (!isFirst){ 
@@ -192,21 +192,8 @@ function ViewController($scope, $http, $location, $window) {
 								
 								prevPage = parseInt(actualLine.lineInfo.page);
 								actualTactInLine = 1;
-							}else {
-// 							soronkent is vinni a mutatot								
-//								if (previousLine!=1){
-//									var x = previousLine.lineInfo.rect[actualTactInLine-1];
-//									var width = previousLine.lineInfo.rect[actualTactInLine];
-//	
-//									var y = previousLine.lineInfo.y;
-//									var height = previousLine.lineInfo.h;
-//									
-//									console.log("x:"+x+" y:"+y+" w:"+width+" h:"+height);
-//									putRectangleToLine(x, y, width, height);
-//									
-//									actualTactInLine++;
-//								}
 							}
+							
 						}
 						
 					}, false);
@@ -355,6 +342,7 @@ function ViewController($scope, $http, $location, $window) {
 		//download only mp3 format
 		downloadFile(audioArray, "SoundFile.mp3");
 	}
+
 }
 
 
@@ -442,7 +430,7 @@ function addFirstLineToLines_CalculateHight(processedData){
 	 var firstLineYPos = "700";
 	 if (processedData[0].length == 0){ // only one line exist in a page
 	 	 processedData[0][0] = {page:1, str:1, x:processedData[1][0].x, y:"150", h:"100"};
-	 } else {
+	 } else { // set the first line to 0
 			try {
 				 if (processedData[0][0].x != undefined && processedData[0][1].y != undefined){ // exists two line in a page
 					 firstLineYPos = parseInt(processedData[0][0].y) + (parseInt(processedData[0][0].y) - parseInt(processedData[0][1].y));
@@ -454,7 +442,7 @@ function addFirstLineToLines_CalculateHight(processedData){
 		 for (var j = processedData[0].length; j > 0 ; j--) {
 			 processedData[0][j] = processedData[0][j-1];
 		 }
-		 processedData[0][0] = {page:"1", str:"1", x:processedData[0][0].x, y:""+firstLineYPos+"", h:"100"};
+		 processedData[0][0] = {page:"1", str:"0", x:processedData[0][0].x, y:""+firstLineYPos+"", h:"100"};
 	 }
 	 
 	 
@@ -483,7 +471,8 @@ function addFirstLineToLines_CalculateHight(processedData){
  * @returns
  */
 function getTactNumberByTime(tactArray, currentTime, previousTact){
-	currentTime = currentTime -1; 
+//	currentTime = currentTime - 1;
+	console.log("currentTime: " + currentTime);
 	for (var i = 1; i < tactArray.length; i++) {
 		if (currentTime >= tactArray[i-1] && currentTime < tactArray[i]){
 			return { tact : i+1, prevTact : previousTact };
@@ -501,7 +490,6 @@ function getTactNumberByTime(tactArray, currentTime, previousTact){
  * @returns
  */
 function getActualLineByTactNumber(processedData, tact){
-	
 	for (var j = 0; j < processedData.length; j++) {
 		for (var int = 0; int < processedData[j].length; int++) {
 			
@@ -516,7 +504,7 @@ function getActualLineByTactNumber(processedData, tact){
 }
 
 /**
- * Divide the lines by number of tacts to equal parts
+ * Divide the lines by number of tacts to equal parts (Soronkenti feldolgozas)
  * @param processedData
  * @returns
  */

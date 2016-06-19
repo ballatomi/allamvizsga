@@ -71,7 +71,6 @@ function LoginController($scope, $http, $location) {
 	$scope.getLoggedUser = function() {
 		$http.get(urlLogin + "loggedIn").success(function(response) {
 			console.log(response);
-			
 			if (response != ""){
 				$scope.loggedUser = response.userName;
 			}else{
@@ -87,8 +86,8 @@ function LoginController($scope, $http, $location) {
 			$location.path('/login');
 		});
 	};
- };
-//});
+};
+
  
 
 

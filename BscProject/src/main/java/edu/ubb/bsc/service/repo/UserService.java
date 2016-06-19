@@ -16,6 +16,8 @@ public interface UserService {
 
 	void updateUser(User user) throws ServiceException;
 
+	void updateUserRigth(User user) throws ServiceException;
+	
 	void deleteUser(User user) throws ServiceException;
 
 	User loginAuthenticateUser(String userName, String password) throws ServiceException;

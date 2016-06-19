@@ -50,6 +50,17 @@ public class SheetMusicServiceImpl implements SheetMusicService{
 		}
 		return object;
 	}
+	
+	public List<SheetMusic> getSheetmusicByUserID(int id) throws ServiceException {
+		List<SheetMusic> object = null;
+		try {
+			object = sd.getSheetmusicByUserID(id);
+		} catch (RepositoryException e) {
+			throw new ServiceException();
+		}
+		return object;
+	}
+
 
 	public String insertSheetmusic(SheetMusic user) throws ServiceException {
 		String retmess = null;
@@ -86,5 +97,6 @@ public class SheetMusicServiceImpl implements SheetMusicService{
 		}
 		return object;
 	}
+
 
 }

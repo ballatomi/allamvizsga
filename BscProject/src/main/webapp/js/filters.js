@@ -18,4 +18,10 @@ filter('datetime', function($filter) {
 		return _date;
 
 	};
+}).
+
+filter('iif', function () {
+   return function(input, trueValue, falseValue) {
+        return input ? falseValue : trueValue ;
+   };
 });

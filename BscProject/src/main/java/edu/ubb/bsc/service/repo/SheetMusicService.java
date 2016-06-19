@@ -12,6 +12,8 @@ public interface SheetMusicService {
 
 	List<SheetMusic> getSheetmusicByFilter(String pattern) throws ServiceException;
 
+	List<SheetMusic> getSheetmusicByUserID (int id) throws ServiceException;
+	
 	String insertSheetmusic(SheetMusic user) throws ServiceException;
 
 	void updateSheetmusic(SheetMusic user) throws ServiceException;

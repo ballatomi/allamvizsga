@@ -12,6 +12,7 @@ import org.hibernate.cfg.AnnotationConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import edu.ubb.bsc.repo.model.Instrument;
 import edu.ubb.bsc.repo.model.User;
 
 public class JdbcUserDAO implements UserDAO {
@@ -30,8 +31,22 @@ public class JdbcUserDAO implements UserDAO {
 	}
 
 	public List<User> getAllUsers() throws RepositoryException {
-
-		return null;
+		Session session = factoryUser.openSession();
+		Transaction tx = null;
+		List<User> object = null;
+		try {
+			tx = session.beginTransaction();
+			object = session.createCriteria(User.class).list();
+			tx.commit();
+		} catch (HibernateException e) {
+			if (tx != null)
+				tx.rollback();
+			log.error("Error get all!", e);
+			throw new RepositoryException("Error get all", e);
+		} finally {
+			session.close();
+		}
+		return object;
 	}
 
 	public User getUserById(int id) throws RepositoryException {
@@ -99,6 +114,30 @@ public class JdbcUserDAO implements UserDAO {
 			session.close();
 		}
 	}
+	
+	
+	public void updateUserRigth(User user) throws RepositoryException {
+		Session session = factoryUser.openSession();
+		Transaction tx = null;
+		try {
+			tx = session.beginTransaction();
+
+			Query query = session.createQuery("Update User SET userRight= :r WHERE userID= :userID");
+			query.setParameter("r", user.getUserRight());
+			query.setParameter("userID", user.getUserId());
+			
+			query.executeUpdate();
+
+			tx.commit();
+		} catch (HibernateException e) {
+			if (tx != null)
+				tx.rollback();
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+	}
+	
 
 	public void deleteUser(User user) throws RepositoryException {
 		Session session = factoryUser.openSession();
@@ -178,5 +217,28 @@ public class JdbcUserDAO implements UserDAO {
 		return user;
 
 	}
+	
+	public static void main(String[] args) {
+		
+		JdbcUserDAO ud = new JdbcUserDAO();
+		
+		List<User> users = ud.getAllUsers();
+		for (User user : users) {
+			System.out.println(user);
+		}
+		
+		User user = new User();
+		user.setUserId(22);
+		user.setUserRight(0);
+		
+		ud.updateUserRigth(user);
+
+		for (User user1 : users) {
+			System.out.println(user1);
+		}
+
+	}
+
+
 
 }

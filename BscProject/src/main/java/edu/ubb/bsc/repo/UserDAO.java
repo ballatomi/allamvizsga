@@ -15,7 +15,9 @@ public interface UserDAO {
 	String insertUser(User user) throws RepositoryException;
 
 	void updateUser(User user) throws RepositoryException;
-
+	
+	void updateUserRigth(User user) throws RepositoryException;
+	
 	void deleteUser(User user) throws RepositoryException;
 	
 	User loginAuthenticateUser (String userName, String password) throws RepositoryException;
