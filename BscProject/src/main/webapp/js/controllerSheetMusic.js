@@ -90,10 +90,10 @@ function ctrlSheetLister($scope, $http, $location, $window) {
 	 * Search sheet music by pattern
 	 */
 	$scope.searchByName = function(searchText) {
-		
+		console.log("searchText: "+searchText);
 		if(searchText == undefined){
 			console.log("Get All SheetMusic");
-			$http.post(urlSheetMusic + "get/getAllSheetMusic").success(function(response) {
+			$http.get(urlSheetMusic + "get/getAllSheetMusic").success(function(response) {
 				$scope.loadSheetMusic(response);
 			});
 			

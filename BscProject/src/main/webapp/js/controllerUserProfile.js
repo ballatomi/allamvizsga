@@ -57,7 +57,15 @@ function UserPersonalController($scope, $http, $location, $window) {
 			if (resp == "null") {
 				$scope.notExitst = true;
 			} else {
-				$scope.sheetMusicAddedByUser = resp.sheetMusic;
+				
+				if (resp.sheetMusic instanceof Array){
+					console.log("Tomb");
+					$scope.sheetMusicAddedByUser = resp.sheetMusic;
+				} else {
+					console.log("Nem Tomb");
+					$scope.sheetMusicAddedByUser = [resp.sheetMusic];
+				}
+				
 			}
 		});
 	}
