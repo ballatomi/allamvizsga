@@ -4,20 +4,20 @@ This application provides an example of
 Building a complete RESTful API in Java using JAX-RS and Jersey.
 Consuming these services using AngularJS
 
-Used tehnologies:
+**Used tehnologies:**
   DB: MySQL;
   Server: JAVA EE: JAX-RS, Jersey, ORM-Hibernate;
   Client: HTML, AngularJS, jQuery, CSS (Bootstrap)
 
-Task realizations:
-	- Data manipulation from and asynchronous calls in client side with AngularJS
-	- Processing .pdf files with PDFJS library
-	- Building REST services with Jersey
-	- Connection with MySQL database - Hibernate
+**Task realizations:**
+- Data manipulation from and asynchronous calls in client side with AngularJS
+- Processing .pdf files with PDFJS library
+- Building REST services with Jersey
+- Connection with MySQL database - Hibernate
 
-============================================	
+-------------------------------------------	
 
-Set Up application: 
+**Set Up application:** 
 
 1. Create a MySQL database name "bscproject".
 2. Execute bscproject.sql to create tables
@@ -28,7 +28,7 @@ Set Up application:
 (5. Or run with maven, jetty server
 	- mvn jetty:run)
 
-============================================
+-------------------------------------------
 
 ## Application functionalities:
 In REST architechture the communication between the client and the server side gets an important role. 
