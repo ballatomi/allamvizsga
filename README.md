@@ -9,7 +9,15 @@ Used tehnologies:
   Server: JAVA EE: JAX-RS, Jersey, ORM-Hibernate;
   Client: HTML, AngularJS, jQuery, CSS (Bootstrap)
 
-Set Up: 
+Task realizations:
+	- Data manipulation from and asynchronous calls in client side with AngularJS
+	- Processing .pdf files with PDFJS library
+	- Building REST services with Jersey
+	- Connection with MySQL database - Hibernate
+
+============================================	
+
+Set Up application: 
 
 1. Create a MySQL database name "bscproject".
 2. Execute bscproject.sql to create tables

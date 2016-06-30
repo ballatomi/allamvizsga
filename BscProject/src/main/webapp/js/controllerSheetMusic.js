@@ -90,8 +90,10 @@ function ctrlSheetLister($scope, $http, $location, $window) {
 	 * Search sheet music by pattern
 	 */
 	$scope.searchByName = function(searchText) {
-		console.log("searchText: "+searchText);
-		if(searchText == undefined){
+		console.log("searchText: "+(searchText==undefined));
+		console.log("searchText ures: "+(searchText==""));
+		
+		if(searchText == undefined || searchText==""){
 			console.log("Get All SheetMusic");
 			$http.get(urlSheetMusic + "get/getAllSheetMusic").success(function(response) {
 				$scope.loadSheetMusic(response);
@@ -100,11 +102,11 @@ function ctrlSheetLister($scope, $http, $location, $window) {
 		} else {
 		
 			$http.get(urlSheetMusic + "getSheetMusicByPattern/" + searchText).success(function(resp) {
-	
 				//if is not an array convert it to array
 				//list = response == null ? [] : (response instanceof Array ? response : [response]);
 				console.log(resp);
 				$scope.loadSheetMusicAfterSearch(resp);
+				searchText = undefined;
 			});
 		}
 }

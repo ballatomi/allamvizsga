@@ -512,12 +512,10 @@ function divideLines(processedData){
 	
 	for (var i = 0; i < processedData.length; i++) {
 		for (var j = 1; j < processedData[i].length; j++) {
-//			console.log(j+": "+parseInt(processedData[i][j].str) +" "+ (j-1)+": "+parseInt(processedData[i][j-1].str));
 			
 			var numOfTacts = parseInt(processedData[i][j].str) - parseInt(processedData[i][j-1].str)
 			var rate = 550 / numOfTacts;
 			
-//			console.log(rate);
 			var dataLines = [];
 			dataLines[0] = 0;
 			dataLines[1] = rate;
@@ -527,7 +525,6 @@ function divideLines(processedData){
 			processedData[i][j-1].rect = dataLines;
 		}
 	}
-//	console.log(processedData);
 	return processedData;
 }
 
@@ -545,7 +542,6 @@ function putRectangleToCanvas(x, y, h, color, oppacity) {
 	context.globalAlpha = oppacity;
 
 	var rect = canvas.getBoundingClientRect();
-//	context.fillRect(x, rect.height-y, rect.width-70, 100);
 	
 	context.fillRect(x, rect.height-y, rect.width-70, h);
 	context.stroke();
@@ -575,10 +571,10 @@ function putRectangleToLine(x, y, w, h) {
  */
 function loadAudioDuration() {
 	var audio = document.getElementById("audio");
-	// $scope.Sheetmusic.duration = audio.duration;
+	
 	$("#audioDuration").text(audio.duration + ".sec");
 	$("#currentTime").text(audio.currentTime + ".sec");
-	// currentTime = $("#currentTime").val();
+	
 }
 
 /**
